@@ -200,8 +200,7 @@ const MainDashboard = () => {
   };
 
   const handleServiceClick = (path) => {
-    const url = `${window.location.origin}${path}`;
-    window.open(url, '_blank');
+    navigate(path);
   };
 
   return (
