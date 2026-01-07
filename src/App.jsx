@@ -54,7 +54,6 @@ function App() {
                 </ProtectedRoute>
               } 
             />
-            
             <Route 
               path="/services/medicine-management/*" 
               element={

@@ -7,7 +7,6 @@
     @apply bg-gray-50 text-gray-900;
   }
 }
-
 @layer components {
   .card {
     @apply bg-white rounded-lg shadow-sm border border-gray-200 p-6;
