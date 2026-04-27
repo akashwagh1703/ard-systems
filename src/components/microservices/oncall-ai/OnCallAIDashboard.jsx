@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Header from '../../common/Header';
 import { ONCALL_AI_DATA } from '../../../data/mockData';
 import { Phone, Clock, CheckCircle, Users, ArrowLeft, TrendingUp, Brain, MapPin, Star, AlertTriangle, Calendar, Zap } from 'lucide-react';
+import AIAssistant from '../../common/AIAssistant';
 
 const OnCallAIDashboard = () => {
   const navigate = useNavigate();
@@ -380,6 +381,8 @@ const OnCallAIDashboard = () => {
 
         {renderModule(activeModule)}
       </div>
+
+      <AIAssistant isDark={isDarkMode} userRole="field_user" serviceData={ONCALL_AI_DATA.dashboard} />
     </div>
   );
 };

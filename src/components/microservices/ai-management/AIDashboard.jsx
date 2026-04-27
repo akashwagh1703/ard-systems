@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import Header from '../../common/Header';
+import AIInsightsPanel from '../../common/AIInsightsPanel';
 import { AI_MANAGEMENT_DATA } from '../../../data/mockData';
 import AIBatchAnalytics from '../vaccine-management/AIBatchAnalytics';
 import { 
@@ -117,6 +118,17 @@ const AIDashboard = () => {
         })
       }
       </div>
+
+      {/* AI Insights Panel */}
+      <AIInsightsPanel
+        serviceType="ai-management"
+        isDark={isDark}
+        title="AI Predictive Analytics"
+        stockData={{ stock: AI_MANAGEMENT_DATA.dashboard.totalStock, dailyUsage: Math.round(AI_MANAGEMENT_DATA.dashboard.monthlyUtilization / 30) }}
+        riskFactors={{ stockLevel: 100 - AI_MANAGEMENT_DATA.dashboard.stockoutRisk, coverageGap: AI_MANAGEMENT_DATA.dashboard.stockoutRisk }}
+        performanceMetrics={{ successRate: AI_MANAGEMENT_DATA.dashboard.successRate, responseTime: 40, coverage: 78, satisfaction: 4.2 }}
+        anomalyData={AI_MANAGEMENT_DATA.allocation.map(d => ({ value: d.utilized, label: d.district }))}
+      />
 
       {/* AI Breeding Alert */}
       <div className={`rounded-2xl p-6 border-l-4 border-green-500 ${

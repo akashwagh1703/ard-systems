@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '../../common/Header';
+import LiveMVUTracker from '../../common/LiveMVUTracker';
+import IoTSensorPanel from '../../common/IoTSensorPanel';
+import useRealTime from '../../../hooks/useRealTime';
 import { MVU_MANAGEMENT_DATA } from '../../../data/mockData';
 import AIMVUAnalytics from './AIMVUAnalytics';
 import { 
@@ -13,6 +16,7 @@ const MVUDashboard = () => {
   const navigate = useNavigate();
   const [activeModule, setActiveModule] = useState('dashboard');
   const [isDark, setIsDark] = useState(false);
+  const { mvus, sensors, isLive, togglePause } = useRealTime(6000);
 
   const modules = [
     { id: 'dashboard', name: 'Overview', icon: BarChart3, description: 'MVU operations status' },
@@ -117,6 +121,12 @@ const MVUDashboard = () => {
         })
       }
       </div>
+
+      {/* Live MVU Tracker */}
+      <LiveMVUTracker mvus={mvus} isDark={isDark} />
+
+      {/* IoT Cold Chain Sensors */}
+      <IoTSensorPanel sensors={sensors} isDark={isDark} />
 
       {/* AI Route Optimization Alert */}
       <div className={`rounded-2xl p-6 border-l-4 border-green-500 ${

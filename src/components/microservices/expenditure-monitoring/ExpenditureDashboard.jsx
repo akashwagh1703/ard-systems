@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '../../common/Header';
+import AIInsightsPanel from '../../common/AIInsightsPanel';
 import { EXPENDITURE_DATA } from '../../../data/mockData';
 import AIExpenditureAnalytics from './AIExpenditureAnalytics';
 import { 
@@ -116,6 +117,19 @@ const ExpenditureDashboard = () => {
         })
       }
       </div>
+
+      {/* AI Insights Panel */}
+      <AIInsightsPanel
+        serviceType="expenditure"
+        isDark={isDark}
+        title="AI Financial Analytics"
+        riskFactors={{
+          budgetVariance: Math.abs(EXPENDITURE_DATA.dashboard.utilization - 75),
+          coverageGap: EXPENDITURE_DATA.dashboard.pendingBills * 3,
+        }}
+        performanceMetrics={{ successRate: 87, responseTime: 48, coverage: 67, satisfaction: 4.1 }}
+        anomalyData={EXPENDITURE_DATA.expenses?.map(e => ({ value: e.spent, label: e.category })) || []}
+      />
 
       {/* AI Anomaly Detection Alert */}
       <div className={`rounded-2xl p-6 border-l-4 border-orange-500 ${

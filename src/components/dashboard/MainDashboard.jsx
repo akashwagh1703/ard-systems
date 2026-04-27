@@ -3,19 +3,31 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { MAIN_DASHBOARD_DATA } from '../../data/mockData';
 import Header from '../common/Header';
+import AIAssistant from '../common/AIAssistant';
+import LiveKPICounter from '../common/LiveKPICounter';
+import LiveAlertFeed from '../common/LiveAlertFeed';
+import LiveMVUTracker from '../common/LiveMVUTracker';
+import IoTSensorPanel from '../common/IoTSensorPanel';
+import useRealTime from '../../hooks/useRealTime';
+import { getWeatherForecast } from '../../services/integrationService';
 import { 
   Syringe, Shield, Pill, Activity, Truck, 
   GraduationCap, DollarSign, FileText, Phone, MessageSquare, 
   ExternalLink, TrendingUp, AlertTriangle, BarChart3, 
-  Clock, Users, Globe, Zap, Sparkles, Layers, Network, 
+  Clock, Users, Zap, Sparkles, Layers, Network, Globe,
   ArrowRight, CheckCircle2, Radio, Moon, Sun, Bell, Search,
-  Plus, Star, Award, Target, Mic, Cloud, Sun as WeatherSun,
-  CloudRain, Wind, Eye, Bookmark, History, HelpCircle,
-  Keyboard, Play, Pause, RotateCcw, TrendingDown, LogOut
+  Plus, Star, Award, Target, Mic, Sun as WeatherSun,
+  Eye, Bookmark, History, HelpCircle, TrendingDown
 } from 'lucide-react';
 
 const MainDashboard = () => {
-  const { user, hasAccess, logout } = useAuth();
+  const { user, hasAccess } = useAuth();
+  const { kpis, alerts, mvus, sensors, isLive, togglePause } = useRealTime(5000);
+  const [liveWeather, setLiveWeather] = useState(null);
+
+  useEffect(() => {
+    getWeatherForecast('Bhubaneswar').then(setLiveWeather);
+  }, []);
   const navigate = useNavigate();
   const [currentTime, setCurrentTime] = useState(new Date());
   const [hoveredCard, setHoveredCard] = useState(null);
@@ -187,6 +199,30 @@ const MainDashboard = () => {
       color: { from: '#ec4899', to: '#db2777', accent: '#f472b6' },
       modules: 4,
       uptime: '99.9%'
+    },
+    {
+      id: 'integrations',
+      title: 'Integration Hub',
+      description: 'DigiLocker, BBPS, SMS, Maps, IMD & lab API integrations',
+      icon: Globe,
+      path: '/integrations',
+      roles: ['super_admin', 'district_officer'],
+      stats: { value: '15', label: 'APIs Active', trend: '+2', status: 'Healthy' },
+      color: { from: '#0ea5e9', to: '#0284c7', accent: '#38bdf8' },
+      modules: 6,
+      uptime: '99.8%'
+    },
+    {
+      id: 'reports',
+      title: 'Report Center',
+      description: 'Generate, schedule & export reports across all services',
+      icon: BarChart3,
+      path: '/reports',
+      roles: ['super_admin', 'district_officer', 'block_officer'],
+      stats: { value: '12', label: 'Templates', trend: '+3', status: 'Ready' },
+      color: { from: '#8b5cf6', to: '#6d28d9', accent: '#a78bfa' },
+      modules: 3,
+      uptime: '99.9%'
     }
   ];
 
@@ -194,17 +230,13 @@ const MainDashboard = () => {
     hasAccess(service.roles)
   );
 
-  const handleLogout = () => {
-    logout();
-    navigate('/');
-  };
-
   const handleServiceClick = (path) => {
     navigate(path);
   };
 
   return (
     <div className={`min-h-screen relative overflow-hidden ${isDark ? 'bg-slate-950' : 'bg-indigo-50'}`}>
+      <Header isDark={isDark} setIsDark={setIsDark} />
 
       {/* Animated Background with Particles */}
       {isDark ? (
@@ -329,15 +361,6 @@ const MainDashboard = () => {
             }`}
           >
             {isDark ? <Sun className="h-5 w-5 text-white" /> : <Moon className="h-5 w-5 text-white" />}
-          </button>
-          
-          {/* Logout Button */}
-          <button
-            onClick={handleLogout}
-            className="h-12 w-12 bg-red-600 hover:bg-red-700 rounded-full flex items-center justify-center transition-all hover:scale-110 shadow-md"
-            title="Logout"
-          >
-            <LogOut className="h-5 w-5 text-white" />
           </button>
         </div>
       </div>
@@ -559,27 +582,30 @@ const MainDashboard = () => {
                       ? 'bg-gradient-to-br from-slate-800 to-slate-900 border-white/10' 
                       : 'bg-white border-gray-200'
                   }`}>
-                    {/* Weather Widget */}
+                    {/* Weather Widget — Live IMD Data */}
                     <div className="mb-4">
                       <div className="flex items-center justify-between mb-2">
-                        <WeatherSun className={`h-8 w-8 ${
-                          isDark ? 'text-yellow-400' : 'text-yellow-500'
-                        }`} />
-                        <span className={`text-2xl font-bold ${
-                          isDark ? 'text-white' : 'text-gray-900'
-                        }`}>{weather.temp}°C</span>
+                        <WeatherSun className={`h-8 w-8 ${isDark ? 'text-yellow-400' : 'text-yellow-500'}`} />
+                        <span className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+                          {liveWeather?.current?.temp ?? 28}°C
+                        </span>
                       </div>
-                      <p className={`text-sm ${
-                        isDark ? 'text-gray-400' : 'text-gray-600'
-                      }`}>{weather.condition}</p>
+                      <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
+                        {liveWeather?.current?.condition ?? 'Sunny'} · Bhubaneswar
+                      </p>
                       <div className="flex items-center space-x-4 mt-2 text-xs">
-                        <span className={isDark ? 'text-gray-500' : 'text-gray-500'}>
-                          💧 {weather.humidity}%
-                        </span>
-                        <span className={isDark ? 'text-gray-500' : 'text-gray-500'}>
-                          💨 {weather.wind} km/h
-                        </span>
+                        <span className={isDark ? 'text-gray-500' : 'text-gray-500'}>💧 {liveWeather?.current?.humidity ?? 65}%</span>
+                        <span className={isDark ? 'text-gray-500' : 'text-gray-500'}>💨 {liveWeather?.current?.windSpeed ?? 12} km/h</span>
                       </div>
+                      {liveWeather?.diseaseRiskCorrelation && (
+                        <div className={`mt-2 text-xs px-2 py-1 rounded-lg font-medium ${
+                          liveWeather.diseaseRiskCorrelation.overall === 'high'
+                            ? isDark ? 'bg-red-500/20 text-red-300' : 'bg-red-100 text-red-700'
+                            : isDark ? 'bg-green-500/20 text-green-300' : 'bg-green-100 text-green-700'
+                        }`}>
+                          Disease Risk: {liveWeather.diseaseRiskCorrelation.overall?.toUpperCase()}
+                        </div>
+                      )}
                     </div>
                     <BarChart3 className={`h-12 w-12 ${
                       isDark ? 'text-blue-400' : 'text-blue-600'
@@ -591,8 +617,13 @@ const MainDashboard = () => {
           </div>
         </div>
 
-        {/* Enhanced KPI Cards with Animated Counters */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+        {/* Live KPI Counters */}
+        <div className="mb-12">
+          <LiveKPICounter kpis={kpis || MAIN_DASHBOARD_DATA} isDark={isDark} isLive={isLive} />
+        </div>
+
+        {/* Legacy KPI Cards — hidden, replaced by LiveKPICounter */}
+        <div className="hidden grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
           {[
             { icon: Activity, label: 'Total Livestock', value: MAIN_DASHBOARD_DATA.totalLivestock.toLocaleString(), trend: '+5.2%', color: 'from-blue-500 to-cyan-500', target: 250000 },
             { icon: Syringe, label: 'AI Coverage', value: `${MAIN_DASHBOARD_DATA.aiCoverage}%`, trend: '+2.1%', color: 'from-green-500 to-emerald-500', target: 100 },
@@ -645,7 +676,18 @@ const MainDashboard = () => {
           })}
         </div>
 
-        {/* New Sections: Achievements, Recent Activity, Quick Actions */}
+        {/* Real-Time: Alert Feed + MVU Tracker */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-12">
+          <LiveAlertFeed alerts={alerts} isLive={isLive} onToggle={togglePause} isDark={isDark} />
+          <LiveMVUTracker mvus={mvus} isDark={isDark} />
+        </div>
+
+        {/* IoT Sensor Panel */}
+        <div className="mb-12">
+          <IoTSensorPanel sensors={sensors} isDark={isDark} />
+        </div>
+
+        {/* Achievements, Recent Activity, Quick Actions */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-12">
           {/* Achievements */}
           <div className={`rounded-2xl p-6 border ${
@@ -985,6 +1027,12 @@ const MainDashboard = () => {
           </div>
         </div>
       </main>
+
+      <AIAssistant
+        isDark={isDark}
+        userRole={user?.role}
+        serviceData={MAIN_DASHBOARD_DATA}
+      />
     </div>
   );
 };

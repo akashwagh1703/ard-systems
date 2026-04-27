@@ -16,6 +16,8 @@ import ExpenditureDashboard from './components/microservices/expenditure-monitor
 import FarmReportingDashboard from './components/microservices/farm-reporting/FarmReportingDashboard';
 import OnCallAIDashboard from './components/microservices/oncall-ai/OnCallAIDashboard';
 import GrievanceDashboard from './components/microservices/grievance-system/GrievanceDashboard';
+import IntegrationHub from './components/integrations/IntegrationHub';
+import ReportCenter from './components/reports/ReportCenter';
 
 function App() {
   return (
@@ -124,6 +126,24 @@ function App() {
                   <GrievanceDashboard />
                 </ProtectedRoute>
               } 
+            />
+
+            <Route
+              path="/integrations"
+              element={
+                <ProtectedRoute requiredRoles={['super_admin', 'district_officer']}>
+                  <IntegrationHub />
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="/reports"
+              element={
+                <ProtectedRoute requiredRoles={['super_admin', 'district_officer', 'block_officer']}>
+                  <ReportCenter />
+                </ProtectedRoute>
+              }
             />
           </Routes>
         </div>

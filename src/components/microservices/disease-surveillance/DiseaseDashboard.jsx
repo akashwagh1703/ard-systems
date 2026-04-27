@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '../../common/Header';
+import AIInsightsPanel from '../../common/AIInsightsPanel';
 import { DISEASE_SURVEILLANCE_DATA } from '../../../data/mockData';
 import AIDiseaseAnalytics from './AIDiseaseAnalytics';
 import { 
@@ -117,6 +118,20 @@ const DiseaseDashboard = () => {
         })
       }
       </div>
+
+      {/* AI Insights Panel */}
+      <AIInsightsPanel
+        serviceType="disease"
+        isDark={isDark}
+        title="AI Disease Surveillance Analytics"
+        riskFactors={{
+          caseCount: Math.min(100, DISEASE_SURVEILLANCE_DATA.dashboard.activeCases * 2),
+          responseTime: 30,
+          coverageGap: DISEASE_SURVEILLANCE_DATA.dashboard.highRiskDistricts * 15,
+        }}
+        performanceMetrics={{ successRate: 94, responseTime: 2.5, coverage: 85, satisfaction: 4.3 }}
+        anomalyData={DISEASE_SURVEILLANCE_DATA.diseases?.map(d => ({ value: d.cases, label: d.name })) || []}
+      />
 
       {/* AI Early Warning Alert */}
       <div className={`rounded-2xl p-6 border-l-4 border-red-500 ${
