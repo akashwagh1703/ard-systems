@@ -20,7 +20,7 @@ import GrievanceDashboard from './components/microservices/grievance-system/Grie
 function App() {
   return (
     <AuthProvider>
-      <Router>
+      <Router basename="/ard-systems">
         <div className="min-h-screen bg-secondary-50">
           <Routes>
             <Route path="/login" element={<LoginPage />} />
