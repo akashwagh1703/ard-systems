@@ -1,333 +1,240 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { SAMPLE_USERS } from '../../data/mockData';
-import {
-  User, Shield, Building, Users, Wheat,
-  Lock, CheckCircle, AlertTriangle, Clock,
-  Eye, EyeOff, RefreshCw, ArrowLeft, Smartphone,
-  Info
-} from 'lucide-react';
+import { User, Shield, Building, Users, Wheat, ArrowRight, CheckCircle, Zap, BarChart2, Globe } from 'lucide-react';
 
 const ROLE_META = {
-  super_admin:      { icon: Shield,   color: 'border-red-300 bg-red-50',    badge: 'bg-red-100 text-red-800',    label: 'State Level' },
-  district_officer: { icon: Building, color: 'border-blue-300 bg-blue-50',  badge: 'bg-blue-100 text-blue-800',  label: 'District Level' },
-  block_officer:    { icon: Users,    color: 'border-green-300 bg-green-50', badge: 'bg-green-100 text-green-800',label: 'Block Level' },
-  field_user:       { icon: User,     color: 'border-orange-300 bg-orange-50',badge:'bg-orange-100 text-orange-800',label:'Field Level' },
-  farmer:           { icon: Wheat,    color: 'border-yellow-300 bg-yellow-50',badge:'bg-yellow-100 text-yellow-800',label:'Citizen' },
+  super_admin:      { icon: Shield,   label: 'Super Admin',      color: '#2563EB', bg: '#EFF6FF', desc: 'Full system · All services · State-level'  },
+  district_officer: { icon: Building, label: 'District Officer', color: '#0284C7', bg: '#F0F9FF', desc: 'District access · CDVO operations'          },
+  block_officer:    { icon: Users,    label: 'Block Officer',    color: '#059669', bg: '#ECFDF5', desc: 'Block operations · BVO functions'           },
+  field_user:       { icon: User,     label: 'Field User',       color: '#D97706', bg: '#FFFBEB', desc: 'Field operations · Service delivery'       },
+  farmer:           { icon: Wheat,    label: 'Farmer',           color: '#7C3AED', bg: '#F5F3FF', desc: 'Service booking · Limited access'          },
 };
 
-const ROLE_DESC = {
-  super_admin:      'Full system access • All microservices • State-level overview',
-  district_officer: 'District-level access • Most microservices • CDVO operations',
-  block_officer:    'Block-level operations • Operational services • BVO functions',
-  field_user:       'Field operations • Service delivery • Technician access',
-  farmer:           'Farmer interface • Service booking • Limited access',
-};
+const FEATURES = [
+  { text: '10 Independent Microservices',    sub: 'AI, Vaccine, Disease, MVU, Grievance & more' },
+  { text: 'AI-Enabled Predictive Analytics', sub: 'Demand forecasting · Anomaly detection' },
+  { text: 'Role-Based Access Control',       sub: '5 user roles with granular permissions' },
+  { text: '2026 Bento Grid Design System',   sub: 'Sidebar nav · Micro-interactions · Fresh UI' },
+];
 
-// OTP Input — 6 individual boxes
-const OtpInput = ({ value, onChange }) => {
-  const inputs = useRef([]);
-  const digits = value.split('');
-
-  const handleKey = (e, idx) => {
-    if (e.key === 'Backspace') {
-      const next = [...digits];
-      next[idx] = '';
-      onChange(next.join(''));
-      if (idx > 0) inputs.current[idx - 1]?.focus();
-    } else if (/^\d$/.test(e.key)) {
-      const next = [...digits];
-      next[idx] = e.key;
-      onChange(next.join(''));
-      if (idx < 5) inputs.current[idx + 1]?.focus();
-    }
-  };
-
-  return (
-    <div className="flex justify-center gap-3">
-      {Array.from({ length: 6 }).map((_, i) => (
-        <input
-          key={i}
-          ref={el => inputs.current[i] = el}
-          type="text"
-          inputMode="numeric"
-          maxLength={1}
-          value={digits[i] || ''}
-          onChange={() => {}}
-          onKeyDown={e => handleKey(e, i)}
-          onFocus={e => e.target.select()}
-          className="w-12 h-14 text-center text-2xl font-bold border-2 rounded-xl focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none transition-all bg-white"
-        />
-      ))}
-    </div>
-  );
-};
-
-// Countdown timer hook
-const useCountdown = (seconds, active) => {
-  const [remaining, setRemaining] = useState(seconds);
-  useEffect(() => {
-    if (!active) { setRemaining(seconds); return; }
-    if (remaining <= 0) return;
-    const t = setTimeout(() => setRemaining(r => r - 1), 1000);
-    return () => clearTimeout(t);
-  }, [remaining, active, seconds]);
-  return [remaining, () => setRemaining(seconds)];
-};
-
-const LoginPage = () => {
-  const [selectedUser, setSelectedUser] = useState('');
-  const [step, setStep] = useState('select'); // 'select' | 'mfa'
-  const [otp, setOtp] = useState('');
-  const [demoOtp, setDemoOtp] = useState('');
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
-  const [showDemoOtp, setShowDemoOtp] = useState(false);
-  const [otpCountdown, resetCountdown] = useCountdown(60, step === 'mfa');
-
-  const { login, verifyOtp, cancelMfa, mfaPending, isLockedOut, getLockoutRemaining, sessionExpired, setSessionExpired } = useAuth();
+export default function LoginPage() {
+  const [selected, setSelected] = useState('');
+  const { login } = useAuth();
   const navigate = useNavigate();
 
-  // Sync mfaPending → step
-  useEffect(() => {
-    if (mfaPending) setStep('mfa');
-  }, [mfaPending]);
-
-  const handleSelectSubmit = (e) => {
+  const handleLogin = (e) => {
     e.preventDefault();
-    if (!selectedUser) return;
-    if (isLockedOut()) {
-      setError(`Account locked. Try again in ${getLockoutRemaining()} minute(s).`);
-      return;
-    }
-    const user = SAMPLE_USERS.find(u => u.id === parseInt(selectedUser));
-    const result = login(user);
-    if (result.mfaRequired) {
-      setDemoOtp(result.otp);
-      setError('');
-      setStep('mfa');
-    }
+    if (!selected) return;
+    const user = SAMPLE_USERS.find(u => u.id === parseInt(selected));
+    login(user);
+    navigate('/dashboard');
   };
-
-  const handleOtpSubmit = (e) => {
-    e.preventDefault();
-    if (otp.length < 6) { setError('Please enter the complete 6-digit OTP.'); return; }
-    const result = verifyOtp(otp);
-    if (result.success) {
-      setSuccess('Login successful! Redirecting...');
-      setTimeout(() => navigate('/dashboard'), 800);
-    } else if (result.locked) {
-      setError(`Too many attempts. Account locked for ${result.remaining} minute(s).`);
-      setStep('select');
-    } else {
-      setError(`Invalid OTP. ${result.attemptsLeft} attempt(s) remaining.`);
-      setOtp('');
-    }
-  };
-
-  const handleResend = () => {
-    if (otpCountdown > 0) return;
-    cancelMfa();
-    const user = SAMPLE_USERS.find(u => u.id === parseInt(selectedUser));
-    const result = login(user);
-    setDemoOtp(result.otp);
-    setOtp('');
-    setError('');
-    resetCountdown();
-  };
-
-  const handleBack = () => {
-    cancelMfa();
-    setStep('select');
-    setOtp('');
-    setError('');
-  };
-
-  const selectedUserObj = SAMPLE_USERS.find(u => u.id === parseInt(selectedUser));
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 p-4">
-      <div className="max-w-2xl w-full space-y-6">
+    <div style={{ minHeight: '100vh', display: 'flex', background: 'var(--base)' }}>
 
-        {/* Header */}
-        <div className="text-center">
-          <div className="mx-auto h-20 w-20 bg-gradient-to-r from-blue-600 to-indigo-700 rounded-2xl flex items-center justify-center mb-4 shadow-lg">
-            <span className="text-white text-3xl font-bold">ARD</span>
+      {/* ── Left panel — 30% Royal Blue ── */}
+      <div style={{
+        width: '42%', minHeight: '100vh', flexShrink: 0,
+        background: 'linear-gradient(160deg, #1E40AF 0%, #2563EB 50%, #1D4ED8 100%)',
+        display: 'flex', flexDirection: 'column', justifyContent: 'space-between',
+        padding: '3rem', position: 'relative', overflow: 'hidden',
+      }}
+        className="hidden lg:flex"
+      >
+        {/* Decorative shapes */}
+        <div style={{ position: 'absolute', top: -80, right: -80, width: 300, height: 300, borderRadius: '50%', background: 'rgba(255,255,255,0.05)', pointerEvents: 'none' }} />
+        <div style={{ position: 'absolute', bottom: -60, left: -40, width: 220, height: 220, borderRadius: '50%', background: 'rgba(249,115,22,0.10)', pointerEvents: 'none' }} />
+        <div style={{ position: 'absolute', top: '45%', right: -30, width: 140, height: 140, borderRadius: '50%', background: 'rgba(255,255,255,0.04)', pointerEvents: 'none' }} />
+
+        <div style={{ position: 'relative', zIndex: 1 }}>
+          {/* Logo */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: '3rem' }}>
+            <div style={{
+              width: 48, height: 48, borderRadius: 14,
+              background: 'linear-gradient(135deg, #F97316, #EA580C)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              fontSize: 14, fontWeight: 800, color: '#fff',
+              boxShadow: '0 4px 20px rgba(249,115,22,0.50)',
+              letterSpacing: '0.04em',
+            }}>ARD</div>
+            <div>
+              <p style={{ color: '#fff', fontWeight: 700, fontSize: 15, lineHeight: 1.3 }}>Animal Resources Development</p>
+              <p style={{ color: 'rgba(255,255,255,0.50)', fontSize: 12 }}>Government of Odisha</p>
+            </div>
           </div>
-          <h2 className="text-3xl font-bold text-gray-900">Animal Resources Development</h2>
-          <p className="text-gray-600 mt-1">Government of Odisha — Secure Portal</p>
+
+          <h1 style={{ color: '#fff', fontSize: '2.125rem', fontWeight: 800, lineHeight: 1.2, letterSpacing: '-0.025em', marginBottom: '1rem' }}>
+            Microservices-Based<br />
+            <span style={{ color: '#FCD34D' }}>Management Platform</span>
+          </h1>
+          <p style={{ color: 'rgba(255,255,255,0.60)', fontSize: 13, lineHeight: 1.75, marginBottom: '2.5rem', maxWidth: 340 }}>
+            A proof-of-concept demonstrating enterprise-grade architecture for the ARD Department with AI-enabled features.
+          </p>
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
+            {FEATURES.map((f, i) => (
+              <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: 12 }}>
+                <div style={{
+                  width: 26, height: 26, borderRadius: 8, flexShrink: 0, marginTop: 1,
+                  background: 'rgba(249,115,22,0.20)',
+                  border: '1px solid rgba(249,115,22,0.35)',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                }}>
+                  <CheckCircle className="icon-xs" style={{ color: '#FCD34D' }} />
+                </div>
+                <div>
+                  <p style={{ color: '#fff', fontSize: 13, fontWeight: 600, lineHeight: 1.3 }}>{f.text}</p>
+                  <p style={{ color: 'rgba(255,255,255,0.45)', fontSize: 11, marginTop: 2 }}>{f.sub}</p>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
 
-        {/* Session expired banner */}
-        {sessionExpired && (
-          <div className="flex items-center gap-3 bg-amber-50 border border-amber-300 rounded-xl px-4 py-3 text-amber-800 text-sm">
-            <Clock className="h-5 w-5 shrink-0" />
-            <span>Your session expired due to inactivity. Please log in again.</span>
-            <button onClick={() => setSessionExpired(false)} className="ml-auto text-amber-600 hover:text-amber-800">✕</button>
-          </div>
-        )}
-
-        {/* Lockout banner */}
-        {isLockedOut() && (
-          <div className="flex items-center gap-3 bg-red-50 border border-red-300 rounded-xl px-4 py-3 text-red-800 text-sm">
-            <Lock className="h-5 w-5 shrink-0" />
-            <span>Account temporarily locked due to multiple failed attempts. Try again in {getLockoutRemaining()} minute(s).</span>
-          </div>
-        )}
-
-        {/* ── STEP 1: Role Selection ── */}
-        {step === 'select' && (
-          <form onSubmit={handleSelectSubmit}>
-            <div className="bg-white rounded-2xl shadow-xl border border-gray-100 p-8">
-              <h3 className="text-xl font-semibold text-gray-900 mb-1">Select Your Role</h3>
-              <p className="text-sm text-gray-500 mb-6">Choose your user profile to continue with secure login</p>
-
-              <div className="space-y-3">
-                {SAMPLE_USERS.map(u => {
-                  const meta = ROLE_META[u.role];
-                  const Icon = meta.icon;
-                  const isSelected = selectedUser === u.id.toString();
-                  return (
-                    <div
-                      key={u.id}
-                      onClick={() => { setSelectedUser(u.id.toString()); setError(''); }}
-                      className={`relative p-4 rounded-xl border-2 cursor-pointer transition-all duration-200 hover:shadow-md ${
-                        isSelected ? 'border-blue-500 bg-blue-50 shadow-md' : `${meta.color} hover:border-gray-300`
-                      }`}
-                    >
-                      <div className="flex items-center gap-4">
-                        <div className={`h-12 w-12 rounded-xl flex items-center justify-center ${isSelected ? 'bg-blue-100' : 'bg-white'}`}>
-                          <Icon className={`h-6 w-6 ${isSelected ? 'text-blue-600' : 'text-gray-600'}`} />
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center justify-between gap-2 mb-1">
-                            <h4 className="font-semibold text-gray-900 truncate">{u.name}</h4>
-                            <span className={`px-2 py-0.5 rounded-full text-xs font-medium shrink-0 ${meta.badge}`}>{meta.label}</span>
-                          </div>
-                          <p className="text-sm text-gray-600">{u.designation} • {u.district}</p>
-                          <p className="text-xs text-gray-400 mt-0.5">{ROLE_DESC[u.role]}</p>
-                        </div>
-                        {isSelected && <CheckCircle className="h-5 w-5 text-blue-600 shrink-0" />}
-                      </div>
-                    </div>
-                  );
-                })}
+        {/* Stats */}
+        <div style={{ display: 'flex', gap: 10, position: 'relative', zIndex: 1 }}>
+          {[
+            { icon: Zap,       value: '10',  label: 'Services'  },
+            { icon: BarChart2, value: '5',   label: 'Roles'     },
+            { icon: Globe,     value: 'AI',  label: 'Powered'   },
+          ].map((s, i) => {
+            const Icon = s.icon;
+            return (
+              <div key={i} style={{
+                flex: 1, padding: '12px 10px', borderRadius: 12, textAlign: 'center',
+                background: 'rgba(255,255,255,0.10)',
+                border: '1px solid rgba(255,255,255,0.12)',
+              }}>
+                <Icon className="icon-sm" style={{ color: '#FCD34D', margin: '0 auto 6px' }} />
+                <p style={{ fontSize: 20, fontWeight: 800, color: '#fff', letterSpacing: '-0.02em' }}>{s.value}</p>
+                <p style={{ fontSize: 10, color: 'rgba(255,255,255,0.45)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{s.label}</p>
               </div>
+            );
+          })}
+        </div>
+      </div>
 
-              {error && (
-                <div className="mt-4 flex items-center gap-2 text-red-700 bg-red-50 border border-red-200 rounded-lg px-3 py-2 text-sm">
-                  <AlertTriangle className="h-4 w-4 shrink-0" /> {error}
-                </div>
-              )}
+      {/* ── Right panel — 60% Base ── */}
+      <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2rem', background: 'var(--base)' }}>
+        <div style={{ width: '100%', maxWidth: 460 }}>
 
-              <button
-                type="submit"
-                disabled={!selectedUser || isLockedOut()}
-                className="w-full mt-6 bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 disabled:from-gray-400 disabled:to-gray-500 text-white font-semibold py-4 rounded-xl transition-all shadow-lg hover:shadow-xl disabled:cursor-not-allowed flex items-center justify-center gap-2"
-              >
-                <Smartphone className="h-5 w-5" />
-                {selectedUser ? 'Send OTP & Continue' : 'Select a Role to Continue'}
-              </button>
+          {/* Mobile logo */}
+          <div className="flex lg:hidden items-center gap-3 mb-8">
+            <div style={{
+              width: 40, height: 40, borderRadius: 11,
+              background: 'linear-gradient(135deg, #2563EB, #1D4ED8)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              fontSize: 12, fontWeight: 800, color: '#fff',
+            }}>ARD</div>
+            <div>
+              <p style={{ fontWeight: 700, fontSize: 14, color: 'var(--blue)' }}>Animal Resources Development</p>
+              <p style={{ fontSize: 11, color: 'var(--text-3)' }}>Government of Odisha</p>
             </div>
-          </form>
-        )}
+          </div>
 
-        {/* ── STEP 2: MFA OTP Verification ── */}
-        {step === 'mfa' && (
-          <form onSubmit={handleOtpSubmit}>
-            <div className="bg-white rounded-2xl shadow-xl border border-gray-100 p-8">
-              <button type="button" onClick={handleBack} className="flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700 mb-6">
-                <ArrowLeft className="h-4 w-4" /> Back
-              </button>
+          {/* Heading */}
+          <div style={{ marginBottom: '1.75rem' }}>
+            <h2 style={{ fontSize: '1.625rem', fontWeight: 800, color: 'var(--text-1)', letterSpacing: '-0.02em', marginBottom: 6 }}>
+              Select Your Role
+            </h2>
+            <p style={{ fontSize: 13, color: 'var(--text-3)', lineHeight: 1.6 }}>
+              Choose your profile to access the appropriate dashboard and services.
+            </p>
+          </div>
 
-              <div className="text-center mb-8">
-                <div className="mx-auto h-16 w-16 bg-blue-100 rounded-2xl flex items-center justify-center mb-4">
-                  <Smartphone className="h-8 w-8 text-blue-600" />
-                </div>
-                <h3 className="text-xl font-bold text-gray-900">Two-Factor Verification</h3>
-                <p className="text-sm text-gray-500 mt-2">
-                  An OTP has been sent to the registered mobile of<br />
-                  <span className="font-semibold text-gray-800">{selectedUserObj?.name}</span>
-                </p>
-              </div>
+          <form onSubmit={handleLogin}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 20 }}>
+              {SAMPLE_USERS.map(u => {
+                const meta = ROLE_META[u.role];
+                const Icon = meta.icon;
+                const isSel = selected === u.id.toString();
 
-              {/* Demo OTP Banner */}
-              <div className="mb-6 bg-blue-50 border border-blue-200 rounded-xl p-4">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2 text-blue-700 text-sm">
-                    <Info className="h-4 w-4 shrink-0" />
-                    <span className="font-medium">Demo Mode — OTP Preview</span>
-                  </div>
+                return (
                   <button
+                    key={u.id}
                     type="button"
-                    onClick={() => setShowDemoOtp(v => !v)}
-                    className="text-blue-600 hover:text-blue-800"
+                    onClick={() => setSelected(u.id.toString())}
+                    style={{
+                      width: '100%', textAlign: 'left',
+                      padding: '13px 16px', borderRadius: 14,
+                      background: isSel ? meta.bg : 'var(--surface)',
+                      border: `1.5px solid ${isSel ? meta.color : 'var(--border)'}`,
+                      cursor: 'pointer', transition: 'all 0.15s ease', outline: 'none',
+                      boxShadow: isSel ? `0 0 0 3px ${meta.color}18` : 'var(--shadow-xs)',
+                    }}
+                    onMouseEnter={e => { if (!isSel) { e.currentTarget.style.borderColor = 'var(--border-2)'; e.currentTarget.style.boxShadow = 'var(--shadow-sm)'; }}}
+                    onMouseLeave={e => { if (!isSel) { e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.boxShadow = 'var(--shadow-xs)'; }}}
                   >
-                    {showDemoOtp ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+                      <div style={{
+                        width: 42, height: 42, borderRadius: 11, flexShrink: 0,
+                        background: isSel ? meta.color : 'var(--base-2)',
+                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        transition: 'all 0.15s ease',
+                        boxShadow: isSel ? `0 2px 10px ${meta.color}35` : 'none',
+                      }}>
+                        <Icon className="icon-md" style={{ color: isSel ? '#fff' : meta.color }} />
+                      </div>
+                      <div style={{ flex: 1, minWidth: 0 }}>
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8, marginBottom: 3 }}>
+                          <span style={{ fontSize: 13, fontWeight: 600, color: isSel ? meta.color : 'var(--text-1)' }}>
+                            {u.name}
+                          </span>
+                          <span style={{
+                            fontSize: 10, fontWeight: 700, padding: '2px 8px', borderRadius: 99,
+                            background: isSel ? meta.color : 'var(--base-2)',
+                            color: isSel ? '#fff' : 'var(--text-3)',
+                            textTransform: 'uppercase', letterSpacing: '0.04em', flexShrink: 0,
+                          }}>
+                            {meta.label}
+                          </span>
+                        </div>
+                        <p style={{ fontSize: 11, color: 'var(--text-4)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                          {u.district} · {meta.desc}
+                        </p>
+                      </div>
+                      <ArrowRight className="icon-sm" style={{
+                        color: isSel ? meta.color : 'var(--border-2)',
+                        transform: isSel ? 'translateX(2px)' : 'none',
+                        transition: 'all 0.15s ease', flexShrink: 0,
+                      }} />
+                    </div>
                   </button>
-                </div>
-                {showDemoOtp && (
-                  <div className="mt-2 text-center">
-                    <span className="text-3xl font-mono font-bold tracking-widest text-blue-800">{demoOtp}</span>
-                  </div>
-                )}
-                {!showDemoOtp && (
-                  <p className="text-xs text-blue-600 mt-1">Click the eye icon to reveal the OTP for this demo</p>
-                )}
-              </div>
-
-              <OtpInput value={otp} onChange={setOtp} />
-
-              {error && (
-                <div className="mt-4 flex items-center gap-2 text-red-700 bg-red-50 border border-red-200 rounded-lg px-3 py-2 text-sm">
-                  <AlertTriangle className="h-4 w-4 shrink-0" /> {error}
-                </div>
-              )}
-              {success && (
-                <div className="mt-4 flex items-center gap-2 text-green-700 bg-green-50 border border-green-200 rounded-lg px-3 py-2 text-sm">
-                  <CheckCircle className="h-4 w-4 shrink-0" /> {success}
-                </div>
-              )}
-
-              <button
-                type="submit"
-                disabled={otp.length < 6}
-                className="w-full mt-6 bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 disabled:from-gray-400 disabled:to-gray-500 text-white font-semibold py-4 rounded-xl transition-all shadow-lg disabled:cursor-not-allowed flex items-center justify-center gap-2"
-              >
-                <Lock className="h-5 w-5" />
-                Verify & Access Dashboard
-              </button>
-
-              <div className="mt-4 text-center">
-                <button
-                  type="button"
-                  onClick={handleResend}
-                  disabled={otpCountdown > 0}
-                  className="text-sm text-blue-600 hover:text-blue-800 disabled:text-gray-400 flex items-center gap-1 mx-auto"
-                >
-                  <RefreshCw className="h-3 w-3" />
-                  {otpCountdown > 0 ? `Resend OTP in ${otpCountdown}s` : 'Resend OTP'}
-                </button>
-              </div>
+                );
+              })}
             </div>
-          </form>
-        )}
 
-        {/* Footer */}
-        <div className="bg-white rounded-xl shadow border border-gray-100 p-4 text-center">
-          <p className="text-sm text-gray-600 mb-2">
-            <span className="font-semibold">Secure Demo System</span> — Role-based access with MFA
+            {/* CTA — 10% Orange */}
+            <button
+              type="submit"
+              disabled={!selected}
+              style={{
+                width: '100%', padding: '14px',
+                borderRadius: 12, border: 'none',
+                fontSize: 14, fontWeight: 700, color: '#fff',
+                background: selected ? 'linear-gradient(135deg, #F97316, #EA580C)' : 'var(--base-3)',
+                cursor: selected ? 'pointer' : 'not-allowed',
+                boxShadow: selected ? '0 4px 20px rgba(249,115,22,0.35)' : 'none',
+                transition: 'all 0.2s ease',
+                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+                letterSpacing: '0.01em',
+              }}
+              onMouseEnter={e => { if (selected) { e.currentTarget.style.transform = 'translateY(-1px)'; e.currentTarget.style.boxShadow = '0 6px 24px rgba(249,115,22,0.45)'; }}}
+              onMouseLeave={e => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = selected ? '0 4px 20px rgba(249,115,22,0.35)' : 'none'; }}
+            >
+              {selected ? 'Access Dashboard' : 'Select a Role to Continue'}
+              {selected && <ArrowRight className="icon-sm" />}
+            </button>
+          </form>
+
+          <p style={{ textAlign: 'center', fontSize: 11, color: 'var(--text-4)', marginTop: 20 }}>
+            Demo system · Role-based access · 10 microservices · AI-enabled
           </p>
-          <div className="flex items-center justify-center gap-4 text-xs text-gray-400">
-            <span className="flex items-center gap-1"><Lock className="h-3 w-3" /> MFA Enabled</span>
-            <span className="flex items-center gap-1"><Shield className="h-3 w-3" /> RBAC Active</span>
-            <span className="flex items-center gap-1"><Clock className="h-3 w-3" /> 30-min Session</span>
-          </div>
         </div>
       </div>
     </div>
   );
-};
-
-export default LoginPage;
+}

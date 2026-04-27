@@ -1,550 +1,191 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import Header from '../../common/Header';
+import ServiceShell from '../../common/ServiceShell';
+import { StatCard, AIAlert, ContentCard, SectionHeader, StatusRow, ProgressBar } from '../../common/ServiceWidgets';
+import { Modal, Toast, useToast, FormField, Input, Select, ModalFooter, ConfirmDialog } from '../../common/CrudComponents';
 import { TRAINING_MANAGEMENT_DATA } from '../../../data/mockData';
 import AITrainingAnalytics from './AITrainingAnalytics';
-import { 
-  GraduationCap, Calendar, Users, CheckCircle, ArrowLeft, TrendingUp,
-  BarChart3, Activity, Clock, Eye, Plus, Brain, Zap, Target, Bell
-} from 'lucide-react';
+import { GraduationCap, Calendar, Users, CheckCircle, TrendingUp, BarChart3, Clock, Brain, Target, Plus, Pencil, Trash2 } from 'lucide-react';
 
-const TrainingDashboard = () => {
-  const navigate = useNavigate();
-  const [activeModule, setActiveModule] = useState('dashboard');
-  const [isDark, setIsDark] = useState(false);
+const MODULES = [
+  { id: 'dashboard',   name: 'Overview',        icon: BarChart3     },
+  { id: 'application', name: 'Applications',     icon: GraduationCap },
+  { id: 'approval',    name: 'Approvals',        icon: CheckCircle   },
+  { id: 'allocation',  name: 'Slot Allocation',  icon: Calendar      },
+  { id: 'history',     name: 'History',          icon: Users         },
+  { id: 'ai-training', name: 'AI Analytics',     icon: Brain         },
+];
+const COLOR = '#7C3AED';
+const TRAINING_TOPICS = ['AI Techniques', 'Disease Management', 'Vaccination Protocols', 'Farm Management', 'Record Keeping', 'Emergency Response'];
 
-  const modules = [
-    { id: 'dashboard', name: 'Overview', icon: BarChart3, description: 'Training program status' },
-    { id: 'application', name: 'Applications', icon: GraduationCap, description: 'Manage applications' },
-    { id: 'approval', name: 'Approvals', icon: CheckCircle, description: 'Approval workflow' },
-    { id: 'allocation', name: 'Slot Allocation', icon: Calendar, description: 'Schedule training slots' },
-    { id: 'history', name: 'Training History', icon: Users, description: 'Past training records' },
-    { id: 'ai-training', name: 'AI Analytics', icon: Brain, description: 'AI-powered insights' }
-  ];
+export default function TrainingDashboard() {
+  const [active, setActive] = useState('dashboard');
+  const { toasts, add: toast, remove } = useToast();
 
-  const renderDashboard = () => (
-    <div className="space-y-8">
-      {/* Welcome Section */}
-      <div className={`rounded-2xl p-6 border ${
-        isDark 
-          ? 'bg-gradient-to-r from-slate-900/90 to-slate-800/90 backdrop-blur-xl border-white/10' 
-          : 'bg-gradient-to-r from-purple-50 to-indigo-50 border-purple-200'
-      }`}>
-        <div className="flex items-center space-x-4">
-          <div className="h-16 w-16 bg-gradient-to-br from-purple-500 to-indigo-600 rounded-2xl flex items-center justify-center">
-            <GraduationCap className="h-8 w-8 text-white" />
-          </div>
-          <div>
-            <h2 className={`text-2xl font-bold mb-2 ${
-              isDark ? 'text-white' : 'text-gray-900'
-            }`}>Training Management System</h2>
-            <p className={`text-lg ${
-              isDark ? 'text-purple-300' : 'text-purple-600'
-            }`}>AI-powered training programs and capacity optimization</p>
-          </div>
-        </div>
-      </div>
+  const [trainings, setTrainings] = useState(TRAINING_MANAGEMENT_DATA.trainings || []);
+  const [trnModal, setTrnModal] = useState(false);
+  const [trnForm, setTrnForm] = useState({ title: '', date: '', participants: '', status: 'pending' });
+  const [editTrnId, setEditTrnId] = useState(null);
+  const [deleteTrn, setDeleteTrn] = useState(null);
 
-      {/* AI-Powered Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {[
-          { 
-            title: 'Upcoming Trainings', 
-            value: TRAINING_MANAGEMENT_DATA.dashboard.upcomingTrainings?.toString() || '0', 
-            icon: Calendar, 
-            color: 'from-blue-500 to-cyan-500',
-            description: 'Scheduled programs',
-            aiInsight: '📅 5 programs this month'
-          },
-          { 
-            title: 'Pending Approvals', 
-            value: TRAINING_MANAGEMENT_DATA.dashboard.pendingApprovals?.toString() || '0', 
-            icon: CheckCircle, 
-            color: 'from-orange-500 to-red-500',
-            description: 'Awaiting approval',
-            aiInsight: '⚠️ 3 urgent approvals needed'
-          },
-          { 
-            title: 'Capacity Utilization', 
-            value: `${TRAINING_MANAGEMENT_DATA.dashboard.capacityUtilization || 0}%`, 
-            icon: Users, 
-            color: 'from-green-500 to-emerald-500',
-            description: 'Current utilization',
-            aiInsight: '🎯 15% below optimal'
-          },
-          { 
-            title: 'Completion Rate', 
-            value: `${TRAINING_MANAGEMENT_DATA.dashboard.completionRate || 0}%`, 
-            icon: GraduationCap, 
-            color: 'from-purple-500 to-pink-500',
-            description: 'Training completion',
-            aiInsight: '🎆 Above industry average'
-          }
-        ].map((stat, index) => {
-          const IconComponent = stat.icon;
-          return (
-            <div key={index} className="group relative">
-              <div className={`absolute inset-0 bg-gradient-to-r ${stat.color} rounded-2xl opacity-20 group-hover:opacity-30 transition-opacity`}></div>
-              <div className={`relative rounded-2xl p-6 border transition-all hover:scale-105 ${
-                isDark 
-                  ? 'bg-slate-900/80 backdrop-blur-xl border-white/10' 
-                  : 'bg-white border-gray-200'
-              }`}>
-                <div className="flex items-center justify-between mb-4">
-                  <div className={`h-12 w-12 bg-gradient-to-r ${stat.color} rounded-xl flex items-center justify-center`}>
-                    <IconComponent className="h-6 w-6 text-white" />
-                  </div>
-                  <Brain className="h-5 w-5 text-purple-500" title="AI Powered" />
-                </div>
-                <h3 className={`text-sm font-medium mb-1 ${
-                  isDark ? 'text-gray-400' : 'text-gray-600'
-                }`}>{stat.title}</h3>
-                <p className={`text-3xl font-bold mb-2 ${
-                  isDark ? 'text-white' : 'text-gray-900'
-                }`}>{stat.value}</p>
-                <p className={`text-xs mb-2 ${
-                  isDark ? 'text-gray-500' : 'text-gray-500'
-                }`}>{stat.description}</p>
-                <div className={`text-xs px-2 py-1 rounded-full ${
-                  isDark ? 'bg-purple-500/20 text-purple-300' : 'bg-purple-100 text-purple-700'
-                }`}>
-                  {stat.aiInsight}
-                </div>
-              </div>
-            </div>
-          );
-        })
-      }
-      </div>
+  const [applications, setApplications] = useState([
+    { id: 'APP001', name: 'Ramesh Das',   topic: 'AI Techniques',    district: 'Khordha', status: 'pending'  },
+    { id: 'APP002', name: 'Sita Patel',   topic: 'Disease Management',district: 'Cuttack', status: 'approved' },
+    { id: 'APP003', name: 'Mohan Kumar',  topic: 'Vaccination Protocols',district: 'Puri', status: 'pending'  },
+  ]);
+  const [appModal, setAppModal] = useState(false);
+  const [appForm, setAppForm] = useState({ name: '', topic: '', district: '' });
+  const [deleteApp, setDeleteApp] = useState(null);
 
-      {/* AI Training Optimization Alert */}
-      <div className={`rounded-2xl p-6 border-l-4 border-purple-500 ${
-        isDark 
-          ? 'bg-purple-500/10 backdrop-blur-xl' 
-          : 'bg-purple-50 border-purple-200'
-      }`}>
-        <div className="flex items-start space-x-4">
-          <div className="h-12 w-12 bg-purple-500 rounded-full flex items-center justify-center">
-            <Brain className="h-6 w-6 text-white" />
-          </div>
-          <div className="flex-1">
-            <h3 className={`text-lg font-bold mb-2 flex items-center ${
-              isDark ? 'text-white' : 'text-gray-900'
-            }`}>
-              🤖 AI Training Optimization
-            </h3>
-            <p className={`text-base mb-3 ${
-              isDark ? 'text-gray-300' : 'text-gray-700'
-            }`}>
-              AI analysis suggests adding evening batches and weekend sessions to increase capacity utilization by 35%. 
-              Optimal timing for cattle breeding workshop is March 20-22 based on farmer availability patterns.
-            </p>
-            <div className="flex space-x-3">
-              <button className="bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded-lg font-medium transition-colors">
-                View AI Recommendations
-              </button>
-              <button className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-medium transition-colors">
-                Optimize Schedule
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
+  const saveTrn = () => {
+    if (!trnForm.title || !trnForm.date) { toast('Fill required fields', 'error'); return; }
+    if (editTrnId) {
+      setTrainings(p => p.map(t => t.id === editTrnId ? { ...t, ...trnForm, participants: +trnForm.participants } : t)); toast('Training updated');
+    } else {
+      setTrainings(p => [...p, { ...trnForm, id: `TRN${String(Date.now()).slice(-3)}`, participants: +trnForm.participants }]); toast('Training scheduled');
+    }
+    setTrnModal(false); setTrnForm({ title: '', date: '', participants: '', status: 'pending' }); setEditTrnId(null);
+  };
 
-      {/* AI Training Analytics */}
-      <AITrainingAnalytics />
+  const saveApp = () => {
+    if (!appForm.name || !appForm.topic) { toast('Fill required fields', 'error'); return; }
+    setApplications(p => [...p, { ...appForm, id: `APP${String(Date.now()).slice(-3)}`, status: 'pending' }]);
+    toast('Application submitted'); setAppModal(false); setAppForm({ name: '', topic: '', district: '' });
+  };
 
-      {/* Smart Training Schedule */}
-      <div className={`rounded-2xl p-6 border ${
-        isDark 
-          ? 'bg-slate-900/80 backdrop-blur-xl border-white/10' 
-          : 'bg-white border-gray-200'
-      }`}>
-        <h3 className={`text-xl font-bold mb-6 flex items-center ${
-          isDark ? 'text-white' : 'text-gray-900'
-        }`}>
-          <Calendar className="h-6 w-6 mr-2 text-purple-500" />
-          AI-Optimized Training Schedule
-        </h3>
-        <div className="space-y-4">
-          {TRAINING_MANAGEMENT_DATA.trainings?.map((training, index) => {
-            const aiOptimization = ['High Priority', 'Optimal Timing', 'Capacity Available'][index % 3];
-            const efficiency = 85 + Math.floor(Math.random() * 15);
-            return (
-              <div key={training.id} className={`p-4 rounded-xl border transition-all hover:scale-105 ${
-                training.status === 'scheduled' 
-                  ? isDark ? 'bg-green-500/10 border-green-500/30' : 'bg-green-50 border-green-200'
-                  : isDark ? 'bg-orange-500/10 border-orange-500/30' : 'bg-orange-50 border-orange-200'
-              }`}>
-                <div className="flex items-center justify-between mb-3">
-                  <h4 className={`font-bold ${
-                    isDark ? 'text-white' : 'text-gray-900'
-                  }`}>{training.title}</h4>
-                  <div className={`h-3 w-3 rounded-full ${
-                    training.status === 'scheduled' ? 'bg-green-500' : 'bg-orange-500 animate-pulse'
-                  }`}></div>
-                </div>
-                <div className="grid grid-cols-4 gap-4 text-sm">
-                  <div>
-                    <span className={isDark ? 'text-gray-400' : 'text-gray-600'}>Date:</span>
-                    <p className={`font-bold ${
-                      isDark ? 'text-white' : 'text-gray-900'
-                    }`}>{training.date}</p>
-                  </div>
-                  <div>
-                    <span className={isDark ? 'text-gray-400' : 'text-gray-600'}>Participants:</span>
-                    <p className={`font-bold ${
-                      isDark ? 'text-white' : 'text-gray-900'
-                    }`}>{training.participants}</p>
-                  </div>
-                  <div>
-                    <span className={isDark ? 'text-gray-400' : 'text-gray-600'}>AI Efficiency:</span>
-                    <p className={`font-bold text-purple-600`}>{efficiency}%</p>
-                  </div>
-                  <div>
-                    <span className={isDark ? 'text-gray-400' : 'text-gray-600'}>AI Status:</span>
-                    <p className={`font-bold text-blue-600`}>{aiOptimization}</p>
-                  </div>
-                </div>
-                <div className="flex items-center justify-between mt-3">
-                  <span className={`px-3 py-1 rounded-full text-sm font-medium ${
-                    training.status === 'scheduled' 
-                      ? 'bg-green-100 text-green-800' 
-                      : 'bg-orange-100 text-orange-800'
-                  }`}>
-                    {training.status === 'scheduled' ? '✅ Scheduled' : '🕰️ Planning'}
-                  </span>
-                  <div className="flex items-center text-xs text-purple-600">
-                    <Zap className="h-3 w-3 mr-1" />
-                    AI Optimized
-                  </div>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </div>
+  const approveApp = (id) => { setApplications(p => p.map(a => a.id === id ? { ...a, status: 'approved' } : a)); toast('Application approved'); };
+  const rejectApp  = (id) => { setApplications(p => p.map(a => a.id === id ? { ...a, status: 'rejected' } : a)); toast('Application rejected', 'info'); };
 
-      {/* Training Performance Metrics */}
-      <div className={`rounded-2xl p-6 border ${
-        isDark 
-          ? 'bg-slate-900/80 backdrop-blur-xl border-white/10' 
-          : 'bg-white border-gray-200'
-      }`}>
-        <h3 className={`text-xl font-bold mb-6 flex items-center ${
-          isDark ? 'text-white' : 'text-gray-900'
-        }`}>
-          <TrendingUp className="h-6 w-6 mr-2 text-green-500" />
-          AI Performance Analytics
-        </h3>
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-          <div className={`p-4 rounded-xl border ${
-            isDark ? 'bg-white/5 border-white/10' : 'bg-blue-50 border-blue-200'
-          }`}>
-            <div className="flex items-center justify-between mb-2">
-              <h4 className={`font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>Satisfaction Score</h4>
-              <Target className="h-5 w-5 text-blue-500" />
-            </div>
-            <p className="text-2xl font-bold text-blue-500 mb-1">4.7/5</p>
-            <p className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Trainee feedback</p>
-          </div>
-          <div className={`p-4 rounded-xl border ${
-            isDark ? 'bg-white/5 border-white/10' : 'bg-green-50 border-green-200'
-          }`}>
-            <div className="flex items-center justify-between mb-2">
-              <h4 className={`font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>Skill Improvement</h4>
-              <Activity className="h-5 w-5 text-green-500" />
-            </div>
-            <p className="text-2xl font-bold text-green-500 mb-1">87%</p>
-            <p className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Pre vs post assessment</p>
-          </div>
-          <div className={`p-4 rounded-xl border ${
-            isDark ? 'bg-white/5 border-white/10' : 'bg-purple-50 border-purple-200'
-          }`}>
-            <div className="flex items-center justify-between mb-2">
-              <h4 className={`font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>Cost Efficiency</h4>
-              <Clock className="h-5 w-5 text-purple-500" />
-            </div>
-            <p className="text-2xl font-bold text-purple-500 mb-1">₹2.2K</p>
-            <p className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Per trainee cost</p>
-          </div>
-          <div className={`p-4 rounded-xl border ${
-            isDark ? 'bg-white/5 border-white/10' : 'bg-orange-50 border-orange-200'
-          }`}>
-            <div className="flex items-center justify-between mb-2">
-              <h4 className={`font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>ROI Impact</h4>
-              <TrendingUp className="h-5 w-5 text-orange-500" />
-            </div>
-            <p className="text-2xl font-bold text-orange-500 mb-1">340%</p>
-            <p className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Training ROI</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+  const renderContent = () => {
+    switch (active) {
+      case 'ai-training': return <AITrainingAnalytics />;
 
-  const renderModule = (moduleId) => {
-    switch (moduleId) {
-      case 'ai-training':
-        return <AITrainingAnalytics />;
       case 'application':
         return (
-          <div className={`rounded-2xl p-6 border ${
-            isDark 
-              ? 'bg-slate-900/80 backdrop-blur-xl border-white/10' 
-              : 'bg-white border-gray-200'
-          }`}>
-            <h3 className={`text-2xl font-bold mb-4 flex items-center ${
-              isDark ? 'text-white' : 'text-gray-900'
-            }`}>
-              <GraduationCap className="h-8 w-8 mr-3 text-blue-500" />
-              Smart Training Applications
-            </h3>
-            <p className={`text-lg mb-6 ${
-              isDark ? 'text-gray-300' : 'text-gray-600'
-            }`}>AI-powered application processing and candidate matching</p>
-            
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <button className="p-6 bg-blue-500 hover:bg-blue-600 text-white rounded-xl transition-all hover:scale-105">
-                <GraduationCap className="h-8 w-8 mb-3 mx-auto" />
-                <h4 className="font-bold mb-2">New Application</h4>
-                <p className="text-sm opacity-90">AI-guided form</p>
-              </button>
-              <button className="p-6 bg-green-500 hover:bg-green-600 text-white rounded-xl transition-all hover:scale-105">
-                <Brain className="h-8 w-8 mb-3 mx-auto" />
-                <h4 className="font-bold mb-2">Smart Matching</h4>
-                <p className="text-sm opacity-90">AI candidate selection</p>
-              </button>
-              <button className="p-6 bg-purple-500 hover:bg-purple-600 text-white rounded-xl transition-all hover:scale-105">
-                <Eye className="h-8 w-8 mb-3 mx-auto" />
-                <h4 className="font-bold mb-2">Track Status</h4>
-                <p className="text-sm opacity-90">Real-time updates</p>
-              </button>
+          <ContentCard>
+            <SectionHeader title="Training Applications" icon={GraduationCap} color={COLOR}
+              right={<button className="btn-blue" style={{ fontSize: 11, padding: '6px 14px' }} onClick={() => setAppModal(true)}><Plus className="icon-xs" /> New Application</button>}
+            />
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+              {applications.map(a => (
+                <div key={a.id} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 14px', borderRadius: 'var(--r-lg)', background: 'var(--base-2)', border: '1px solid var(--border)' }}>
+                  <div>
+                    <p style={{ fontSize: 12, fontWeight: 600, color: 'var(--text-1)' }}>{a.name} — {a.topic}</p>
+                    <p style={{ fontSize: 10, color: 'var(--text-4)' }}>{a.district} · {a.id}</p>
+                  </div>
+                  <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
+                    <span style={{ fontSize: 10, fontWeight: 600, padding: '2px 8px', borderRadius: 'var(--r-full)', background: a.status === 'approved' ? 'var(--success-bg)' : a.status === 'rejected' ? 'var(--danger-bg)' : 'var(--warning-bg)', color: a.status === 'approved' ? 'var(--success)' : a.status === 'rejected' ? 'var(--danger)' : 'var(--warning)', border: `1px solid ${a.status === 'approved' ? 'var(--success-border)' : a.status === 'rejected' ? 'var(--danger-border)' : 'var(--warning-border)'}` }}>{a.status}</span>
+                    {a.status === 'pending' && <>
+                      <button onClick={() => approveApp(a.id)} style={{ padding: '4px 10px', borderRadius: 'var(--r-md)', background: 'var(--success)', color: '#fff', border: 'none', fontSize: 10, fontWeight: 600, cursor: 'pointer' }}>Approve</button>
+                      <button onClick={() => rejectApp(a.id)} style={{ padding: '4px 10px', borderRadius: 'var(--r-md)', background: 'var(--danger-bg)', color: 'var(--danger)', border: '1px solid var(--danger-border)', fontSize: 10, fontWeight: 600, cursor: 'pointer' }}>Reject</button>
+                    </>}
+                    <button onClick={() => setDeleteApp(a.id)} style={{ width: 28, height: 28, borderRadius: 'var(--r-md)', border: '1px solid var(--danger-border)', background: 'var(--danger-bg)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--danger)' }}><Trash2 className="icon-xs" /></button>
+                  </div>
+                </div>
+              ))}
             </div>
-          </div>
+            <Modal open={appModal} onClose={() => setAppModal(false)} title="New Training Application">
+              <FormField label="Applicant Name" required><Input value={appForm.name} onChange={e => setAppForm(p => ({ ...p, name: e.target.value }))} placeholder="Full name" /></FormField>
+              <FormField label="Training Topic" required><Select value={appForm.topic} onChange={e => setAppForm(p => ({ ...p, topic: e.target.value }))}><option value="">Select topic</option>{TRAINING_TOPICS.map(t => <option key={t}>{t}</option>)}</Select></FormField>
+              <FormField label="District"><Input value={appForm.district} onChange={e => setAppForm(p => ({ ...p, district: e.target.value }))} placeholder="e.g. Khordha" /></FormField>
+              <ModalFooter onCancel={() => setAppModal(false)} onSubmit={saveApp} submitLabel="Submit Application" submitColor={COLOR} />
+            </Modal>
+            <ConfirmDialog open={!!deleteApp} onClose={() => setDeleteApp(null)} onConfirm={() => { setApplications(p => p.filter(a => a.id !== deleteApp)); toast('Application deleted', 'info'); }} title="Delete Application" message="Delete this application?" />
+          </ContentCard>
         );
+
       case 'approval':
         return (
-          <div className={`rounded-2xl p-6 border ${
-            isDark 
-              ? 'bg-slate-900/80 backdrop-blur-xl border-white/10' 
-              : 'bg-white border-gray-200'
-          }`}>
-            <h3 className={`text-2xl font-bold mb-4 flex items-center ${
-              isDark ? 'text-white' : 'text-gray-900'
-            }`}>
-              <CheckCircle className="h-8 w-8 mr-3 text-green-500" />
-              AI Approval Workflow
-            </h3>
-            <p className={`text-lg mb-6 ${
-              isDark ? 'text-gray-300' : 'text-gray-600'
-            }`}>Smart approval process with AI recommendations</p>
-            
-            <div className="space-y-4">
-              {['Application-001', 'Application-002', 'Application-003'].map((app, i) => {
-                const priority = ['High', 'Medium', 'Low'][i];
-                const aiRecommendation = ['Approve', 'Review', 'Approve'][i];
-                return (
-                  <div key={i} className={`p-4 rounded-xl border flex items-center justify-between ${
-                    isDark ? 'bg-white/5 border-white/10' : 'bg-gray-50 border-gray-200'
-                  }`}>
-                    <div className="flex items-center space-x-4">
-                      <div className={`h-12 w-12 rounded-full flex items-center justify-center ${
-                        priority === 'High' ? 'bg-red-100' : 
-                        priority === 'Medium' ? 'bg-yellow-100' : 'bg-green-100'
-                      }`}>
-                        <CheckCircle className={`h-6 w-6 ${
-                          priority === 'High' ? 'text-red-600' :
-                          priority === 'Medium' ? 'text-yellow-600' : 'text-green-600'
-                        }`} />
-                      </div>
-                      <div>
-                        <h4 className={`font-bold ${
-                          isDark ? 'text-white' : 'text-gray-900'
-                        }`}>{app}</h4>
-                        <p className={`text-sm flex items-center ${
-                          isDark ? 'text-gray-400' : 'text-gray-600'
-                        }`}>
-                          AI Recommendation: {aiRecommendation} • Priority: {priority}
-                          <Brain className="h-3 w-3 ml-1 text-purple-500" />
-                        </p>
-                      </div>
-                    </div>
-                    <button className={`px-4 py-2 rounded-lg transition-colors ${
-                      aiRecommendation === 'Approve' 
-                        ? 'bg-green-500 hover:bg-green-600 text-white' 
-                        : 'bg-yellow-500 hover:bg-yellow-600 text-white'
-                    }`}>
-                      {aiRecommendation}
-                    </button>
+          <ContentCard>
+            <SectionHeader title="Pending Approvals" icon={CheckCircle} color="var(--success)" />
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+              {applications.filter(a => a.status === 'pending').length === 0 && <p style={{ fontSize: 12, color: 'var(--text-4)', textAlign: 'center', padding: '2rem' }}>No pending approvals.</p>}
+              {applications.filter(a => a.status === 'pending').map(a => (
+                <div key={a.id} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 14px', borderRadius: 'var(--r-lg)', background: 'var(--warning-bg)', border: '1px solid var(--warning-border)' }}>
+                  <div>
+                    <p style={{ fontSize: 12, fontWeight: 600, color: 'var(--text-1)' }}>{a.name} — {a.topic}</p>
+                    <p style={{ fontSize: 10, color: 'var(--text-4)' }}>{a.district} · {a.id}</p>
                   </div>
-                );
-              })}
+                  <div style={{ display: 'flex', gap: 6 }}>
+                    <button onClick={() => approveApp(a.id)} style={{ padding: '6px 14px', borderRadius: 'var(--r-md)', background: 'var(--success)', color: '#fff', border: 'none', fontSize: 11, fontWeight: 600, cursor: 'pointer' }}>Approve</button>
+                    <button onClick={() => rejectApp(a.id)} style={{ padding: '6px 14px', borderRadius: 'var(--r-md)', background: 'var(--danger-bg)', color: 'var(--danger)', border: '1px solid var(--danger-border)', fontSize: 11, fontWeight: 600, cursor: 'pointer' }}>Reject</button>
+                  </div>
+                </div>
+              ))}
             </div>
-          </div>
+          </ContentCard>
         );
+
       case 'allocation':
         return (
-          <div className={`rounded-2xl p-6 border ${
-            isDark 
-              ? 'bg-slate-900/80 backdrop-blur-xl border-white/10' 
-              : 'bg-white border-gray-200'
-          }`}>
-            <h3 className={`text-2xl font-bold mb-4 flex items-center ${
-              isDark ? 'text-white' : 'text-gray-900'
-            }`}>
-              <Calendar className="h-8 w-8 mr-3 text-purple-500" />
-              AI Smart Slot Allocation
-            </h3>
-            <p className={`text-lg mb-6 ${
-              isDark ? 'text-gray-300' : 'text-gray-600'
-            }`}>AI-optimized scheduling for maximum efficiency</p>
-            
-            <div className={`p-6 rounded-xl border-2 border-dashed mb-6 text-center ${
-              isDark ? 'border-white/20' : 'border-gray-300'
-            }`}>
-              <Brain className={`h-16 w-16 mx-auto mb-4 text-purple-500`} />
-              <h4 className={`text-xl font-bold mb-2 ${
-                isDark ? 'text-white' : 'text-gray-900'
-              }`}>AI Schedule Optimizer</h4>
-              <p className={`mb-4 ${
-                isDark ? 'text-gray-400' : 'text-gray-600'
-              }`}>Let AI create optimal training schedules</p>
-              <button className="bg-purple-500 hover:bg-purple-600 text-white px-6 py-3 rounded-lg font-medium transition-colors">
-                Generate Smart Schedule
-              </button>
+          <ContentCard>
+            <SectionHeader title="Training Schedule" icon={Calendar} color={COLOR}
+              right={<button className="btn-blue" style={{ fontSize: 11, padding: '6px 14px' }} onClick={() => { setTrnForm({ title: '', date: '', participants: '', status: 'pending' }); setEditTrnId(null); setTrnModal(true); }}><Plus className="icon-xs" /> Schedule Training</button>}
+            />
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+              {trainings.map(t => (
+                <div key={t.id} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 14px', borderRadius: 'var(--r-lg)', background: 'var(--base-2)', border: '1px solid var(--border)' }}>
+                  <div>
+                    <p style={{ fontSize: 12, fontWeight: 600, color: 'var(--text-1)' }}>{t.title}</p>
+                    <p style={{ fontSize: 10, color: 'var(--text-4)' }}>{t.date} · {t.participants} participants</p>
+                  </div>
+                  <div style={{ display: 'flex', gap: 6 }}>
+                    <span style={{ fontSize: 10, fontWeight: 600, padding: '2px 8px', borderRadius: 'var(--r-full)', background: t.status === 'scheduled' ? 'var(--success-bg)' : 'var(--warning-bg)', color: t.status === 'scheduled' ? 'var(--success)' : 'var(--warning)', border: `1px solid ${t.status === 'scheduled' ? 'var(--success-border)' : 'var(--warning-border)'}` }}>{t.status}</span>
+                    <button onClick={() => { setTrnForm({ title: t.title, date: t.date, participants: t.participants, status: t.status }); setEditTrnId(t.id); setTrnModal(true); }} style={{ width: 28, height: 28, borderRadius: 'var(--r-md)', border: '1px solid var(--border)', background: 'var(--surface)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--blue)' }}><Pencil className="icon-xs" /></button>
+                    <button onClick={() => setDeleteTrn(t.id)} style={{ width: 28, height: 28, borderRadius: 'var(--r-md)', border: '1px solid var(--danger-border)', background: 'var(--danger-bg)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--danger)' }}><Trash2 className="icon-xs" /></button>
+                  </div>
+                </div>
+              ))}
             </div>
-          </div>
+            <Modal open={trnModal} onClose={() => setTrnModal(false)} title={editTrnId ? 'Edit Training' : 'Schedule Training'}>
+              <FormField label="Training Title" required><Select value={trnForm.title} onChange={e => setTrnForm(p => ({ ...p, title: e.target.value }))}><option value="">Select topic</option>{TRAINING_TOPICS.map(t => <option key={t}>{t}</option>)}</Select></FormField>
+              <FormField label="Date" required><Input type="date" value={trnForm.date} onChange={e => setTrnForm(p => ({ ...p, date: e.target.value }))} /></FormField>
+              <FormField label="Max Participants"><Input type="number" value={trnForm.participants} onChange={e => setTrnForm(p => ({ ...p, participants: e.target.value }))} placeholder="e.g. 30" /></FormField>
+              <FormField label="Status"><Select value={trnForm.status} onChange={e => setTrnForm(p => ({ ...p, status: e.target.value }))}><option value="pending">Pending</option><option value="scheduled">Scheduled</option><option value="completed">Completed</option></Select></FormField>
+              <ModalFooter onCancel={() => setTrnModal(false)} onSubmit={saveTrn} submitLabel={editTrnId ? 'Update' : 'Schedule'} submitColor={COLOR} />
+            </Modal>
+            <ConfirmDialog open={!!deleteTrn} onClose={() => setDeleteTrn(null)} onConfirm={() => { setTrainings(p => p.filter(t => t.id !== deleteTrn)); toast('Training deleted', 'info'); }} title="Delete Training" message="Delete this training schedule?" />
+          </ContentCard>
         );
+
       case 'history':
         return (
-          <div className={`rounded-2xl p-6 border ${
-            isDark 
-              ? 'bg-slate-900/80 backdrop-blur-xl border-white/10' 
-              : 'bg-white border-gray-200'
-          }`}>
-            <h3 className={`text-2xl font-bold mb-4 flex items-center ${
-              isDark ? 'text-white' : 'text-gray-900'
-            }`}>
-              <Users className="h-8 w-8 mr-3 text-blue-500" />
-              AI Training History Analytics
-            </h3>
-            <p className={`text-lg mb-6 ${
-              isDark ? 'text-gray-300' : 'text-gray-600'
-            }`}>Comprehensive training records with AI insights</p>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className={`p-6 rounded-xl border ${
-                isDark ? 'bg-white/5 border-white/10' : 'bg-blue-50 border-blue-200'
-              }`}>
-                <h4 className={`text-xl font-bold mb-3 flex items-center ${
-                  isDark ? 'text-white' : 'text-gray-900'
-                }`}>
-                  Total Trained
-                  <Brain className="h-5 w-5 ml-2 text-purple-500" />
-                </h4>
-                <p className="text-3xl font-bold text-blue-500 mb-2">2,450</p>
-                <p className={`text-sm ${
-                  isDark ? 'text-gray-400' : 'text-gray-600'
-                }`}>Participants this year</p>
-                <p className="text-xs text-green-600 mt-1">📈 25% increase from last year</p>
-              </div>
-              <div className={`p-6 rounded-xl border ${
-                isDark ? 'bg-white/5 border-white/10' : 'bg-green-50 border-green-200'
-              }`}>
-                <h4 className={`text-xl font-bold mb-3 flex items-center ${
-                  isDark ? 'text-white' : 'text-gray-900'
-                }`}>
-                  Success Rate
-                  <Target className="h-5 w-5 ml-2 text-green-500" />
-                </h4>
-                <p className="text-3xl font-bold text-green-500 mb-2">94%</p>
-                <p className={`text-sm ${
-                  isDark ? 'text-gray-400' : 'text-gray-600'
-                }`}>Training effectiveness</p>
-                <p className="text-xs text-blue-600 mt-1">🤖 AI-optimized curriculum</p>
-              </div>
-            </div>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
+            <ContentCard><SectionHeader title="Total Trained" icon={Users} color={COLOR} /><p style={{ fontSize: '2rem', fontWeight: 800, color: COLOR, letterSpacing: '-0.03em' }}>2,450</p><p style={{ fontSize: 11, color: 'var(--text-3)', marginTop: 4 }}>Participants this year</p></ContentCard>
+            <ContentCard><SectionHeader title="Success Rate" icon={Target} color="var(--success)" /><p style={{ fontSize: '2rem', fontWeight: 800, color: 'var(--success)', letterSpacing: '-0.03em' }}>94%</p><p style={{ fontSize: 11, color: 'var(--text-3)', marginTop: 4 }}>Training effectiveness</p></ContentCard>
           </div>
         );
+
       default:
-        return renderDashboard();
+        return (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 12 }}>
+              <StatCard label="Upcoming Trainings" value={trainings.filter(t => t.status !== 'completed').length.toString()} icon={Calendar} color="var(--blue)" />
+              <StatCard label="Pending Approvals" value={applications.filter(a => a.status === 'pending').length.toString()} icon={CheckCircle} color="var(--warning)" aiNote="Needs action" />
+              <StatCard label="Total Applications" value={applications.length.toString()} icon={Users} color={COLOR} />
+              <StatCard label="Completion Rate" value={`${TRAINING_MANAGEMENT_DATA.dashboard.completionRate || 0}%`} icon={TrendingUp} color="var(--success)" trend="+5%" trendUp />
+            </div>
+            <AIAlert title="AI Training Optimization" message="AI suggests adding evening batches to increase capacity utilization by 35%. Optimal timing for cattle breeding workshop is March 20-22." color={COLOR} actions={['View Recommendations', 'Optimize Schedule']} />
+            <ContentCard>
+              <SectionHeader title="Training Schedule" icon={Calendar} color={COLOR} right={<button style={{ fontSize: 11, padding: '5px 12px', borderRadius: 'var(--r-md)', background: COLOR, color: '#fff', border: 'none', cursor: 'pointer' }} onClick={() => setActive('allocation')}>Manage</button>} />
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                {trainings.map(t => (
+                  <StatusRow key={t.id} label={t.title} sub={`${t.date} · ${t.participants} participants`}
+                    icon={Calendar} iconBg={COLOR + '15'} statusColor={t.status === 'scheduled' ? 'var(--success)' : 'var(--warning)'} statusLabel={t.status}
+                  />
+                ))}
+              </div>
+            </ContentCard>
+          </div>
+        );
     }
   };
 
   return (
-    <div className={`min-h-screen ${isDark ? 'bg-slate-950' : 'bg-gray-50'}`}>
-      <Header isDark={isDark} setIsDark={setIsDark} />
-      
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Service Header */}
-        <div className="flex items-center justify-between mb-8">
-          <div className="flex items-center space-x-4">
-            <button
-              onClick={() => navigate('/dashboard')}
-              className={`p-3 rounded-full transition-all hover:scale-110 ${
-                isDark 
-                  ? 'bg-slate-800 text-white hover:bg-slate-700' 
-                  : 'bg-white text-gray-700 hover:bg-gray-100'
-              }`}
-            >
-              <ArrowLeft className="h-5 w-5" />
-            </button>
-            <div>
-              <h1 className={`text-3xl font-bold ${
-                isDark ? 'text-white' : 'text-gray-900'
-              }`}>Training Management</h1>
-              <p className={`text-lg ${
-                isDark ? 'text-gray-400' : 'text-gray-600'
-              }`}>AI-powered training programs and capacity optimization</p>
-            </div>
-          </div>
-        </div>
-
-        {/* Module Navigation */}
-        <div className="grid grid-cols-1 md:grid-cols-6 gap-4 mb-8">
-          {modules.map((module) => {
-            const IconComponent = module.icon;
-            const isActive = activeModule === module.id;
-            return (
-              <button
-                key={module.id}
-                onClick={() => setActiveModule(module.id)}
-                className={`p-4 rounded-2xl border transition-all hover:scale-105 text-left ${
-                  isActive
-                    ? isDark 
-                      ? 'bg-purple-500/20 border-purple-500/50 text-white' 
-                      : 'bg-purple-50 border-purple-300 text-purple-900'
-                    : isDark
-                      ? 'bg-slate-900/50 border-white/10 text-gray-300 hover:bg-slate-800/50'
-                      : 'bg-white border-gray-200 text-gray-700 hover:bg-gray-50'
-                }`}
-              >
-                <div className="flex items-center space-x-3 mb-2">
-                  <div className={`h-10 w-10 rounded-xl flex items-center justify-center ${
-                    isActive 
-                      ? 'bg-purple-500 text-white' 
-                      : isDark ? 'bg-slate-700 text-gray-300' : 'bg-gray-100 text-gray-600'
-                  }`}>
-                    <IconComponent className="h-5 w-5" />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold">{module.name}</h3>
-                  </div>
-                </div>
-                <p className={`text-xs ${
-                  isDark ? 'text-gray-400' : 'text-gray-500'
-                }`}>{module.description}</p>
-              </button>
-            );
-          })}
-        </div>
-
-        {/* Module Content */}
-        {renderModule(activeModule)}
-      </div>
-    </div>
+    <>
+      <ServiceShell title="Training Management" subtitle="Applications, approvals, slot allocation & AI optimization" icon={GraduationCap} color={COLOR} badge="AI Powered" modules={MODULES} activeModule={active} onModuleChange={setActive}>
+        {renderContent()}
+      </ServiceShell>
+      <Toast toasts={toasts} remove={remove} />
+    </>
   );
-};
-
-export default TrainingDashboard;
+}

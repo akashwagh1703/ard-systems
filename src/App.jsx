@@ -4,6 +4,7 @@ import { AuthProvider } from './contexts/AuthContext';
 import LoginPage from './components/auth/LoginPage';
 import MainDashboard from './components/dashboard/MainDashboard';
 import ProtectedRoute from './components/auth/ProtectedRoute';
+import AppShell from './components/common/AppShell';
 
 // Microservice Dashboards
 import AIDashboard from './components/microservices/ai-management/AIDashboard';
@@ -16,137 +17,35 @@ import ExpenditureDashboard from './components/microservices/expenditure-monitor
 import FarmReportingDashboard from './components/microservices/farm-reporting/FarmReportingDashboard';
 import OnCallAIDashboard from './components/microservices/oncall-ai/OnCallAIDashboard';
 import GrievanceDashboard from './components/microservices/grievance-system/GrievanceDashboard';
-import IntegrationHub from './components/integrations/IntegrationHub';
-import ReportCenter from './components/reports/ReportCenter';
+
+/* Wrap a page with ProtectedRoute + AppShell */
+const Protected = ({ children, roles = [] }) => (
+  <ProtectedRoute requiredRoles={roles}>
+    <AppShell>{children}</AppShell>
+  </ProtectedRoute>
+);
 
 function App() {
   return (
     <AuthProvider>
       <Router basename="/ard-systems">
-        <div className="min-h-screen bg-secondary-50">
-          <Routes>
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/" element={<Navigate to="/dashboard" replace />} />
-            
-            {/* Main Dashboard */}
-            <Route 
-              path="/dashboard" 
-              element={
-                <ProtectedRoute>
-                  <MainDashboard />
-                </ProtectedRoute>
-              } 
-            />
-            
-            {/* Microservice Dashboards */}
-            <Route 
-              path="/services/ai-management/*" 
-              element={
-                <ProtectedRoute requiredRoles={['super_admin', 'district_officer', 'block_officer', 'field_user']}>
-                  <AIDashboard />
-                </ProtectedRoute>
-              } 
-            />
-            
-            <Route 
-              path="/services/vaccine-management/*" 
-              element={
-                <ProtectedRoute requiredRoles={['super_admin', 'district_officer', 'block_officer', 'field_user']}>
-                  <VaccineDashboard />
-                </ProtectedRoute>
-              } 
-            />
-            <Route 
-              path="/services/medicine-management/*" 
-              element={
-                <ProtectedRoute requiredRoles={['super_admin', 'district_officer', 'block_officer', 'field_user']}>
-                  <MedicineDashboard />
-                </ProtectedRoute>
-              } 
-            />
-            
-            <Route 
-              path="/services/disease-surveillance/*" 
-              element={
-                <ProtectedRoute requiredRoles={['super_admin', 'district_officer', 'field_user']}>
-                  <DiseaseDashboard />
-                </ProtectedRoute>
-              } 
-            />
-            
-            <Route 
-              path="/services/mvu-management/*" 
-              element={
-                <ProtectedRoute requiredRoles={['super_admin', 'district_officer', 'block_officer', 'field_user']}>
-                  <MVUDashboard />
-                </ProtectedRoute>
-              } 
-            />
-            
-            <Route 
-              path="/services/training-management/*" 
-              element={
-                <ProtectedRoute requiredRoles={['super_admin', 'district_officer']}>
-                  <TrainingDashboard />
-                </ProtectedRoute>
-              } 
-            />
-            
-            <Route 
-              path="/services/expenditure-monitoring/*" 
-              element={
-                <ProtectedRoute requiredRoles={['super_admin', 'district_officer']}>
-                  <ExpenditureDashboard />
-                </ProtectedRoute>
-              } 
-            />
-            
-            <Route 
-              path="/services/farm-reporting/*" 
-              element={
-                <ProtectedRoute requiredRoles={['super_admin', 'district_officer', 'farmer']}>
-                  <FarmReportingDashboard />
-                </ProtectedRoute>
-              } 
-            />
-            
-            <Route 
-              path="/services/oncall-ai/*" 
-              element={
-                <ProtectedRoute requiredRoles={['farmer', 'field_user', 'super_admin']}>
-                  <OnCallAIDashboard />
-                </ProtectedRoute>
-              } 
-            />
-            
-            <Route 
-              path="/services/grievance-system/*" 
-              element={
-                <ProtectedRoute>
-                  <GrievanceDashboard />
-                </ProtectedRoute>
-              } 
-            />
+        <Routes>
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/" element={<Navigate to="/dashboard" replace />} />
 
-            <Route
-              path="/integrations"
-              element={
-                <ProtectedRoute requiredRoles={['super_admin', 'district_officer']}>
-                  <IntegrationHub />
-                </ProtectedRoute>
-              }
-            />
+          <Route path="/dashboard" element={<Protected><MainDashboard /></Protected>} />
 
-            <Route
-              path="/reports"
-              element={
-                <ProtectedRoute requiredRoles={['super_admin', 'district_officer', 'block_officer']}>
-                  <ReportCenter />
-                </ProtectedRoute>
-              }
-            />
-          </Routes>
-        </div>
+          <Route path="/services/ai-management/*"         element={<Protected roles={['super_admin','district_officer','block_officer','field_user']}><AIDashboard /></Protected>} />
+          <Route path="/services/vaccine-management/*"    element={<Protected roles={['super_admin','district_officer','block_officer','field_user']}><VaccineDashboard /></Protected>} />
+          <Route path="/services/medicine-management/*"   element={<Protected roles={['super_admin','district_officer','block_officer','field_user']}><MedicineDashboard /></Protected>} />
+          <Route path="/services/disease-surveillance/*"  element={<Protected roles={['super_admin','district_officer','field_user']}><DiseaseDashboard /></Protected>} />
+          <Route path="/services/mvu-management/*"        element={<Protected roles={['super_admin','district_officer','block_officer','field_user']}><MVUDashboard /></Protected>} />
+          <Route path="/services/training-management/*"   element={<Protected roles={['super_admin','district_officer']}><TrainingDashboard /></Protected>} />
+          <Route path="/services/expenditure-monitoring/*"element={<Protected roles={['super_admin','district_officer']}><ExpenditureDashboard /></Protected>} />
+          <Route path="/services/farm-reporting/*"        element={<Protected roles={['super_admin','district_officer','farmer']}><FarmReportingDashboard /></Protected>} />
+          <Route path="/services/oncall-ai/*"             element={<Protected roles={['farmer','field_user','super_admin']}><OnCallAIDashboard /></Protected>} />
+          <Route path="/services/grievance-system/*"      element={<Protected><GrievanceDashboard /></Protected>} />
+        </Routes>
       </Router>
     </AuthProvider>
   );
