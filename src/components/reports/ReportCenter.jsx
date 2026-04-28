@@ -1,53 +1,51 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Header from '../common/Header';
+import { ContentCard, SectionHeader } from '../common/ServiceWidgets';
 import {
   REPORT_TEMPLATES, generateReportData, exportToCSV,
   exportToJSON, SCHEDULED_REPORTS, getChartData
 } from '../../services/reportingEngine';
 import {
-  ArrowLeft, Download, FileText, Calendar, Clock, Play,
-  Filter, RefreshCw, BarChart3, TrendingUp, CheckCircle,
-  AlertTriangle, Pause, Mail, Plus, Eye, Printer, ChevronDown, ChevronUp
+  ArrowLeft, Download, FileText, Calendar, Clock,
+  RefreshCw, BarChart3, TrendingUp, CheckCircle,
+  Mail, Plus, Printer
 } from 'lucide-react';
 
 const CATEGORY_COLORS = {
-  executive:    'bg-purple-100 text-purple-800',
-  operational:  'bg-blue-100 text-blue-800',
-  health:       'bg-red-100 text-red-800',
-  financial:    'bg-green-100 text-green-800',
-  service:      'bg-orange-100 text-orange-800',
-  capacity:     'bg-yellow-100 text-yellow-800',
-  agricultural: 'bg-emerald-100 text-emerald-800',
-  ai:           'bg-indigo-100 text-indigo-800',
-  custom:       'bg-gray-100 text-gray-800',
+  executive:    { bg: '#F5F3FF', text: '#7C3AED', border: '#C4B5FD' },
+  operational:  { bg: '#EFF6FF', text: '#2563EB', border: '#BFDBFE' },
+  health:       { bg: '#FEF2F2', text: '#DC2626', border: '#FECACA' },
+  financial:    { bg: '#ECFDF5', text: '#059669', border: '#A7F3D0' },
+  service:      { bg: '#FFF7ED', text: '#EA580C', border: '#FED7AA' },
+  capacity:     { bg: '#FFFBEB', text: '#D97706', border: '#FDE68A' },
+  agricultural: { bg: '#ECFDF5', text: '#10B981', border: '#A7F3D0' },
+  ai:           { bg: '#EEF2FF', text: '#6366F1', border: '#C7D2FE' },
+  custom:       { bg: '#F9FAFB', text: '#6B7280', border: '#E5E7EB' },
 };
 
 // Pure CSS bar chart
-const BarChart = ({ data, xKey, bars, isDark }) => {
+const BarChart = ({ data, xKey, bars }) => {
   const maxVal = Math.max(...data.flatMap(d => bars.map(b => d[b.key] || 0)), 1);
-  const tp = isDark ? 'text-gray-400' : 'text-gray-500';
   return (
-    <div className="space-y-2">
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
       {data.map((row, i) => (
-        <div key={i} className="flex items-center gap-3">
-          <span className={`text-xs w-8 shrink-0 ${tp}`}>{row[xKey]}</span>
-          <div className="flex-1 flex flex-col gap-1">
+        <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          <span style={{ fontSize: 11, color: 'var(--text-3)', width: 32, flexShrink: 0 }}>{row[xKey]}</span>
+          <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 4 }}>
             {bars.map(bar => (
-              <div key={bar.key} className={`flex items-center gap-2`}>
-                <div className={`h-4 rounded-sm transition-all duration-700 ${bar.color}`}
-                  style={{ width: `${(row[bar.key] / maxVal) * 100}%`, minWidth: 4 }} />
-                <span className={`text-xs ${tp}`}>{row[bar.key]}</span>
+              <div key={bar.key} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                <div style={{ height: 16, borderRadius: 4, background: bar.color, transition: 'all 0.7s ease', width: `${(row[bar.key] / maxVal) * 100}%`, minWidth: 4 }} />
+                <span style={{ fontSize: 11, color: 'var(--text-3)' }}>{row[bar.key]}</span>
               </div>
             ))}
           </div>
         </div>
       ))}
-      <div className="flex gap-4 mt-2">
+      <div style={{ display: 'flex', gap: 16, marginTop: 8 }}>
         {bars.map(bar => (
-          <div key={bar.key} className="flex items-center gap-1">
-            <div className={`h-2 w-4 rounded-sm ${bar.color}`} />
-            <span className={`text-xs ${tp}`}>{bar.label}</span>
+          <div key={bar.key} style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+            <div style={{ height: 8, width: 16, borderRadius: 4, background: bar.color }} />
+            <span style={{ fontSize: 11, color: 'var(--text-3)' }}>{bar.label}</span>
           </div>
         ))}
       </div>
@@ -56,19 +54,16 @@ const BarChart = ({ data, xKey, bars, isDark }) => {
 };
 
 // Report data table
-const DataTable = ({ data, isDark }) => {
+const DataTable = ({ data }) => {
   if (!data || !Array.isArray(data) || data.length === 0) return null;
   const headers = Object.keys(data[0]);
-  const tp = isDark ? 'text-white' : 'text-gray-900';
-  const ts = isDark ? 'text-gray-400' : 'text-gray-600';
-  const border = isDark ? 'border-white/10' : 'border-gray-200';
   return (
-    <div className="overflow-x-auto rounded-xl border" style={{ borderColor: isDark ? 'rgba(255,255,255,0.1)' : '#e5e7eb' }}>
-      <table className="w-full text-sm">
+    <div style={{ overflowX: 'auto', borderRadius: 'var(--r-xl)', border: '1px solid var(--border)' }}>
+      <table style={{ width: '100%', fontSize: 13 }}>
         <thead>
-          <tr className={isDark ? 'bg-white/5' : 'bg-gray-50'}>
+          <tr style={{ background: 'var(--base-2)' }}>
             {headers.map(h => (
-              <th key={h} className={`px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide ${ts} border-b ${border}`}>
+              <th key={h} style={{ padding: '12px 16px', textAlign: 'left', fontSize: 11, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--text-3)', borderBottom: '1px solid var(--border)' }}>
                 {h.replace(/_/g, ' ')}
               </th>
             ))}
@@ -76,9 +71,11 @@ const DataTable = ({ data, isDark }) => {
         </thead>
         <tbody>
           {data.map((row, i) => (
-            <tr key={i} className={`border-b ${border} ${isDark ? 'hover:bg-white/5' : 'hover:bg-gray-50'} transition-colors`}>
+            <tr key={i} style={{ borderBottom: '1px solid var(--border)', transition: 'background 0.15s ease' }}
+              onMouseEnter={e => e.currentTarget.style.background = 'var(--base-2)'}
+              onMouseLeave={e => e.currentTarget.style.background = 'transparent'}>
               {headers.map(h => (
-                <td key={h} className={`px-4 py-3 ${tp}`}>
+                <td key={h} style={{ padding: '12px 16px', color: 'var(--text-1)' }}>
                   {typeof row[h] === 'object' ? JSON.stringify(row[h]) : String(row[h] ?? '-')}
                 </td>
               ))}
@@ -91,11 +88,10 @@ const DataTable = ({ data, isDark }) => {
 };
 
 // Report preview panel
-const ReportPreview = ({ template, isDark }) => {
+const ReportPreview = ({ template }) => {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState(null);
   const [dateRange, setDateRange] = useState('30d');
-  const [activeSection, setActiveSection] = useState(0);
 
   const generate = async () => {
     setLoading(true);
@@ -106,10 +102,6 @@ const ReportPreview = ({ template, isDark }) => {
 
   useEffect(() => { generate(); }, [template.id, dateRange]);
 
-  const tp = isDark ? 'text-white' : 'text-gray-900';
-  const ts = isDark ? 'text-gray-400' : 'text-gray-600';
-  const card = `rounded-xl border p-4 ${isDark ? 'bg-white/5 border-white/10' : 'bg-gray-50 border-gray-200'}`;
-
   const chartData = getChartData(
     template.id === 'ai_service_report' ? 'ai_coverage_trend' :
     template.id === 'disease_surveillance_report' ? 'disease_cases' :
@@ -119,74 +111,71 @@ const ReportPreview = ({ template, isDark }) => {
   );
 
   return (
-    <div className="space-y-4">
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
       {/* Controls */}
-      <div className="flex items-center gap-3 flex-wrap">
-        <select
-          value={dateRange}
-          onChange={e => setDateRange(e.target.value)}
-          className={`text-sm rounded-xl px-3 py-2 border outline-none ${isDark ? 'bg-white/10 border-white/10 text-white' : 'bg-white border-gray-200 text-gray-900'}`}
-        >
+      <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
+        <select value={dateRange} onChange={e => setDateRange(e.target.value)}
+          style={{ fontSize: 13, borderRadius: 'var(--r-xl)', padding: '8px 12px', border: '1px solid var(--border)', background: 'var(--surface)', color: 'var(--text-1)', outline: 'none' }}>
           <option value="7d">Last 7 days</option>
           <option value="30d">Last 30 days</option>
           <option value="90d">Last 90 days</option>
           <option value="1y">Last 1 year</option>
         </select>
-        <button onClick={generate} disabled={loading} className="flex items-center gap-2 px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm rounded-xl transition-all disabled:opacity-60">
-          <RefreshCw className={`h-3.5 w-3.5 ${loading ? 'animate-spin' : ''}`} />
+        <button onClick={generate} disabled={loading}
+          style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '8px 12px', background: 'var(--blue)', color: '#fff', border: 'none', borderRadius: 'var(--r-xl)', fontSize: 13, fontWeight: 600, cursor: loading ? 'not-allowed' : 'pointer', opacity: loading ? 0.6 : 1, transition: 'all 0.15s ease' }}>
+          <RefreshCw className={`icon-xs ${loading ? 'animate-spin' : ''}`} style={{ animation: loading ? 'spin 1s linear infinite' : 'none' }} />
           {loading ? 'Generating...' : 'Regenerate'}
         </button>
         <button onClick={() => data && exportToCSV(data.kpis || data.districtBreakdown || data.categories || [], `${template.id}_${dateRange}`)}
-          className="flex items-center gap-2 px-3 py-2 bg-green-600 hover:bg-green-700 text-white text-sm rounded-xl transition-all">
-          <Download className="h-3.5 w-3.5" /> CSV
+          style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '8px 12px', background: 'var(--success)', color: '#fff', border: 'none', borderRadius: 'var(--r-xl)', fontSize: 13, fontWeight: 600, cursor: 'pointer', transition: 'all 0.15s ease' }}>
+          <Download className="icon-xs" /> CSV
         </button>
         <button onClick={() => data && exportToJSON(data, `${template.id}_${dateRange}`)}
-          className="flex items-center gap-2 px-3 py-2 bg-orange-600 hover:bg-orange-700 text-white text-sm rounded-xl transition-all">
-          <Download className="h-3.5 w-3.5" /> JSON
+          style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '8px 12px', background: 'var(--orange)', color: '#fff', border: 'none', borderRadius: 'var(--r-xl)', fontSize: 13, fontWeight: 600, cursor: 'pointer', transition: 'all 0.15s ease' }}>
+          <Download className="icon-xs" /> JSON
         </button>
         <button onClick={() => window.print()}
-          className="flex items-center gap-2 px-3 py-2 bg-gray-600 hover:bg-gray-700 text-white text-sm rounded-xl transition-all">
-          <Printer className="h-3.5 w-3.5" /> Print
+          style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '8px 12px', background: 'var(--text-3)', color: '#fff', border: 'none', borderRadius: 'var(--r-xl)', fontSize: 13, fontWeight: 600, cursor: 'pointer', transition: 'all 0.15s ease' }}>
+          <Printer className="icon-xs" /> Print
         </button>
       </div>
 
       {loading ? (
-        <div className="flex items-center justify-center py-16">
-          <div className="text-center">
-            <RefreshCw className="h-8 w-8 animate-spin text-blue-500 mx-auto mb-3" />
-            <p className={`text-sm ${ts}`}>Generating report...</p>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '4rem 0' }}>
+          <div style={{ textAlign: 'center' }}>
+            <RefreshCw className="icon-lg" style={{ color: 'var(--blue)', margin: '0 auto 12px', animation: 'spin 1s linear infinite' }} />
+            <p style={{ fontSize: 13, color: 'var(--text-3)' }}>Generating report...</p>
           </div>
         </div>
       ) : data ? (
-        <div className="space-y-4">
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
           {/* Generated at */}
-          <p className={`text-xs ${ts}`}>Generated: {new Date(data.generatedAt).toLocaleString()} · Period: {dateRange}</p>
+          <p style={{ fontSize: 11, color: 'var(--text-4)' }}>Generated: {new Date(data.generatedAt).toLocaleString()} · Period: {dateRange}</p>
 
           {/* Trend chart */}
-          <div className={card}>
-            <p className={`text-sm font-semibold mb-4 ${tp}`}>6-Month Trend</p>
+          <ContentCard>
+            <SectionHeader title="6-Month Trend" icon={TrendingUp} color="var(--blue)" />
             <BarChart
               data={chartData}
               xKey="month"
-              isDark={isDark}
               bars={
                 template.id === 'disease_surveillance_report'
-                  ? [{ key: 'fmd', label: 'FMD', color: 'bg-red-500' }, { key: 'hs', label: 'HS', color: 'bg-orange-500' }, { key: 'bq', label: 'BQ', color: 'bg-yellow-500' }]
+                  ? [{ key: 'fmd', label: 'FMD', color: 'var(--danger)' }, { key: 'hs', label: 'HS', color: 'var(--orange)' }, { key: 'bq', label: 'BQ', color: 'var(--warning)' }]
                   : template.id === 'grievance_analytics'
-                  ? [{ key: 'received', label: 'Received', color: 'bg-red-500' }, { key: 'resolved', label: 'Resolved', color: 'bg-green-500' }]
-                  : [{ key: 'coverage', label: 'Actual', color: 'bg-blue-500' }, { key: 'target', label: 'Target', color: 'bg-gray-300' }]
+                  ? [{ key: 'received', label: 'Received', color: 'var(--danger)' }, { key: 'resolved', label: 'Resolved', color: 'var(--success)' }]
+                  : [{ key: 'coverage', label: 'Actual', color: 'var(--blue)' }, { key: 'target', label: 'Target', color: 'var(--border-2)' }]
               }
             />
-          </div>
+          </ContentCard>
 
           {/* KPIs */}
           {data.kpis && (
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12 }}>
               {data.kpis.map((kpi, i) => (
-                <div key={i} className={card}>
-                  <p className={`text-xs ${ts} mb-1`}>{kpi.metric}</p>
-                  <p className={`text-xl font-bold ${tp}`}>{kpi.value}</p>
-                  <span className={`text-xs font-medium ${kpi.change?.startsWith('+') ? 'text-green-500' : 'text-red-500'}`}>{kpi.change}</span>
+                <div key={i} style={{ padding: '1rem', borderRadius: 'var(--r-xl)', background: 'var(--base-2)', border: '1px solid var(--border)' }}>
+                  <p style={{ fontSize: 11, color: 'var(--text-4)', marginBottom: 4 }}>{kpi.metric}</p>
+                  <p style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--text-1)', marginBottom: 4 }}>{kpi.value}</p>
+                  <span style={{ fontSize: 11, fontWeight: 600, color: kpi.change?.startsWith('+') ? 'var(--success)' : 'var(--danger)' }}>{kpi.change}</span>
                 </div>
               ))}
             </div>
@@ -195,31 +184,31 @@ const ReportPreview = ({ template, isDark }) => {
           {/* District breakdown table */}
           {data.districtBreakdown && (
             <div>
-              <p className={`text-sm font-semibold mb-2 ${tp}`}>District Breakdown</p>
-              <DataTable data={data.districtBreakdown} isDark={isDark} />
+              <p style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-1)', marginBottom: 8 }}>District Breakdown</p>
+              <DataTable data={data.districtBreakdown} />
             </div>
           )}
 
           {/* Categories table */}
           {data.categories && (
             <div>
-              <p className={`text-sm font-semibold mb-2 ${tp}`}>Category Analysis</p>
-              <DataTable data={data.categories} isDark={isDark} />
+              <p style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-1)', marginBottom: 8 }}>Category Analysis</p>
+              <DataTable data={data.categories} />
             </div>
           )}
 
           {/* Anomalies */}
           {data.anomalies && (
             <div>
-              <p className={`text-sm font-semibold mb-2 ${tp}`}>Detected Anomalies</p>
-              <div className="space-y-2">
+              <p style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-1)', marginBottom: 8 }}>Detected Anomalies</p>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
                 {data.anomalies.map((a, i) => (
-                  <div key={i} className={`rounded-xl border p-3 flex items-center justify-between ${isDark ? 'bg-orange-500/10 border-orange-500/30' : 'bg-orange-50 border-orange-200'}`}>
+                  <div key={i} style={{ borderRadius: 'var(--r-xl)', border: '1px solid var(--orange-border)', padding: '12px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: 'var(--orange-bg)' }}>
                     <div>
-                      <p className={`text-sm font-medium ${tp}`}>{a.category} — {a.type}</p>
-                      <p className={`text-xs ${ts}`}>Amount: {a.amount} · Deviation: {a.deviation}</p>
+                      <p style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-1)' }}>{a.category} — {a.type}</p>
+                      <p style={{ fontSize: 11, color: 'var(--text-3)' }}>Amount: {a.amount} · Deviation: {a.deviation}</p>
                     </div>
-                    <span className={`text-xs px-2 py-1 rounded-full font-medium ${a.status === 'flagged' ? 'bg-red-100 text-red-800' : a.status === 'under_review' ? 'bg-yellow-100 text-yellow-800' : 'bg-green-100 text-green-800'}`}>
+                    <span style={{ fontSize: 11, padding: '2px 8px', borderRadius: 'var(--r-full)', fontWeight: 600, background: a.status === 'flagged' ? 'var(--danger-bg)' : a.status === 'under_review' ? 'var(--warning-bg)' : 'var(--success-bg)', color: a.status === 'flagged' ? 'var(--danger)' : a.status === 'under_review' ? 'var(--warning)' : 'var(--success)' }}>
                       {a.status.replace('_', ' ')}
                     </span>
                   </div>
@@ -231,8 +220,8 @@ const ReportPreview = ({ template, isDark }) => {
           {/* Service health */}
           {data.serviceHealth && (
             <div>
-              <p className={`text-sm font-semibold mb-2 ${tp}`}>Service Health</p>
-              <DataTable data={data.serviceHealth} isDark={isDark} />
+              <p style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-1)', marginBottom: 8 }}>Service Health</p>
+              <DataTable data={data.serviceHealth} />
             </div>
           )}
         </div>
@@ -242,36 +231,33 @@ const ReportPreview = ({ template, isDark }) => {
 };
 
 // Scheduled report row
-const ScheduledRow = ({ report, isDark }) => {
-  const tp = isDark ? 'text-white' : 'text-gray-900';
-  const ts = isDark ? 'text-gray-400' : 'text-gray-600';
-  return (
-    <div className={`flex items-center gap-4 p-4 rounded-xl border ${isDark ? 'bg-white/5 border-white/10' : 'bg-gray-50 border-gray-200'}`}>
-      <div className={`h-2 w-2 rounded-full shrink-0 ${report.status === 'active' ? 'bg-green-500 animate-pulse' : 'bg-gray-400'}`} />
-      <div className="flex-1 min-w-0">
-        <p className={`font-medium text-sm ${tp}`}>{report.name}</p>
-        <div className="flex items-center gap-3 text-xs mt-0.5">
-          <span className={ts}><Clock className="h-3 w-3 inline mr-1" />{report.schedule}</span>
-          <span className={ts}><Mail className="h-3 w-3 inline mr-1" />{report.recipients.length} recipient(s)</span>
-        </div>
+const ScheduledRow = ({ report }) => (
+  <div style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '12px 16px', borderRadius: 'var(--r-xl)', background: 'var(--base-2)', border: '1px solid var(--border)' }}>
+    <div style={{ width: 8, height: 8, borderRadius: '50%', flexShrink: 0, background: report.status === 'active' ? 'var(--success)' : 'var(--text-4)', animation: report.status === 'active' ? 'pulse 2s infinite' : 'none' }} />
+    <div style={{ flex: 1, minWidth: 0 }}>
+      <p style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-1)', marginBottom: 3 }}>{report.name}</p>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+        <span style={{ fontSize: 11, color: 'var(--text-3)', display: 'flex', alignItems: 'center', gap: 4 }}>
+          <Clock className="icon-xs" />{report.schedule}
+        </span>
+        <span style={{ fontSize: 11, color: 'var(--text-3)', display: 'flex', alignItems: 'center', gap: 4 }}>
+          <Mail className="icon-xs" />{report.recipients.length} recipient(s)
+        </span>
       </div>
-      <div className="text-right shrink-0">
-        <p className={`text-xs ${ts}`}>Last: {report.lastRun}</p>
-        <p className={`text-xs font-medium ${report.status === 'active' ? 'text-green-500' : 'text-gray-400'}`}>
-          Next: {report.nextRun}
-        </p>
-      </div>
-      <span className={`text-xs px-2 py-1 rounded-full font-medium shrink-0 ${report.status === 'active' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-600'}`}>
-        {report.status}
-      </span>
     </div>
-  );
-};
+    <div style={{ textAlign: 'right', flexShrink: 0 }}>
+      <p style={{ fontSize: 11, color: 'var(--text-4)' }}>Last: {report.lastRun}</p>
+      <p style={{ fontSize: 11, fontWeight: 600, color: report.status === 'active' ? 'var(--success)' : 'var(--text-4)' }}>Next: {report.nextRun}</p>
+    </div>
+    <span style={{ fontSize: 11, padding: '2px 8px', borderRadius: 'var(--r-full)', fontWeight: 600, flexShrink: 0, background: report.status === 'active' ? 'var(--success-bg)' : 'var(--base-2)', color: report.status === 'active' ? 'var(--success)' : 'var(--text-3)', border: `1px solid ${report.status === 'active' ? 'var(--success-border)' : 'var(--border)'}` }}>
+      {report.status}
+    </span>
+  </div>
+);
 
 // ── Main Report Center ────────────────────────
 const ReportCenter = () => {
   const navigate = useNavigate();
-  const [isDark, setIsDark] = useState(() => localStorage.getItem('ardTheme') === 'dark');
   const [activeTab, setActiveTab] = useState('templates');
   const [selectedTemplate, setSelectedTemplate] = useState(null);
   const [categoryFilter, setCategoryFilter] = useState('all');
@@ -284,199 +270,200 @@ const ReportCenter = () => {
     (t.name.toLowerCase().includes(searchQuery.toLowerCase()) || t.description.toLowerCase().includes(searchQuery.toLowerCase()))
   );
 
-  const tp = isDark ? 'text-white' : 'text-gray-900';
-  const ts = isDark ? 'text-gray-400' : 'text-gray-600';
-  const card = `rounded-2xl border ${isDark ? 'bg-slate-900/80 border-white/10' : 'bg-white border-gray-200'}`;
-
   return (
-    <div className={`min-h-screen ${isDark ? 'bg-slate-950' : 'bg-gray-50'}`}>
-      <Header isDark={isDark} setIsDark={setIsDark} />
+    <div style={{ maxWidth: 1200, margin: '0 auto' }}>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-
-        {/* Header */}
-        <div className="flex items-center justify-between mb-8">
-          <div className="flex items-center gap-4">
-            <button onClick={() => navigate('/dashboard')} className={`p-3 rounded-full transition-all hover:scale-110 ${isDark ? 'bg-slate-800 text-white hover:bg-slate-700' : 'bg-white text-gray-700 hover:bg-gray-100'}`}>
-              <ArrowLeft className="h-5 w-5" />
-            </button>
-            <div>
-              <h1 className={`text-3xl font-bold ${tp}`}>Report Center</h1>
-              <p className={ts}>Generate, schedule, and export reports across all services</p>
-            </div>
-          </div>
-          <button className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl text-sm font-medium hover:from-blue-700 hover:to-indigo-700 transition-all">
-            <Plus className="h-4 w-4" /> Custom Report
+      {/* Header */}
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 24 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          <button onClick={() => navigate('/dashboard')}
+            style={{ width: 40, height: 40, borderRadius: 'var(--r-full)', background: 'var(--surface)', border: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', transition: 'all 0.15s ease', color: 'var(--text-1)' }}
+            onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.1)'}
+            onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}>
+            <ArrowLeft className="icon-sm" />
           </button>
+          <div>
+            <h1 style={{ fontSize: '1.375rem', fontWeight: 800, color: 'var(--text-1)', letterSpacing: '-0.02em' }}>Report Center</h1>
+            <p style={{ fontSize: 12, color: 'var(--text-3)', marginTop: 2 }}>Generate, schedule, and export reports across all services</p>
+          </div>
         </div>
+        <button style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '8px 16px', background: 'linear-gradient(135deg, #2563EB 0%, #6366F1 100%)', color: '#fff', border: 'none', borderRadius: 'var(--r-xl)', fontSize: 13, fontWeight: 600, cursor: 'pointer', transition: 'all 0.15s ease' }}
+          onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-1px)'}
+          onMouseLeave={e => e.currentTarget.style.transform = 'translateY(0)'}>
+          <Plus className="icon-xs" /> Custom Report
+        </button>
+      </div>
 
-        {/* Summary KPIs */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-          {[
-            { label: 'Report Templates', value: REPORT_TEMPLATES.length,    icon: FileText,   color: 'from-blue-500 to-indigo-600'   },
-            { label: 'Scheduled Reports', value: SCHEDULED_REPORTS.length,  icon: Calendar,   color: 'from-green-500 to-emerald-600' },
-            { label: 'Active Schedules',  value: SCHEDULED_REPORTS.filter(r => r.status === 'active').length, icon: CheckCircle, color: 'from-purple-500 to-pink-500' },
-            { label: 'Export Formats',    value: 3,                          icon: Download,   color: 'from-orange-500 to-red-500'    },
-          ].map((kpi, i) => (
-            <div key={i} className={`${card} p-5 relative overflow-hidden`}>
-              <div className={`absolute inset-0 opacity-10 bg-gradient-to-br ${kpi.color}`} />
-              <div className="relative flex items-center gap-3">
-                <div className={`h-10 w-10 rounded-xl bg-gradient-to-br ${kpi.color} flex items-center justify-center`}>
-                  <kpi.icon className="h-5 w-5 text-white" />
+      {/* Summary KPIs */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 12, marginBottom: 20 }}>
+        {[
+          { label: 'Report Templates', value: REPORT_TEMPLATES.length,    icon: FileText,   gradient: 'linear-gradient(135deg, #2563EB 0%, #6366F1 100%)' },
+          { label: 'Scheduled Reports', value: SCHEDULED_REPORTS.length,  icon: Calendar,   gradient: 'linear-gradient(135deg, #059669 0%, #10B981 100%)' },
+          { label: 'Active Schedules',  value: SCHEDULED_REPORTS.filter(r => r.status === 'active').length, icon: CheckCircle, gradient: 'linear-gradient(135deg, #7C3AED 0%, #A855F7 100%)' },
+          { label: 'Export Formats',    value: 3,                          icon: Download,   gradient: 'linear-gradient(135deg, #EA580C 0%, #EF4444 100%)' },
+        ].map((kpi, i) => {
+          const Icon = kpi.icon;
+          return (
+            <div key={i} style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 'var(--r-xl)', padding: '1rem', position: 'relative', overflow: 'hidden', boxShadow: 'var(--shadow-xs)' }}>
+              <div style={{ position: 'absolute', inset: 0, background: kpi.gradient, opacity: 0.1 }} />
+              <div style={{ position: 'relative', display: 'flex', alignItems: 'center', gap: 10 }}>
+                <div style={{ width: 40, height: 40, borderRadius: 'var(--r-xl)', background: kpi.gradient, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <Icon className="icon-sm" style={{ color: '#fff' }} />
                 </div>
                 <div>
-                  <p className={`text-2xl font-bold ${tp}`}>{kpi.value}</p>
-                  <p className={`text-xs ${ts}`}>{kpi.label}</p>
+                  <p style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--text-1)', letterSpacing: '-0.02em' }}>{kpi.value}</p>
+                  <p style={{ fontSize: 11, color: 'var(--text-4)' }}>{kpi.label}</p>
                 </div>
               </div>
             </div>
-          ))}
-        </div>
+          );
+        })}
+      </div>
 
-        {/* Tabs */}
-        <div className={`flex gap-1 p-1 rounded-xl mb-6 w-fit ${isDark ? 'bg-white/10' : 'bg-gray-100'}`}>
-          {[
-            { id: 'templates',  label: 'Report Templates', icon: FileText  },
-            { id: 'scheduled',  label: 'Scheduled Reports', icon: Calendar  },
-            { id: 'analytics',  label: 'Analytics Overview', icon: BarChart3 },
-          ].map(tab => (
+      {/* Tabs */}
+      <div style={{ display: 'flex', gap: 4, padding: 4, borderRadius: 'var(--r-xl)', marginBottom: 20, width: 'fit-content', background: 'var(--base-2)', border: '1px solid var(--border)' }}>
+        {[
+          { id: 'templates',  label: 'Report Templates',  icon: FileText  },
+          { id: 'scheduled',  label: 'Scheduled Reports',  icon: Calendar  },
+          { id: 'analytics',  label: 'Analytics Overview', icon: BarChart3 },
+        ].map(tab => {
+          const Icon = tab.icon;
+          const isActive = activeTab === tab.id;
+          return (
             <button key={tab.id} onClick={() => setActiveTab(tab.id)}
-              className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
-                activeTab === tab.id
-                  ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-sm'
-                  : isDark ? 'text-gray-400 hover:text-white' : 'text-gray-600 hover:text-gray-900'
-              }`}>
-              <tab.icon className="h-4 w-4" />
+              style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '8px 16px', borderRadius: 'var(--r-lg)', fontSize: 13, fontWeight: 600, border: 'none', cursor: 'pointer', transition: 'all 0.15s ease', background: isActive ? 'linear-gradient(135deg, #2563EB 0%, #6366F1 100%)' : 'transparent', color: isActive ? '#fff' : 'var(--text-3)', boxShadow: isActive ? '0 2px 8px rgba(37,99,235,0.3)' : 'none' }}>
+              <Icon className="icon-xs" />
               {tab.label}
             </button>
-          ))}
-        </div>
+          );
+        })}
+      </div>
 
-        {/* ── TEMPLATES TAB ── */}
-        {activeTab === 'templates' && (
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {/* Template list */}
-            <div className="lg:col-span-1 space-y-4">
-              {/* Search + filter */}
-              <input
-                type="text"
-                placeholder="Search reports..."
-                value={searchQuery}
-                onChange={e => setSearchQuery(e.target.value)}
-                className={`w-full px-4 py-2.5 rounded-xl border text-sm outline-none ${isDark ? 'bg-white/10 border-white/10 text-white placeholder-gray-500' : 'bg-white border-gray-200 text-gray-900 placeholder-gray-400'}`}
-              />
-              <div className="flex gap-1.5 flex-wrap">
-                {categories.map(cat => (
+      {/* ── TEMPLATES TAB ── */}
+      {activeTab === 'templates' && (
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: 16 }}>
+          {/* Template list */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+            {/* Search */}
+            <input type="text" placeholder="Search reports..." value={searchQuery} onChange={e => setSearchQuery(e.target.value)}
+              style={{ width: '100%', padding: '10px 14px', borderRadius: 'var(--r-xl)', border: '1px solid var(--border)', background: 'var(--surface)', color: 'var(--text-1)', fontSize: 13, outline: 'none', boxSizing: 'border-box' }} />
+
+            {/* Category filters */}
+            <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+              {categories.map(cat => {
+                const isActive = categoryFilter === cat;
+                return (
                   <button key={cat} onClick={() => setCategoryFilter(cat)}
-                    className={`px-2.5 py-1 rounded-lg text-xs font-medium capitalize transition-all ${
-                      categoryFilter === cat
-                        ? 'bg-blue-600 text-white'
-                        : isDark ? 'bg-white/10 text-gray-300 hover:bg-white/20' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                    }`}>
+                    style={{ padding: '4px 10px', borderRadius: 'var(--r-md)', fontSize: 11, fontWeight: 500, textTransform: 'capitalize', cursor: 'pointer', transition: 'all 0.15s ease', background: isActive ? 'var(--blue)' : 'var(--surface)', color: isActive ? '#fff' : 'var(--text-3)', border: `1px solid ${isActive ? 'var(--blue)' : 'var(--border)'}` }}>
                     {cat}
                   </button>
-                ))}
-              </div>
+                );
+              })}
+            </div>
 
-              {/* Template cards */}
-              <div className="space-y-2 max-h-[600px] overflow-y-auto pr-1">
-                {filtered.map(template => (
-                  <div
-                    key={template.id}
-                    onClick={() => setSelectedTemplate(template)}
-                    className={`p-4 rounded-xl border cursor-pointer transition-all hover:scale-[1.01] ${
-                      selectedTemplate?.id === template.id
-                        ? isDark ? 'bg-blue-500/20 border-blue-500/50' : 'bg-blue-50 border-blue-300'
-                        : isDark ? 'bg-white/5 border-white/10 hover:bg-white/10' : 'bg-white border-gray-200 hover:bg-gray-50'
-                    }`}
-                  >
-                    <div className="flex items-start gap-3">
-                      <span className="text-2xl shrink-0">{template.icon}</span>
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2 mb-1 flex-wrap">
-                          <p className={`font-semibold text-sm ${tp}`}>{template.name}</p>
-                          <span className={`text-xs px-1.5 py-0.5 rounded-full font-medium ${CATEGORY_COLORS[template.category] || 'bg-gray-100 text-gray-800'}`}>
+            {/* Template cards */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 8, maxHeight: 600, overflowY: 'auto', paddingRight: 4 }}>
+              {filtered.map(template => {
+                const isSelected = selectedTemplate?.id === template.id;
+                const catColor = CATEGORY_COLORS[template.category] || CATEGORY_COLORS.custom;
+                return (
+                  <div key={template.id} onClick={() => setSelectedTemplate(template)}
+                    style={{ padding: '12px 14px', borderRadius: 'var(--r-xl)', border: `1px solid ${isSelected ? 'var(--blue)' : 'var(--border)'}`, background: isSelected ? 'var(--blue-subtle)' : 'var(--surface)', cursor: 'pointer', transition: 'all 0.15s ease', boxShadow: isSelected ? '0 0 0 2px var(--blue-muted)' : 'none' }}
+                    onMouseEnter={e => { if (!isSelected) e.currentTarget.style.background = 'var(--base-2)'; }}
+                    onMouseLeave={e => { if (!isSelected) e.currentTarget.style.background = 'var(--surface)'; }}>
+                    <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10 }}>
+                      <span style={{ fontSize: 22, flexShrink: 0 }}>{template.icon}</span>
+                      <div style={{ flex: 1, minWidth: 0 }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 3, flexWrap: 'wrap' }}>
+                          <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--text-1)' }}>{template.name}</p>
+                          <span style={{ fontSize: 10, padding: '1px 6px', borderRadius: 'var(--r-full)', fontWeight: 600, textTransform: 'capitalize', background: catColor.bg, color: catColor.text, border: `1px solid ${catColor.border}` }}>
                             {template.category}
                           </span>
                         </div>
-                        <p className={`text-xs ${ts} leading-relaxed`}>{template.description}</p>
-                        <div className="flex items-center gap-3 mt-2 text-xs">
-                          <span className={ts}><Clock className="h-3 w-3 inline mr-1" />{template.frequency}</span>
-                          {template.estimatedRows && <span className={ts}>{template.estimatedRows} rows</span>}
+                        <p style={{ fontSize: 11, color: 'var(--text-3)', lineHeight: 1.5 }}>{template.description}</p>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginTop: 6 }}>
+                          <span style={{ fontSize: 11, color: 'var(--text-4)', display: 'flex', alignItems: 'center', gap: 3 }}>
+                            <Clock className="icon-xs" />{template.frequency}
+                          </span>
+                          {template.estimatedRows && <span style={{ fontSize: 11, color: 'var(--text-4)' }}>{template.estimatedRows} rows</span>}
                         </div>
                       </div>
                     </div>
                   </div>
-                ))}
-              </div>
+                );
+              })}
             </div>
+          </div>
 
-            {/* Report preview */}
-            <div className="lg:col-span-2">
-              {selectedTemplate ? (
-                <div className={`${card} p-6`}>
-                  <div className="flex items-center gap-3 mb-6">
-                    <span className="text-3xl">{selectedTemplate.icon}</span>
-                    <div>
-                      <h2 className={`text-xl font-bold ${tp}`}>{selectedTemplate.name}</h2>
-                      <p className={`text-sm ${ts}`}>{selectedTemplate.description}</p>
-                    </div>
+          {/* Report preview */}
+          <div>
+            {selectedTemplate ? (
+              <ContentCard>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 20 }}>
+                  <span style={{ fontSize: 32 }}>{selectedTemplate.icon}</span>
+                  <div>
+                    <h2 style={{ fontSize: '1.125rem', fontWeight: 800, color: 'var(--text-1)', letterSpacing: '-0.01em' }}>{selectedTemplate.name}</h2>
+                    <p style={{ fontSize: 12, color: 'var(--text-3)', marginTop: 2 }}>{selectedTemplate.description}</p>
                   </div>
-                  <ReportPreview template={selectedTemplate} isDark={isDark} />
                 </div>
-              ) : (
-                <div className={`${card} p-12 flex flex-col items-center justify-center text-center`}>
-                  <FileText className={`h-16 w-16 mb-4 ${ts}`} />
-                  <p className={`text-lg font-semibold ${tp}`}>Select a Report Template</p>
-                  <p className={`text-sm ${ts} mt-1`}>Choose from {REPORT_TEMPLATES.length} templates to preview and export</p>
+                <ReportPreview template={selectedTemplate} />
+              </ContentCard>
+            ) : (
+              <div style={{ background: 'var(--surface)', border: '2px dashed var(--border-2)', borderRadius: 'var(--r-2xl)', padding: '4rem', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center' }}>
+                <div style={{ width: 64, height: 64, borderRadius: 'var(--r-xl)', background: 'var(--base-2)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 16 }}>
+                  <FileText className="icon-xl" style={{ color: 'var(--text-4)' }} />
                 </div>
-              )}
-            </div>
-          </div>
-        )}
-
-        {/* ── SCHEDULED TAB ── */}
-        {activeTab === 'scheduled' && (
-          <div className={`${card} p-6`}>
-            <div className="flex items-center justify-between mb-6">
-              <h2 className={`text-xl font-bold ${tp}`}>Scheduled Reports</h2>
-              <button className="flex items-center gap-2 px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm rounded-xl transition-all">
-                <Plus className="h-4 w-4" /> Add Schedule
-              </button>
-            </div>
-            <div className="space-y-3">
-              {SCHEDULED_REPORTS.map(report => (
-                <ScheduledRow key={report.id} report={report} isDark={isDark} />
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* ── ANALYTICS OVERVIEW TAB ── */}
-        {activeTab === 'analytics' && (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {[
-              { title: 'AI Coverage Trend',       type: 'ai_coverage_trend',    bars: [{ key: 'coverage', label: 'Coverage %', color: 'bg-blue-500' }, { key: 'target', label: 'Target', color: 'bg-gray-300' }] },
-              { title: 'Disease Cases Trend',      type: 'disease_cases',        bars: [{ key: 'fmd', label: 'FMD', color: 'bg-red-500' }, { key: 'hs', label: 'HS', color: 'bg-orange-500' }, { key: 'bq', label: 'BQ', color: 'bg-yellow-500' }] },
-              { title: 'Budget Utilization',       type: 'budget_utilization',   bars: [{ key: 'utilized', label: 'Utilized %', color: 'bg-green-500' }] },
-              { title: 'Grievance Trend',          type: 'grievance_trend',      bars: [{ key: 'received', label: 'Received', color: 'bg-red-500' }, { key: 'resolved', label: 'Resolved', color: 'bg-green-500' }] },
-              { title: 'MVU Coverage',             type: 'mvu_coverage',         bars: [{ key: 'coverage', label: 'Coverage %', color: 'bg-indigo-500' }, { key: 'target', label: 'Target', color: 'bg-gray-300' }] },
-              { title: 'Vaccination Coverage',     type: 'vaccination_coverage', bars: [{ key: 'coverage', label: 'Coverage %', color: 'bg-purple-500' }, { key: 'target', label: 'Target', color: 'bg-gray-300' }] },
-            ].map((chart, i) => (
-              <div key={i} className={`${card} p-5`}>
-                <div className="flex items-center justify-between mb-4">
-                  <p className={`font-semibold ${tp}`}>{chart.title}</p>
-                  <button onClick={() => exportToCSV(getChartData(chart.type), chart.type)}
-                    className={`h-7 w-7 rounded-lg flex items-center justify-center ${isDark ? 'bg-white/10 hover:bg-white/20' : 'bg-gray-100 hover:bg-gray-200'}`}>
-                    <Download className={`h-3.5 w-3.5 ${ts}`} />
-                  </button>
-                </div>
-                <BarChart data={getChartData(chart.type)} xKey="month" bars={chart.bars} isDark={isDark} />
+                <p style={{ fontSize: 15, fontWeight: 700, color: 'var(--text-1)', marginBottom: 6 }}>Select a Report Template</p>
+                <p style={{ fontSize: 13, color: 'var(--text-3)' }}>Choose from {REPORT_TEMPLATES.length} templates to preview and export</p>
               </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* ── SCHEDULED TAB ── */}
+      {activeTab === 'scheduled' && (
+        <ContentCard>
+          <SectionHeader title="Scheduled Reports" icon={Calendar} color="var(--blue)"
+            right={
+              <button style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '6px 14px', background: 'var(--blue)', color: '#fff', border: 'none', borderRadius: 'var(--r-md)', fontSize: 12, fontWeight: 600, cursor: 'pointer' }}>
+                <Plus className="icon-xs" /> Add Schedule
+              </button>
+            }
+          />
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+            {SCHEDULED_REPORTS.map(report => (
+              <ScheduledRow key={report.id} report={report} />
             ))}
           </div>
-        )}
-      </div>
+        </ContentCard>
+      )}
+
+      {/* ── ANALYTICS OVERVIEW TAB ── */}
+      {activeTab === 'analytics' && (
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
+          {[
+            { title: 'AI Coverage Trend',   type: 'ai_coverage_trend',    bars: [{ key: 'coverage', label: 'Coverage %', color: 'var(--blue)' }, { key: 'target', label: 'Target', color: 'var(--border-2)' }] },
+            { title: 'Disease Cases Trend', type: 'disease_cases',        bars: [{ key: 'fmd', label: 'FMD', color: 'var(--danger)' }, { key: 'hs', label: 'HS', color: 'var(--orange)' }, { key: 'bq', label: 'BQ', color: 'var(--warning)' }] },
+            { title: 'Budget Utilization',  type: 'budget_utilization',   bars: [{ key: 'utilized', label: 'Utilized %', color: 'var(--success)' }] },
+            { title: 'Grievance Trend',     type: 'grievance_trend',      bars: [{ key: 'received', label: 'Received', color: 'var(--danger)' }, { key: 'resolved', label: 'Resolved', color: 'var(--success)' }] },
+            { title: 'MVU Coverage',        type: 'mvu_coverage',         bars: [{ key: 'coverage', label: 'Coverage %', color: '#6366F1' }, { key: 'target', label: 'Target', color: 'var(--border-2)' }] },
+            { title: 'Vaccination Coverage',type: 'vaccination_coverage', bars: [{ key: 'coverage', label: 'Coverage %', color: '#7C3AED' }, { key: 'target', label: 'Target', color: 'var(--border-2)' }] },
+          ].map((chart, i) => (
+            <ContentCard key={i}>
+              <SectionHeader title={chart.title} icon={BarChart3} color="var(--blue)"
+                right={
+                  <button onClick={() => exportToCSV(getChartData(chart.type), chart.type)}
+                    style={{ width: 28, height: 28, borderRadius: 'var(--r-md)', border: '1px solid var(--border)', background: 'var(--surface)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--text-3)' }}>
+                    <Download className="icon-xs" />
+                  </button>
+                }
+              />
+              <BarChart data={getChartData(chart.type)} xKey="month" bars={chart.bars} />
+            </ContentCard>
+          ))}
+        </div>
+      )}
     </div>
   );
 };

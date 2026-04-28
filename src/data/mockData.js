@@ -118,7 +118,8 @@ export const DISEASE_SURVEILLANCE_DATA = {
     activeCases: 45,
     highRiskDistricts: 3,
     labReports: 156,
-    outbreakAlerts: 2
+    outbreakAlerts: 2,
+    avgResponseTime: 2.5
   },
   diseases: [
     { name: 'FMD', cases: 12, trend: 'increasing', risk: 'high' },
@@ -132,12 +133,23 @@ export const MVU_MANAGEMENT_DATA = {
   dashboard: {
     totalUnits: 45,
     activeUnits: 42,
+    villagesCovered: 312,
+    animalsTreated: 8450,
+    efficiency: 87,
     coverageAchieved: 78,
     avgResponseTime: 2.5
   },
   units: [
     { id: 'MVU001', district: 'Khordha', status: 'active', coverage: 85, lastService: '2024-01-18' },
     { id: 'MVU002', district: 'Cuttack', status: 'maintenance', coverage: 70, lastService: '2024-01-15' }
+  ],
+  tourPlanning: [
+    { id: 1, location: 'Balianta, Khordha',   date: '2024-01-20', villages: 5 },
+    { id: 2, location: 'Pipili, Puri',         date: '2024-01-21', villages: 4 },
+    { id: 3, location: 'Tangi, Cuttack',       date: '2024-01-22', villages: 6 },
+    { id: 4, location: 'Berhampur, Ganjam',    date: '2024-01-23', villages: 3 },
+    { id: 5, location: 'Balasore Town',        date: '2024-01-24', villages: 5 },
+    { id: 6, location: 'Jajpur Road',          date: '2024-01-25', villages: 4 },
   ]
 };
 

@@ -585,7 +585,6 @@ This section demonstrates the **complete scope and capabilities** of the ARD POC
 
 **Microservices Framework:**
 - **Node.js + Express** - API services
-- **Spring Boot** - Java microservices
 - **Python FastAPI** - AI/ML services
 
 **Databases:**

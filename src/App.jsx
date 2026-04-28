@@ -17,6 +17,9 @@ import ExpenditureDashboard from './components/microservices/expenditure-monitor
 import FarmReportingDashboard from './components/microservices/farm-reporting/FarmReportingDashboard';
 import OnCallAIDashboard from './components/microservices/oncall-ai/OnCallAIDashboard';
 import GrievanceDashboard from './components/microservices/grievance-system/GrievanceDashboard';
+import IntegrationHub from './components/integrations/IntegrationHub';
+import ReportCenter from './components/reports/ReportCenter';
+import TechStack from './components/common/TechStack';
 
 /* Wrap a page with ProtectedRoute + AppShell */
 const Protected = ({ children, roles = [] }) => (
@@ -45,6 +48,9 @@ function App() {
           <Route path="/services/farm-reporting/*"        element={<Protected roles={['super_admin','district_officer','farmer']}><FarmReportingDashboard /></Protected>} />
           <Route path="/services/oncall-ai/*"             element={<Protected roles={['farmer','field_user','super_admin']}><OnCallAIDashboard /></Protected>} />
           <Route path="/services/grievance-system/*"      element={<Protected><GrievanceDashboard /></Protected>} />
+          <Route path="/integrations"                      element={<Protected><IntegrationHub /></Protected>} />
+          <Route path="/reports"                           element={<Protected><ReportCenter /></Protected>} />
+          <Route path="/tech-stack"                        element={<Protected><TechStack /></Protected>} />
         </Routes>
       </Router>
     </AuthProvider>

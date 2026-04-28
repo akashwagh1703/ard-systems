@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import Header from '../common/Header';
 import {
   getIntegrationHealth, fetchDigiLockerDocuments, initiateBBPSPayment,
   sendSMS, getWeatherForecast, getLabResults, getRouteOptimization,
   searchGeMProducts, submitEOfficeApproval, verifyAadhaar, sendWhatsApp
 } from '../../services/integrationService';
 import {
-  ArrowLeft, CheckCircle, AlertTriangle, Zap, RefreshCw,
+  CheckCircle, AlertTriangle, Zap, RefreshCw,
   Play, Globe, Shield, CreditCard, MessageSquare, MapPin,
   FlaskConical, ChevronDown, ChevronUp, Loader, Copy, Check, Activity
 } from 'lucide-react';
@@ -86,75 +84,65 @@ const IntegrationCard = ({ integration, isDark }) => {
     }
   };
 
-  const tp = isDark ? 'text-white'    : 'text-gray-900';
-  const ts = isDark ? 'text-gray-400' : 'text-gray-600';
-
   return (
-    <div className={`rounded-2xl border overflow-hidden ${isDark ? 'bg-slate-900/80 border-white/10' : 'bg-white border-gray-200'}`}>
-      <div className="flex items-center gap-4 p-4">
-        <div className={`h-12 w-12 rounded-xl bg-gradient-to-br ${integration.color} flex items-center justify-center text-2xl shrink-0`}>
+    <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 'var(--r-xl)', overflow: 'hidden', boxShadow: 'var(--shadow-xs)' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '14px 16px' }}>
+        <div style={{ width: 44, height: 44, borderRadius: 'var(--r-lg)', background: 'var(--base-2)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20, flexShrink: 0 }}>
           {integration.icon}
         </div>
-        <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2 mb-1 flex-wrap">
-            <p className={`font-semibold ${tp}`}>{integration.name}</p>
-            <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${isDark ? catMeta.dark : catMeta.color}`}>
-              {catMeta.label}
-            </span>
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 3, flexWrap: 'wrap' }}>
+            <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--text-1)' }}>{integration.name}</p>
+            <span style={{ fontSize: 9, fontWeight: 600, padding: '2px 7px', borderRadius: 'var(--r-full)', background: 'var(--blue-subtle)', color: 'var(--blue)', border: '1px solid var(--blue-muted)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>{catMeta.label}</span>
           </div>
-          <div className="flex items-center gap-3 text-xs flex-wrap">
-            <div className="flex items-center gap-1">
-              <div className={`h-1.5 w-1.5 rounded-full ${statusMeta.dot}`} />
-              <span className={ts}>{statusMeta.label}</span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+              <div style={{ width: 6, height: 6, borderRadius: '50%', background: integration.status === 'active' ? 'var(--success)' : integration.status === 'degraded' ? 'var(--warning)' : 'var(--danger)' }} />
+              <span style={{ fontSize: 10, color: 'var(--text-4)' }}>{statusMeta.label}</span>
             </div>
-            <span className={ts}>{integration.latency}ms</span>
-            <span className={ts}>{integration.uptime?.toFixed(1)}% uptime</span>
-            <span className={ts}>{integration.callsToday?.toLocaleString()} calls/day</span>
+            <span style={{ fontSize: 10, color: 'var(--text-4)' }}>{integration.latency}ms</span>
+            <span style={{ fontSize: 10, color: 'var(--text-4)' }}>{integration.uptime?.toFixed(1)}% uptime</span>
           </div>
         </div>
-        <div className="flex items-center gap-2 shrink-0">
-          <button
-            onClick={runDemo}
-            disabled={loading || integration.status === 'down'}
-            className="flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 disabled:from-gray-400 disabled:to-gray-500 text-white text-xs font-medium rounded-lg transition-all"
-          >
-            {loading ? <Loader className="h-3 w-3 animate-spin" /> : <Play className="h-3 w-3" />}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexShrink: 0 }}>
+          <button onClick={runDemo} disabled={loading || integration.status === 'down'} style={{
+            display: 'flex', alignItems: 'center', gap: 5,
+            padding: '6px 12px', borderRadius: 'var(--r-md)',
+            background: 'var(--blue)', color: '#fff', border: 'none',
+            fontSize: 11, fontWeight: 600, cursor: loading ? 'not-allowed' : 'pointer',
+            opacity: loading || integration.status === 'down' ? 0.6 : 1,
+          }}>
+            {loading ? <Loader className="icon-xs" style={{ animation: 'spin 1s linear infinite' }} /> : <Play className="icon-xs" />}
             {loading ? 'Calling...' : 'Test API'}
           </button>
-          <button
-            onClick={() => setExpanded(v => !v)}
-            className={`h-7 w-7 rounded-lg flex items-center justify-center ${isDark ? 'bg-white/10 hover:bg-white/20' : 'bg-gray-100 hover:bg-gray-200'}`}
-          >
-            {expanded ? <ChevronUp className="h-3.5 w-3.5" /> : <ChevronDown className="h-3.5 w-3.5" />}
+          <button onClick={() => setExpanded(v => !v)} style={{
+            width: 28, height: 28, borderRadius: 'var(--r-md)', border: '1px solid var(--border)',
+            background: 'var(--surface)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--text-3)',
+          }}>
+            {expanded ? <ChevronUp className="icon-xs" /> : <ChevronDown className="icon-xs" />}
           </button>
         </div>
       </div>
 
       {/* Metrics bar */}
-      <div className={`grid grid-cols-3 divide-x border-t text-center py-2 ${isDark ? 'border-white/10 divide-white/10' : 'border-gray-100 divide-gray-100'}`}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', borderTop: '1px solid var(--border)', textAlign: 'center', padding: '8px 0' }}>
         {[
-          { label: 'Latency',    value: `${integration.latency}ms`,              color: integration.latency < 300 ? 'text-green-500' : integration.latency < 600 ? 'text-yellow-500' : 'text-red-500' },
-          { label: 'Error Rate', value: `${integration.errorRate}%`,             color: (integration.errorRate || 0) < 1 ? 'text-green-500' : 'text-red-500' },
-          { label: 'Uptime',     value: `${integration.uptime?.toFixed(1) || 0}%`, color: (integration.uptime || 0) >= 99 ? 'text-green-500' : 'text-yellow-500' },
+          { label: 'Latency',    value: `${integration.latency}ms`,               color: integration.latency < 300 ? 'var(--success)' : integration.latency < 600 ? 'var(--warning)' : 'var(--danger)' },
+          { label: 'Error Rate', value: `${integration.errorRate}%`,              color: (integration.errorRate || 0) < 1 ? 'var(--success)' : 'var(--danger)' },
+          { label: 'Uptime',     value: `${integration.uptime?.toFixed(1) || 0}%`, color: (integration.uptime || 0) >= 99 ? 'var(--success)' : 'var(--warning)' },
         ].map(m => (
-          <div key={m.label}>
-            <p className={`text-sm font-bold ${m.color}`}>{m.value}</p>
-            <p className={`text-xs ${ts}`}>{m.label}</p>
+          <div key={m.label} style={{ borderRight: '1px solid var(--border)' }}>
+            <p style={{ fontSize: 12, fontWeight: 700, color: m.color }}>{m.value}</p>
+            <p style={{ fontSize: 10, color: 'var(--text-4)' }}>{m.label}</p>
           </div>
         ))}
       </div>
 
       {expanded && (
-        <div className="p-4 space-y-3">
-          {response && <ResponseViewer data={response} isDark={isDark} />}
-          {error && (
-            <div className={`rounded-xl p-3 text-xs ${isDark ? 'bg-red-500/10 text-red-300' : 'bg-red-50 text-red-700'}`}>
-              Error: {error}
-            </div>
-          )}
-          {!response && !error && !loading && (
-            <p className={`text-xs text-center py-4 ${ts}`}>Click "Test API" to see a live response</p>
-          )}
+        <div style={{ padding: '12px 16px', borderTop: '1px solid var(--border)' }}>
+          {response && <ResponseViewer data={response} isDark={false} />}
+          {error && <div style={{ padding: '8px 12px', borderRadius: 'var(--r-md)', background: 'var(--danger-bg)', color: 'var(--danger)', fontSize: 11 }}>Error: {error}</div>}
+          {!response && !error && !loading && <p style={{ fontSize: 11, color: 'var(--text-4)', textAlign: 'center', padding: '1rem' }}>Click "Test API" to see a live response</p>}
         </div>
       )}
     </div>
@@ -162,14 +150,13 @@ const IntegrationCard = ({ integration, isDark }) => {
 };
 
 const IntegrationHub = () => {
-  const navigate = useNavigate();
-  const [isDark, setIsDark]           = useState(() => localStorage.getItem('ardTheme') === 'dark');
   const [integrations, setIntegrations] = useState([]);
   const [filter, setFilter]           = useState('all');
   const [refreshing, setRefreshing]   = useState(false);
   const [weatherData, setWeatherData] = useState(null);
   const [gemData, setGemData]         = useState(null);
   const [labData, setLabData]         = useState(null);
+  const isDark = false;
 
   const loadHealth = () => setIntegrations(getIntegrationHealth());
 
@@ -193,70 +180,63 @@ const IntegrationHub = () => {
   const degraded    = integrations.filter(i => i.status === 'degraded').length;
   const totalCalls  = integrations.reduce((s, i) => s + (i.callsToday || 0), 0);
 
-  const tp = isDark ? 'text-white'    : 'text-gray-900';
-  const ts = isDark ? 'text-gray-400' : 'text-gray-600';
-  const card = `rounded-2xl border p-5 ${isDark ? 'bg-slate-900/80 border-white/10' : 'bg-white border-gray-200'}`;
-
   return (
-    <div className={`min-h-screen ${isDark ? 'bg-slate-950' : 'bg-gray-50'}`}>
-      <Header isDark={isDark} setIsDark={setIsDark} />
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div style={{ maxWidth: 1200, margin: '0 auto' }}>
 
         {/* Header */}
-        <div className="flex items-center justify-between mb-8">
-          <div className="flex items-center gap-4">
-            <button onClick={() => navigate('/dashboard')} className={`p-3 rounded-full transition-all hover:scale-110 ${isDark ? 'bg-slate-800 text-white hover:bg-slate-700' : 'bg-white text-gray-700 hover:bg-gray-100'}`}>
-              <ArrowLeft className="h-5 w-5" />
-            </button>
-            <div>
-              <h1 className={`text-3xl font-bold ${tp}`}>Integration Hub</h1>
-              <p className={ts}>Third-party API integrations & health monitoring</p>
-            </div>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 24 }}>
+          <div>
+            <h1 style={{ fontSize: '1.375rem', fontWeight: 800, color: 'var(--text-1)', letterSpacing: '-0.02em' }}>Integration Hub</h1>
+            <p style={{ fontSize: 12, color: 'var(--text-3)', marginTop: 2 }}>Third-party API integrations & health monitoring</p>
           </div>
           <button
             onClick={handleRefresh}
             disabled={refreshing}
-            className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl text-sm font-medium hover:from-blue-700 hover:to-indigo-700 transition-all disabled:opacity-60"
+            style={{
+              display: 'flex', alignItems: 'center', gap: 6,
+              padding: '8px 16px', borderRadius: 'var(--r-md)',
+              background: 'var(--blue)', color: '#fff', border: 'none',
+              fontSize: 12, fontWeight: 600, cursor: refreshing ? 'not-allowed' : 'pointer',
+              opacity: refreshing ? 0.7 : 1, transition: 'all 0.15s ease',
+            }}
           >
-            <RefreshCw className={`h-4 w-4 ${refreshing ? 'animate-spin' : ''}`} />
+            <RefreshCw className={`icon-xs ${refreshing ? 'animate-spin' : ''}`} />
             Refresh Health
           </button>
         </div>
 
         {/* Summary KPIs */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 12, marginBottom: 20 }}>
           {[
-            { label: 'Total Integrations', value: integrations.length,          icon: Globe,         color: 'from-blue-500 to-indigo-600'   },
-            { label: 'Active',             value: activeCount,                  icon: CheckCircle,   color: 'from-green-500 to-emerald-600' },
-            { label: 'Degraded',           value: degraded,                     icon: AlertTriangle, color: 'from-yellow-500 to-orange-500' },
-            { label: 'API Calls Today',    value: totalCalls.toLocaleString(),  icon: Zap,           color: 'from-purple-500 to-pink-500'   },
+            { label: 'Total Integrations', value: integrations.length,         icon: Globe,         color: 'var(--blue)'    },
+            { label: 'Active',             value: activeCount,                 icon: CheckCircle,   color: 'var(--success)' },
+            { label: 'Degraded',           value: degraded,                    icon: AlertTriangle, color: 'var(--warning)' },
+            { label: 'API Calls Today',    value: totalCalls.toLocaleString(), icon: Zap,           color: 'var(--orange)'  },
           ].map((kpi, i) => (
-            <div key={i} className={`${card} relative overflow-hidden`}>
-              <div className={`absolute inset-0 opacity-10 bg-gradient-to-br ${kpi.color}`} />
-              <div className="relative flex items-center gap-3">
-                <div className={`h-10 w-10 rounded-xl bg-gradient-to-br ${kpi.color} flex items-center justify-center`}>
-                  <kpi.icon className="h-5 w-5 text-white" />
+            <div key={i} style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 'var(--r-xl)', padding: '1rem', boxShadow: 'var(--shadow-xs)' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                <div style={{ width: 36, height: 36, borderRadius: 'var(--r-md)', background: kpi.color + '15', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <kpi.icon className="icon-sm" style={{ color: kpi.color }} />
                 </div>
                 <div>
-                  <p className={`text-2xl font-bold ${tp}`}>{kpi.value}</p>
-                  <p className={`text-xs ${ts}`}>{kpi.label}</p>
+                  <p style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--text-1)' }}>{kpi.value}</p>
+                  <p style={{ fontSize: 10, color: 'var(--text-4)' }}>{kpi.label}</p>
                 </div>
               </div>
             </div>
           ))}
         </div>
 
-        {/* Live Showcase: Weather + GeM + Lab */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+        {/* Live Showcase */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 14, marginBottom: 20 }}>
 
           {weatherData && (
-            <div className={card}>
-              <div className="flex items-center gap-2 mb-3">
-                <span className="text-xl">🌦️</span>
-                <p className={`font-semibold ${tp}`}>IMD Weather — Cuttack</p>
+            <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 'var(--r-xl)', padding: '1.25rem', boxShadow: 'var(--shadow-xs)' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
+                <span style={{ fontSize: 18 }}>🌦️</span>
+                <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--text-1)' }}>IMD Weather — Cuttack</p>
               </div>
-              <div className="grid grid-cols-2 gap-2 text-sm mb-3">
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginBottom: 10 }}>
                 {[
                   { label: 'Temperature', value: `${weatherData.current?.temp}°C` },
                   { label: 'Humidity',    value: `${weatherData.current?.humidity}%` },
@@ -264,73 +244,65 @@ const IntegrationHub = () => {
                   { label: 'Wind',        value: `${weatherData.current?.windSpeed} km/h` },
                 ].map(item => (
                   <div key={item.label}>
-                    <p className={`text-xs ${ts}`}>{item.label}</p>
-                    <p className={`font-bold ${tp}`}>{item.value}</p>
+                    <p style={{ fontSize: 10, color: 'var(--text-4)' }}>{item.label}</p>
+                    <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--text-1)' }}>{item.value}</p>
                   </div>
                 ))}
               </div>
-              <div className={`rounded-lg p-2 text-xs font-medium ${
-                weatherData.diseaseRiskCorrelation?.overall === 'high'
-                  ? isDark ? 'bg-red-500/20 text-red-300' : 'bg-red-50 text-red-700'
-                  : weatherData.diseaseRiskCorrelation?.overall === 'medium'
-                  ? isDark ? 'bg-yellow-500/20 text-yellow-300' : 'bg-yellow-50 text-yellow-700'
-                  : isDark ? 'bg-green-500/20 text-green-300' : 'bg-green-50 text-green-700'
-              }`}>
+              <div style={{ padding: '6px 10px', borderRadius: 'var(--r-md)', fontSize: 11, fontWeight: 600, background: weatherData.diseaseRiskCorrelation?.overall === 'high' ? 'var(--danger-bg)' : weatherData.diseaseRiskCorrelation?.overall === 'medium' ? 'var(--warning-bg)' : 'var(--success-bg)', color: weatherData.diseaseRiskCorrelation?.overall === 'high' ? 'var(--danger)' : weatherData.diseaseRiskCorrelation?.overall === 'medium' ? 'var(--warning)' : 'var(--success)' }}>
                 Disease Risk: {weatherData.diseaseRiskCorrelation?.overall?.toUpperCase()}
               </div>
             </div>
           )}
 
           {gemData && (
-            <div className={card}>
-              <div className="flex items-center gap-2 mb-3">
-                <span className="text-xl">💎</span>
-                <p className={`font-semibold ${tp}`}>GeM Portal — Vaccines</p>
+            <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 'var(--r-xl)', padding: '1.25rem', boxShadow: 'var(--shadow-xs)' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
+                <span style={{ fontSize: 18 }}>💎</span>
+                <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--text-1)' }}>GeM Portal — Vaccines</p>
               </div>
-              <div className="space-y-2">
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
                 {gemData.products?.slice(0, 2).map(p => (
-                  <div key={p.id} className={`rounded-lg p-2 text-xs ${isDark ? 'bg-white/5' : 'bg-gray-50'}`}>
-                    <div className="flex justify-between mb-1">
-                      <span className={`font-medium ${tp}`}>{p.name}</span>
-                      <span className="text-green-500 font-bold">₹{p.price}/{p.unit}</span>
+                  <div key={p.id} style={{ padding: '8px 10px', borderRadius: 'var(--r-md)', background: 'var(--base-2)', border: '1px solid var(--border)' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 2 }}>
+                      <span style={{ fontSize: 11, fontWeight: 600, color: 'var(--text-1)' }}>{p.name}</span>
+                      <span style={{ fontSize: 11, fontWeight: 700, color: 'var(--success)' }}>₹{p.price}/{p.unit}</span>
                     </div>
-                    <div className="flex justify-between">
-                      <span className={ts}>{p.vendor}</span>
-                      <span className={ts}>⭐ {p.rating} · {p.delivery}</span>
+                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                      <span style={{ fontSize: 10, color: 'var(--text-4)' }}>{p.vendor}</span>
+                      <span style={{ fontSize: 10, color: 'var(--text-4)' }}>⭐ {p.rating} · {p.delivery}</span>
                     </div>
                   </div>
                 ))}
               </div>
-              <p className={`text-xs mt-2 ${ts}`}>{gemData.totalVendors} vendors available</p>
+              <p style={{ fontSize: 10, color: 'var(--text-4)', marginTop: 8 }}>{gemData.totalVendors} vendors available</p>
             </div>
           )}
 
           {labData && (
-            <div className={card}>
-              <div className="flex items-center gap-2 mb-3">
-                <span className="text-xl">🔬</span>
-                <p className={`font-semibold ${tp}`}>ICAR-NIVEDI — Lab Result</p>
+            <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 'var(--r-xl)', padding: '1.25rem', boxShadow: 'var(--shadow-xs)' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
+                <span style={{ fontSize: 18 }}>🔬</span>
+                <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--text-1)' }}>ICAR-NIVEDI — Lab Result</p>
               </div>
-              <div className="space-y-2 text-sm mb-3">
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 6, marginBottom: 10 }}>
                 {[
                   { label: 'Sample ID',  value: labData.sampleId },
                   { label: 'Confidence', value: `${labData.confidence}%` },
                   { label: 'Protocol',   value: labData.protocol },
                 ].map(item => (
-                  <div key={item.label} className="flex justify-between">
-                    <span className={ts}>{item.label}</span>
-                    <span className={`font-medium ${tp}`}>{item.value}</span>
+                  <div key={item.label} style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <span style={{ fontSize: 11, color: 'var(--text-4)' }}>{item.label}</span>
+                    <span style={{ fontSize: 11, fontWeight: 600, color: 'var(--text-1)' }}>{item.value}</span>
                   </div>
                 ))}
-                <div className="flex justify-between">
-                  <span className={ts}>Result</span>
-                  <span className={`font-bold ${labData.result === 'positive' ? 'text-red-500' : 'text-green-500'}`}>
-                    {labData.result?.toUpperCase()}
-                  </span>
+                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <span style={{ fontSize: 11, color: 'var(--text-4)' }}>Result</span>
+                  <span style={{ fontSize: 11, fontWeight: 700, color: labData.result === 'positive' ? 'var(--danger)' : 'var(--success)' }}>{labData.result?.toUpperCase()}</span>
                 </div>
               </div>
               {labData.result === 'positive' && (
-                <div className={`rounded-lg p-2 text-xs ${isDark ? 'bg-red-500/20 text-red-300' : 'bg-red-50 text-red-700'}`}>
+                <div style={{ padding: '6px 10px', borderRadius: 'var(--r-md)', background: 'var(--danger-bg)', color: 'var(--danger)', fontSize: 11, fontWeight: 500 }}>
                   ⚠ {labData.disease} detected — immediate action required
                 </div>
               )}
@@ -339,29 +311,26 @@ const IntegrationHub = () => {
         </div>
 
         {/* Category filter */}
-        <div className="flex gap-2 flex-wrap mb-6">
+        <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 16 }}>
           {categories.map(cat => (
-            <button
-              key={cat}
-              onClick={() => setFilter(cat)}
-              className={`px-3 py-1.5 rounded-xl text-sm font-medium transition-all capitalize ${
-                filter === cat
-                  ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white'
-                  : isDark ? 'bg-white/10 text-gray-300 hover:bg-white/20' : 'bg-white text-gray-600 hover:bg-gray-100 border border-gray-200'
-              }`}
-            >
+            <button key={cat} onClick={() => setFilter(cat)} style={{
+              padding: '5px 12px', borderRadius: 'var(--r-md)', fontSize: 11, fontWeight: 500,
+              background: filter === cat ? 'var(--blue)' : 'var(--surface)',
+              color: filter === cat ? '#fff' : 'var(--text-3)',
+              border: `1px solid ${filter === cat ? 'var(--blue)' : 'var(--border)'}`,
+              cursor: 'pointer', transition: 'all 0.15s ease', textTransform: 'capitalize',
+            }}>
               {cat === 'all' ? `All (${integrations.length})` : cat}
             </button>
           ))}
         </div>
 
         {/* Integration cards */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
           {filtered.map(integration => (
-            <IntegrationCard key={integration.id} integration={integration} isDark={isDark} />
+            <IntegrationCard key={integration.id} integration={integration} isDark={false} />
           ))}
         </div>
-      </div>
     </div>
   );
 };

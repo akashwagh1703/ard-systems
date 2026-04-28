@@ -5,8 +5,8 @@ import { SAMPLE_USERS } from '../../data/mockData';
 import { User, Shield, Building, Users, Wheat, ArrowRight, CheckCircle, Zap, BarChart2, Globe } from 'lucide-react';
 
 const ROLE_META = {
-  super_admin:      { icon: Shield,   label: 'Super Admin',      color: '#2563EB', bg: '#EFF6FF', desc: 'Full system · All services · State-level'  },
-  district_officer: { icon: Building, label: 'District Officer', color: '#0284C7', bg: '#F0F9FF', desc: 'District access · CDVO operations'          },
+  super_admin:      { icon: Shield,   label: 'Super Admin',      color: '#0D9488', bg: '#F0FDFA', desc: 'Full system · All services · State-level'  },
+  district_officer: { icon: Building, label: 'District Officer', color: '#0891B2', bg: '#ECFEFF', desc: 'District access · CDVO operations'          },
   block_officer:    { icon: Users,    label: 'Block Officer',    color: '#059669', bg: '#ECFDF5', desc: 'Block operations · BVO functions'           },
   field_user:       { icon: User,     label: 'Field User',       color: '#D97706', bg: '#FFFBEB', desc: 'Field operations · Service delivery'       },
   farmer:           { icon: Wheat,    label: 'Farmer',           color: '#7C3AED', bg: '#F5F3FF', desc: 'Service booking · Limited access'          },
@@ -117,7 +117,7 @@ export default function LoginPage() {
         </div>
       </div>
 
-      {/* ── Right panel — 60% Base ── */}
+      {/* ── Right panel ── */}
       <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2rem', background: 'var(--base)' }}>
         <div style={{ width: '100%', maxWidth: 460 }}>
 
@@ -125,7 +125,7 @@ export default function LoginPage() {
           <div className="flex lg:hidden items-center gap-3 mb-8">
             <div style={{
               width: 40, height: 40, borderRadius: 11,
-              background: 'linear-gradient(135deg, #2563EB, #1D4ED8)',
+              background: 'linear-gradient(135deg, #3B82F6, #2563EB)',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               fontSize: 12, fontWeight: 800, color: '#fff',
             }}>ARD</div>
@@ -163,10 +163,10 @@ export default function LoginPage() {
                       background: isSel ? meta.bg : 'var(--surface)',
                       border: `1.5px solid ${isSel ? meta.color : 'var(--border)'}`,
                       cursor: 'pointer', transition: 'all 0.15s ease', outline: 'none',
-                      boxShadow: isSel ? `0 0 0 3px ${meta.color}18` : 'var(--shadow-xs)',
+                      boxShadow: isSel ? `0 0 0 3px ${meta.color}25` : 'var(--shadow-xs)',
                     }}
-                    onMouseEnter={e => { if (!isSel) { e.currentTarget.style.borderColor = 'var(--border-2)'; e.currentTarget.style.boxShadow = 'var(--shadow-sm)'; }}}
-                    onMouseLeave={e => { if (!isSel) { e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.boxShadow = 'var(--shadow-xs)'; }}}
+                    onMouseEnter={e => { if (!isSel) { e.currentTarget.style.borderColor = 'var(--border-2)'; e.currentTarget.style.background = 'var(--base-2)'; }}}
+                    onMouseLeave={e => { if (!isSel) { e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.background = 'var(--surface)'; }}}
                   >
                     <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
                       <div style={{
@@ -174,7 +174,7 @@ export default function LoginPage() {
                         background: isSel ? meta.color : 'var(--base-2)',
                         display: 'flex', alignItems: 'center', justifyContent: 'center',
                         transition: 'all 0.15s ease',
-                        boxShadow: isSel ? `0 2px 10px ${meta.color}35` : 'none',
+                        boxShadow: isSel ? `0 2px 10px ${meta.color}50` : 'none',
                       }}>
                         <Icon className="icon-md" style={{ color: isSel ? '#fff' : meta.color }} />
                       </div>
@@ -207,7 +207,7 @@ export default function LoginPage() {
               })}
             </div>
 
-            {/* CTA — 10% Orange */}
+            {/* CTA */}
             <button
               type="submit"
               disabled={!selected}

@@ -21,7 +21,7 @@ export function Modal({ open, onClose, title, children, width = 480 }) {
   return (
     <div style={{
       position: 'fixed', inset: 0, zIndex: 100,
-      background: 'rgba(15,23,42,0.45)', backdropFilter: 'blur(4px)',
+      background: 'rgba(15,42,38,0.45)', backdropFilter: 'blur(4px)',
       display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem',
       animation: 'fadeUp 0.2s ease forwards',
     }}>
@@ -37,9 +37,9 @@ export function Modal({ open, onClose, title, children, width = 480 }) {
           padding: '1rem 1.5rem', borderBottom: '1px solid var(--border)',
           background: 'var(--base-2)',
         }}>
-          <span style={{ fontSize: 14, fontWeight: 700, color: 'var(--text-1)' }}>{title}</span>
+          <span style={{ fontSize: 15, fontWeight: 700, color: 'var(--text-1)' }}>{title}</span>
           <button onClick={onClose} style={{
-            width: 28, height: 28, borderRadius: 'var(--r-md)', border: '1px solid var(--border)',
+            width: 30, height: 30, borderRadius: 'var(--r-md)', border: '1px solid var(--border)',
             background: 'var(--surface)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
             color: 'var(--text-3)', transition: 'all 0.15s ease',
           }}
@@ -69,13 +69,13 @@ export function Toast({ toasts, remove }) {
         return (
           <div key={t.id} style={{
             display: 'flex', alignItems: 'center', gap: 10,
-            padding: '10px 14px', borderRadius: 'var(--r-lg)',
+            padding: '12px 16px', borderRadius: 'var(--r-lg)',
             background: cfg.bg, border: `1px solid ${cfg.border}`,
-            boxShadow: 'var(--shadow-md)', minWidth: 260, maxWidth: 360,
+            boxShadow: 'var(--shadow-md)', minWidth: 280, maxWidth: 380,
             animation: 'fadeUp 0.25s ease forwards',
           }}>
             <cfg.Icon className="icon-sm" style={{ color: cfg.color, flexShrink: 0 }} />
-            <span style={{ fontSize: 12, fontWeight: 500, color: 'var(--text-1)', flex: 1 }}>{t.message}</span>
+            <span style={{ fontSize: 14, fontWeight: 500, color: 'var(--text-1)', flex: 1 }}>{t.message}</span>
             <button onClick={() => remove(t.id)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-4)', padding: 0 }}>
               <X className="icon-xs" />
             </button>
@@ -101,8 +101,8 @@ export function useToast() {
 /* ── FormField ── */
 export function FormField({ label, required, children }) {
   return (
-    <div style={{ marginBottom: 14 }}>
-      <label style={{ display: 'block', fontSize: 11, fontWeight: 600, color: 'var(--text-2)', marginBottom: 5, textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+    <div style={{ marginBottom: 16 }}>
+      <label style={{ display: 'block', fontSize: 12, fontWeight: 600, color: 'var(--text-2)', marginBottom: 6, textTransform: 'uppercase', letterSpacing: '0.04em' }}>
         {label}{required && <span style={{ color: 'var(--danger)', marginLeft: 3 }}>*</span>}
       </label>
       {children}
@@ -119,11 +119,11 @@ export function Input({ value, onChange, placeholder, type = 'text', ...rest }) 
       onChange={onChange}
       placeholder={placeholder}
       style={{
-        width: '100%', padding: '8px 12px', fontSize: 13,
+        width: '100%', padding: '9px 13px', fontSize: 14,
         border: '1.5px solid var(--border)', borderRadius: 'var(--r-md)',
         background: 'var(--surface)', color: 'var(--text-1)',
-        outline: 'none', transition: 'border-color 0.15s ease', fontFamily: 'inherit',
-        boxSizing: 'border-box',
+        outline: 'none', transition: 'border-color 0.15s ease, box-shadow 0.15s ease',
+        fontFamily: 'inherit', boxSizing: 'border-box',
       }}
       onFocus={e => { e.target.style.borderColor = 'var(--blue)'; e.target.style.boxShadow = '0 0 0 3px var(--blue-pale)'; }}
       onBlur={e => { e.target.style.borderColor = 'var(--border)'; e.target.style.boxShadow = 'none'; }}
@@ -139,14 +139,14 @@ export function Select({ value, onChange, children, ...rest }) {
       value={value}
       onChange={onChange}
       style={{
-        width: '100%', padding: '8px 12px', fontSize: 13,
+        width: '100%', padding: '9px 13px', fontSize: 14,
         border: '1.5px solid var(--border)', borderRadius: 'var(--r-md)',
         background: 'var(--surface)', color: 'var(--text-1)',
         outline: 'none', cursor: 'pointer', fontFamily: 'inherit',
         boxSizing: 'border-box',
       }}
-      onFocus={e => { e.target.style.borderColor = 'var(--blue)'; }}
-      onBlur={e => { e.target.style.borderColor = 'var(--border)'; }}
+      onFocus={e => { e.target.style.borderColor = 'var(--blue)'; e.target.style.boxShadow = '0 0 0 3px var(--blue-pale)'; }}
+      onBlur={e => { e.target.style.borderColor = 'var(--border)'; e.target.style.boxShadow = 'none'; }}
       {...rest}
     >
       {children}
@@ -163,11 +163,11 @@ export function Textarea({ value, onChange, placeholder, rows = 3 }) {
       placeholder={placeholder}
       rows={rows}
       style={{
-        width: '100%', padding: '8px 12px', fontSize: 13,
+        width: '100%', padding: '9px 13px', fontSize: 14,
         border: '1.5px solid var(--border)', borderRadius: 'var(--r-md)',
         background: 'var(--surface)', color: 'var(--text-1)',
         outline: 'none', resize: 'vertical', fontFamily: 'inherit',
-        boxSizing: 'border-box', transition: 'border-color 0.15s ease',
+        boxSizing: 'border-box', transition: 'border-color 0.15s ease, box-shadow 0.15s ease',
       }}
       onFocus={e => { e.target.style.borderColor = 'var(--blue)'; e.target.style.boxShadow = '0 0 0 3px var(--blue-pale)'; }}
       onBlur={e => { e.target.style.borderColor = 'var(--border)'; e.target.style.boxShadow = 'none'; }}
@@ -180,7 +180,7 @@ export function ModalFooter({ onCancel, onSubmit, submitLabel = 'Save', submitCo
   return (
     <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 8, marginTop: 20, paddingTop: 16, borderTop: '1px solid var(--border)' }}>
       <button onClick={onCancel} style={{
-        padding: '8px 18px', borderRadius: 'var(--r-md)', fontSize: 12, fontWeight: 600,
+        padding: '9px 20px', borderRadius: 'var(--r-md)', fontSize: 14, fontWeight: 600,
         background: 'var(--surface)', border: '1px solid var(--border)', color: 'var(--text-2)',
         cursor: 'pointer', transition: 'all 0.15s ease',
       }}
@@ -188,7 +188,7 @@ export function ModalFooter({ onCancel, onSubmit, submitLabel = 'Save', submitCo
         onMouseLeave={e => { e.currentTarget.style.background = 'var(--surface)'; }}
       >Cancel</button>
       <button onClick={onSubmit} disabled={loading} style={{
-        padding: '8px 18px', borderRadius: 'var(--r-md)', fontSize: 12, fontWeight: 600,
+        padding: '9px 20px', borderRadius: 'var(--r-md)', fontSize: 14, fontWeight: 600,
         background: submitColor, border: 'none', color: '#fff',
         cursor: loading ? 'not-allowed' : 'pointer', opacity: loading ? 0.7 : 1,
         transition: 'all 0.15s ease',
@@ -204,14 +204,14 @@ export function ModalFooter({ onCancel, onSubmit, submitLabel = 'Save', submitCo
 export function ConfirmDialog({ open, onClose, onConfirm, title, message, confirmLabel = 'Delete', confirmColor = 'var(--danger)' }) {
   return (
     <Modal open={open} onClose={onClose} title={title} width={400}>
-      <p style={{ fontSize: 13, color: 'var(--text-2)', lineHeight: 1.6, marginBottom: 20 }}>{message}</p>
+      <p style={{ fontSize: 14, color: 'var(--text-2)', lineHeight: 1.65, marginBottom: 20 }}>{message}</p>
       <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 8 }}>
         <button onClick={onClose} style={{
-          padding: '8px 18px', borderRadius: 'var(--r-md)', fontSize: 12, fontWeight: 600,
+          padding: '9px 20px', borderRadius: 'var(--r-md)', fontSize: 14, fontWeight: 600,
           background: 'var(--surface)', border: '1px solid var(--border)', color: 'var(--text-2)', cursor: 'pointer',
         }}>Cancel</button>
         <button onClick={() => { onConfirm(); onClose(); }} style={{
-          padding: '8px 18px', borderRadius: 'var(--r-md)', fontSize: 12, fontWeight: 600,
+          padding: '9px 20px', borderRadius: 'var(--r-md)', fontSize: 14, fontWeight: 600,
           background: confirmColor, border: 'none', color: '#fff', cursor: 'pointer',
         }}>{confirmLabel}</button>
       </div>
