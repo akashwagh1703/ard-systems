@@ -38,7 +38,7 @@ export default function LoginPage() {
       {/* ── Left panel — 30% Royal Blue ── */}
       <div style={{
         width: '42%', minHeight: '100vh', flexShrink: 0,
-        background: 'linear-gradient(160deg, #1E40AF 0%, #2563EB 50%, #1D4ED8 100%)',
+        background: 'linear-gradient(160deg, #0F766E 0%, #0D9488 50%, #14B8A6 100%)',
         display: 'flex', flexDirection: 'column', justifyContent: 'space-between',
         padding: '3rem', position: 'relative', overflow: 'hidden',
       }}
@@ -233,6 +233,16 @@ export default function LoginPage() {
           <p style={{ textAlign: 'center', fontSize: 11, color: 'var(--text-4)', marginTop: 20 }}>
             Demo system · Role-based access · 10 microservices · AI-enabled
           </p>
+
+          {/* Farmer Portal Link */}
+          <div style={{ marginTop: 20, paddingTop: 16, borderTop: '1px solid var(--border)', textAlign: 'center' }}>
+            <p style={{ fontSize: 13, color: 'var(--text-3)', marginBottom: 10 }}>Are you a farmer?</p>
+            <button onClick={() => navigate('/farmer/login')} style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '10px 24px', borderRadius: 'var(--r-md)', background: 'var(--blue-subtle)', border: '1.5px solid var(--blue-muted)', color: 'var(--blue-dark)', fontSize: 14, fontWeight: 600, cursor: 'pointer', transition: 'all 0.15s ease' }}
+              onMouseEnter={e => { e.currentTarget.style.background = 'var(--blue-pale)'; }}
+              onMouseLeave={e => { e.currentTarget.style.background = 'var(--blue-subtle)'; }}>
+              🌾 Go to Farmer Portal
+            </button>
+          </div>
         </div>
       </div>
     </div>

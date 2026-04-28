@@ -73,7 +73,7 @@ For each phase include:
 
 ---
 
-## 🤖 AI Features (CRITICAL)
+##  AI Features (CRITICAL)
 - Disease prediction
 - Smart alerts
 - AI chatbot

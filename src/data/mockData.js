@@ -39,15 +39,16 @@ export const SAMPLE_USERS = [
     designation: 'Artificial Insemination Technician',
     district: 'Khordha',
     block: 'Bhubaneswar'
-  },
-  {
-    id: 5,
-    name: 'Gita Devi',
-    role: USER_ROLES.FARMER,
-    designation: 'Farmer',
-    district: 'Khordha',
-    block: 'Bhubaneswar'
   }
+  // ,
+  // {
+  //   id: 5,
+  //   name: 'Gita Devi',
+  //   role: USER_ROLES.FARMER,
+  //   designation: 'Farmer',
+  //   district: 'Khordha',
+  //   block: 'Bhubaneswar'
+  // }
 ];
 
 // Main Dashboard KPIs

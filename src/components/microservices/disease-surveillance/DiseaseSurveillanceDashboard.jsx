@@ -132,7 +132,7 @@ const DiseaseSurveillanceDashboard = () => {
             <h3 className={`text-lg font-bold mb-2 flex items-center ${
               isDark ? 'text-white' : 'text-gray-900'
             }`}>
-              🤖 AI Early Warning System
+               AI Early Warning System
             </h3>
             <p className={`text-base mb-3 ${
               isDark ? 'text-gray-300' : 'text-gray-700'

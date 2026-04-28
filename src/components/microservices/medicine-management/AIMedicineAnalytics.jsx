@@ -47,7 +47,7 @@ const AIMedicineAnalytics = ({ medicines }) => {
       <div className="bg-gradient-to-r from-green-500 to-blue-600 rounded-xl p-6 text-white">
         <div className="flex items-center space-x-3 mb-4">
           <Brain className="h-8 w-8" />
-          <h3 className="text-2xl font-bold">🤖 AI Medicine Intelligence</h3>
+          <h3 className="text-2xl font-bold"> AI Medicine Intelligence</h3>
         </div>
         <p className="text-green-100">Smart demand forecasting and inventory optimization</p>
       </div>
@@ -78,7 +78,7 @@ const AIMedicineAnalytics = ({ medicines }) => {
         {/* Stock Optimization */}
         <div className="bg-white rounded-xl p-6 border border-gray-200">
           <div className="flex items-center justify-between mb-4">
-            <h4 className="font-bold text-gray-900">🎯 Stock Optimization</h4>
+            <h4 className="font-bold text-gray-900"> Stock Optimization</h4>
             <Target className="h-5 w-5 text-green-500" />
           </div>
           {Object.entries(aiInsights).slice(0, 3).map(([medicine, insight]) => (

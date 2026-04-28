@@ -53,7 +53,7 @@ export default function MainDashboard() {
         {/* Welcome card — spans 2 cols */}
         <div style={{
           gridColumn: 'span 2',
-          background: 'linear-gradient(135deg, #1E3A8A 0%, #1D4ED8 40%, #2563EB 70%, #3B82F6 100%)',
+          background: 'linear-gradient(135deg, #0F766E 0%, #0D9488 40%, #14B8A6 70%, #5EEAD4 100%)',
           borderRadius: 20, padding: '1.75rem 2rem',
           position: 'relative', overflow: 'hidden',
           boxShadow: '0 8px 32px rgba(29,78,216,0.30)',

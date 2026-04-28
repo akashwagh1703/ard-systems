@@ -18,7 +18,7 @@ const AIFarmAnalytics = () => {
       <div className="bg-gradient-to-r from-green-500 to-blue-600 rounded-xl p-6 text-white">
         <div className="flex items-center space-x-3 mb-4">
           <Brain className="h-8 w-8" />
-          <h3 className="text-2xl font-bold">🤖 AI Farm Intelligence</h3>
+          <h3 className="text-2xl font-bold"> AI Farm Intelligence</h3>
         </div>
         <p className="text-green-100">Smart breeding insights and productivity optimization</p>
       </div>

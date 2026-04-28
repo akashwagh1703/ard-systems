@@ -112,7 +112,7 @@ export default function TechStack() {
 
       {/* Hero */}
       <div style={{
-        background: 'linear-gradient(135deg, #1E3A8A 0%, #1D4ED8 40%, #2563EB 70%, #3B82F6 100%)',
+        background: 'linear-gradient(135deg, #0F766E 0%, #0D9488 40%, #14B8A6 70%, #5EEAD4 100%)',
         borderRadius: 'var(--r-2xl)', padding: '2rem 2.5rem', marginBottom: 20,
         position: 'relative', overflow: 'hidden',
       }}>

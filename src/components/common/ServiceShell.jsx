@@ -13,7 +13,7 @@ export default function ServiceShell({ title, subtitle, icon: Icon, color = 'var
         background: `linear-gradient(135deg, ${color}18 0%, ${color}08 100%)`,
         border: `1px solid ${color}25`,
         borderRadius: 'var(--r-2xl)',
-        padding: '1.5rem 2rem',
+        padding: '1rem 1rem',
         marginBottom: 20,
         position: 'relative',
         overflow: 'hidden',
@@ -22,39 +22,24 @@ export default function ServiceShell({ title, subtitle, icon: Icon, color = 'var
         <div style={{ position: 'absolute', top: -40, right: -40, width: 160, height: 160, borderRadius: '50%', background: `${color}10`, pointerEvents: 'none' }} />
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 16, position: 'relative', zIndex: 1 }}>
-          <button
-            onClick={() => navigate('/dashboard')}
-            style={{
-              width: 36, height: 36, borderRadius: 'var(--r-md)',
-              border: `1px solid ${color}30`,
-              background: `${color}12`,
-              color: color,
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              cursor: 'pointer', transition: 'all 0.15s ease', flexShrink: 0,
-            }}
-            onMouseEnter={e => { e.currentTarget.style.background = `${color}22`; }}
-            onMouseLeave={e => { e.currentTarget.style.background = `${color}12`; }}
-          >
-            <ArrowLeft className="icon-sm" />
-          </button>
-
-          <div style={{
+          {/* <div style={{
             width: 48, height: 48, borderRadius: 'var(--r-lg)',
             background: `linear-gradient(135deg, ${color}, ${color}cc)`,
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             boxShadow: `0 4px 16px ${color}35`, flexShrink: 0,
           }}>
             {Icon && <Icon className="icon-lg" style={{ color: '#fff' }} />}
-          </div>
+          </div> */}
 
           <div style={{ flex: 1 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 4 }}>
               <h1 style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--text-1)', letterSpacing: '-0.02em' }}>{title}</h1>
               {badge && (
                 <span style={{
-                  fontSize: 10, fontWeight: 700, padding: '2px 8px', borderRadius: 'var(--r-full)',
-                  background: `${color}15`, color: color, border: `1px solid ${color}30`,
+                  fontSize: 10, fontWeight: 700, padding: '3px 10px', borderRadius: 'var(--r-full)',
+                  background: 'var(--orange)', color: '#fff',
                   textTransform: 'uppercase', letterSpacing: '0.05em',
+                  boxShadow: '0 2px 8px rgba(249,115,22,0.35)',
                 }}>{badge}</span>
               )}
             </div>

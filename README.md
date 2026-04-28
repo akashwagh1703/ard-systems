@@ -1,7 +1,7 @@
 # ARD POC - Animal Resources Development System
 ## Government of Odisha - Microservices-Based Platform
 
-### 🎯 Project Overview
+###  Project Overview
 
 This is a **Proof of Concept (POC)** for the Government of Odisha's Animal Resources Development (ARD) Department, built as a **microservices-based platform** with AI-enabled features. The system demonstrates enterprise-grade architecture suitable for government operations with role-based access control and service-wise modularity.
 
@@ -124,7 +124,7 @@ This is a **Proof of Concept (POC)** for the Government of Odisha's Animal Resou
 - **Modules:** Issue Reporting, Geo-tag Upload, Status Tracking, Resolution
 - **AI Features:** Pattern analysis, resolution optimization
 
-### 🤖 AI Layer (Cross-Cutting)
+###  AI Layer (Cross-Cutting)
 
 **AI Capabilities:**
 - Predictive analytics
@@ -200,7 +200,7 @@ Navigate Service Modules
 - Cross-service data relationships
 - AI-generated insights and alerts
 
-### 🎯 Key Features Demonstrated
+###  Key Features Demonstrated
 
 1. **Microservices Architecture**
    - Independent service dashboards
@@ -305,7 +305,7 @@ npm run build
 - Deployment instructions
 - Customization guidelines
 
-### 🎯 POC Objectives Achieved
+###  POC Objectives Achieved
 
 ✅ **Microservices Architecture Demonstration**
 ✅ **Multi-Role User Coverage**
@@ -322,7 +322,7 @@ npm run build
 
 This section demonstrates the **complete scope and capabilities** of the ARD POC system, showcasing AI-powered module management, third-party integrations, comprehensive dashboards & reports, and the technology stack in action.
 
-### 🤖 AI Module Management
+###  AI Module Management
 
 #### **1. Predictive Analytics Engine**
 
@@ -652,7 +652,7 @@ This section demonstrates the **complete scope and capabilities** of the ARD POC
 - **OWASP ZAP** - Vulnerability scanning
 - **Snyk** - Dependency scanning
 
-### 🎯 Demonstration Scenarios
+###  Demonstration Scenarios
 
 #### **Scenario 1: AI-Driven Service Optimization**
 

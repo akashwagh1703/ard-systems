@@ -28,10 +28,10 @@ const Header = ({ isDark = false, setIsDark }) => {
 
   return (
     <header style={{
-      background: 'linear-gradient(135deg, #1B2CC1 0%, #111D8A 100%)',
+      background: 'linear-gradient(135deg, #0F766E 0%, #0D9488 100%)',
       borderBottom: '1px solid rgba(255,255,255,0.08)',
       position: 'sticky', top: 0, zIndex: 40,
-      boxShadow: '0 2px 16px rgba(27,44,193,0.25)',
+      boxShadow: '0 2px 16px rgba(13,148,136,0.25)',
     }}>
       <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 1.5rem' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 56 }}>
@@ -44,7 +44,7 @@ const Header = ({ isDark = false, setIsDark }) => {
             {/* Amber mark — 10% accent */}
             <div style={{
               width: 34, height: 34, borderRadius: 9,
-              background: 'linear-gradient(135deg, #F59E0B, #D97706)',
+              background: 'linear-gradient(135deg, #F97316, #EA580C)',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               fontSize: 11, fontWeight: 700, color: '#fff',
               boxShadow: '0 2px 8px rgba(245,158,11,0.4)',

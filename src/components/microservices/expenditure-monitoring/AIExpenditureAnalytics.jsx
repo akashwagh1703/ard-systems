@@ -18,7 +18,7 @@ const AIExpenditureAnalytics = () => {
       <div className="bg-gradient-to-r from-purple-500 to-pink-600 rounded-xl p-6 text-white">
         <div className="flex items-center space-x-3 mb-4">
           <Brain className="h-8 w-8" />
-          <h3 className="text-2xl font-bold">🤖 AI Expenditure Intelligence</h3>
+          <h3 className="text-2xl font-bold"> AI Expenditure Intelligence</h3>
         </div>
         <p className="text-purple-100">Smart spend analysis and anomaly detection</p>
       </div>

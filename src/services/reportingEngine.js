@@ -127,7 +127,7 @@ export const REPORT_TEMPLATES = [
     name: 'AI Insights & Predictions',
     description: 'Cross-service AI predictions, anomalies, recommendations, and model accuracy',
     category: 'ai',
-    icon: '🤖',
+    icon: '',
     frequency: 'weekly',
     roles: ['super_admin'],
     estimatedRows: 55,

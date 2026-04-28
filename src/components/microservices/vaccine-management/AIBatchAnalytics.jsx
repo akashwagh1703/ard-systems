@@ -53,7 +53,7 @@ const AIBatchAnalytics = ({ batches }) => {
       <div className="bg-gradient-to-r from-purple-500 to-blue-600 rounded-xl p-6 text-white">
         <div className="flex items-center space-x-3 mb-4">
           <Brain className="h-8 w-8" />
-          <h3 className="text-2xl font-bold">🤖 AI Batch Intelligence</h3>
+          <h3 className="text-2xl font-bold"> AI Batch Intelligence</h3>
         </div>
         <p className="text-purple-100">Real-time AI analysis of vaccine batch performance and predictions</p>
       </div>
@@ -103,7 +103,7 @@ const AIBatchAnalytics = ({ batches }) => {
         {/* AI Recommendations */}
         <div className="bg-white rounded-xl p-6 border border-gray-200">
           <div className="flex items-center justify-between mb-4">
-            <h4 className="font-bold text-gray-900">🎯 AI Recommendations</h4>
+            <h4 className="font-bold text-gray-900"> AI Recommendations</h4>
             <Target className="h-5 w-5 text-purple-500" />
           </div>
           <div className="space-y-3">

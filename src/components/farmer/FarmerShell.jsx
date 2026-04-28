@@ -1,0 +1,146 @@
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation, Navigate } from 'react-router-dom';
+import { useFarmerAuth } from '../../contexts/FarmerAuthContext';
+import { LayoutDashboard, Heart, Droplets, Stethoscope, Wrench, BarChart3, Bot, LogOut, Leaf } from 'lucide-react';
+
+const NAV = [
+  { path: '/farmer/dashboard',  label: 'Home',     icon: LayoutDashboard },
+  { path: '/farmer/animals',    label: 'Animals',  icon: Heart           },
+  { path: '/farmer/milk',       label: 'Milk',     icon: Droplets        },
+  { path: '/farmer/health',     label: 'Health',   icon: Stethoscope     },
+  { path: '/farmer/services',   label: 'Services', icon: Wrench          },
+  { path: '/farmer/reports',    label: 'Reports',  icon: BarChart3       },
+];
+
+export default function FarmerShell({ children }) {
+  const { farmer, farmerLogout } = useFarmerAuth();
+  const navigate = useNavigate();
+  const { pathname } = useLocation();
+  const [isDesktop, setIsDesktop] = useState(window.innerWidth >= 768);
+
+  useEffect(() => {
+    const handler = () => setIsDesktop(window.innerWidth >= 768);
+    window.addEventListener('resize', handler);
+    return () => window.removeEventListener('resize', handler);
+  }, []);
+
+  if (!farmer) return <Navigate to="/farmer/login" replace />;
+
+  if (isDesktop) {
+    return (
+      <div style={{ minHeight: '100vh', display: 'flex', background: 'var(--base)' }}>
+        {/* Sidebar */}
+        <aside style={{ width: 240, background: 'linear-gradient(180deg, #0F766E 0%, #0D9488 100%)', display: 'flex', flexDirection: 'column', position: 'fixed', top: 0, left: 0, bottom: 0, zIndex: 40 }}>
+          {/* Brand */}
+          <div style={{ padding: '1.5rem 1.25rem 1rem', borderBottom: '1px solid rgba(255,255,255,0.12)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12 }}>
+              <div style={{ width: 38, height: 38, borderRadius: 11, background: 'rgba(255,255,255,0.18)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <Leaf size={18} color="#fff" />
+              </div>
+              <div>
+                <p style={{ fontSize: 14, fontWeight: 700, color: '#fff', lineHeight: 1.2 }}>Farmer Portal</p>
+                <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.60)' }}>ARD · Odisha</p>
+              </div>
+            </div>
+            {/* Farmer info */}
+            <div style={{ background: 'rgba(255,255,255,0.10)', borderRadius: 10, padding: '10px 12px' }}>
+              <p style={{ fontSize: 13, fontWeight: 700, color: '#fff' }}>{farmer.name}</p>
+              <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.65)', marginTop: 2 }}>{farmer.village}, {farmer.district}</p>
+            </div>
+          </div>
+
+          {/* Nav links */}
+          <nav style={{ flex: 1, padding: '1rem 0.75rem', display: 'flex', flexDirection: 'column', gap: 4 }}>
+            {NAV.map(item => {
+              const Icon = item.icon;
+              const active = pathname === item.path;
+              return (
+                <button key={item.path} onClick={() => navigate(item.path)}
+                  style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '10px 14px', borderRadius: 10, border: 'none', cursor: 'pointer', background: active ? 'rgba(255,255,255,0.18)' : 'transparent', color: active ? '#fff' : 'rgba(255,255,255,0.70)', fontSize: 14, fontWeight: active ? 700 : 500, textAlign: 'left', transition: 'all 0.15s' }}
+                  onMouseEnter={e => { if (!active) e.currentTarget.style.background = 'rgba(255,255,255,0.08)'; }}
+                  onMouseLeave={e => { if (!active) e.currentTarget.style.background = 'transparent'; }}
+                >
+                  <Icon size={18} strokeWidth={active ? 2.2 : 1.75} />
+                  {item.label}
+                  {active && <div style={{ marginLeft: 'auto', width: 6, height: 6, borderRadius: '50%', background: '#fff' }} />}
+                </button>
+              );
+            })}
+
+            {/* AI Assistant nav item */}
+            <button onClick={() => navigate('/farmer/ai')}
+              style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '10px 14px', borderRadius: 10, border: 'none', cursor: 'pointer', background: pathname === '/farmer/ai' ? 'rgba(249,115,22,0.30)' : 'rgba(249,115,22,0.15)', color: '#fff', fontSize: 14, fontWeight: 600, textAlign: 'left', marginTop: 8 }}
+              onMouseEnter={e => e.currentTarget.style.background = 'rgba(249,115,22,0.30)'}
+              onMouseLeave={e => { if (pathname !== '/farmer/ai') e.currentTarget.style.background = 'rgba(249,115,22,0.15)'; }}
+            >
+              <Bot size={18} />
+              AI Assistant
+            </button>
+          </nav>
+
+          {/* Logout */}
+          <div style={{ padding: '1rem 0.75rem', borderTop: '1px solid rgba(255,255,255,0.12)' }}>
+            <button onClick={() => { farmerLogout(); navigate('/farmer/login'); }}
+              style={{ display: 'flex', alignItems: 'center', gap: 10, width: '100%', padding: '10px 14px', borderRadius: 10, border: 'none', cursor: 'pointer', background: 'rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.80)', fontSize: 14, fontWeight: 500 }}
+              onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.15)'}
+              onMouseLeave={e => e.currentTarget.style.background = 'rgba(255,255,255,0.08)'}
+            >
+              <LogOut size={16} /> Logout
+            </button>
+          </div>
+        </aside>
+
+        {/* Main content */}
+        <main style={{ marginLeft: 240, flex: 1, padding: '2rem 2.5rem', minHeight: '100vh', boxSizing: 'border-box', maxWidth: 'calc(100vw - 240px)' }}>
+          {children}
+        </main>
+      </div>
+    );
+  }
+
+  // Mobile layout
+  return (
+    <div style={{ minHeight: '100vh', background: 'var(--base)', display: 'flex', flexDirection: 'column' }}>
+      <header style={{ height: 58, background: 'linear-gradient(135deg, #0F766E 0%, #0D9488 60%, #14B8A6 100%)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 1.25rem', position: 'sticky', top: 0, zIndex: 40, boxShadow: '0 2px 16px rgba(13,148,136,0.25)' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          <div style={{ width: 34, height: 34, borderRadius: 10, background: 'rgba(255,255,255,0.18)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <span style={{ fontSize: 16 }}>🌾</span>
+          </div>
+          <div>
+            <p style={{ fontSize: 14, fontWeight: 700, color: '#fff', lineHeight: 1.2 }}>Farmer Portal</p>
+            <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.65)' }}>Welcome, {farmer.name}</p>
+          </div>
+        </div>
+        <button onClick={() => { farmerLogout(); navigate('/farmer/login'); }} style={{ width: 34, height: 34, borderRadius: 9, border: 'none', background: 'rgba(255,255,255,0.12)', color: 'rgba(255,255,255,0.80)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }} title="Logout">
+          <LogOut size={16} />
+        </button>
+      </header>
+
+      <main style={{ flex: 1, padding: '1.25rem 1rem 5.5rem', maxWidth: 900, width: '100%', margin: '0 auto', boxSizing: 'border-box' }}>
+        {children}
+      </main>
+
+      <nav style={{ position: 'fixed', bottom: 0, left: 0, right: 0, background: 'var(--surface)', borderTop: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'space-around', padding: '6px 0 8px', zIndex: 40, boxShadow: '0 -4px 20px rgba(13,148,136,0.10)' }}>
+        {NAV.map(item => {
+          const Icon = item.icon;
+          const active = pathname === item.path;
+          return (
+            <button key={item.path} onClick={() => navigate(item.path)} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 3, background: 'none', border: 'none', cursor: 'pointer', padding: '4px 10px', borderRadius: 10, minWidth: 52 }}>
+              <Icon size={20} color={active ? '#0D9488' : 'var(--text-4)'} strokeWidth={active ? 2.2 : 1.75} />
+              <span style={{ fontSize: 10, fontWeight: active ? 700 : 500, color: active ? '#0D9488' : 'var(--text-4)' }}>{item.label}</span>
+              {active && <div style={{ width: 4, height: 4, borderRadius: '50%', background: '#0D9488', marginTop: -2 }} />}
+            </button>
+          );
+        })}
+      </nav>
+
+      <button onClick={() => navigate('/farmer/ai')} style={{ position: 'fixed', bottom: 72, right: 20, width: 52, height: 52, borderRadius: '50%', background: 'linear-gradient(135deg, var(--orange), var(--orange-dark))', border: 'none', boxShadow: '0 4px 20px rgba(249,115,22,0.40)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 50 }}
+        onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.10)'}
+        onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}
+        title="AI Assistant"
+      >
+        <Bot size={22} color="#fff" />
+      </button>
+    </div>
+  );
+}

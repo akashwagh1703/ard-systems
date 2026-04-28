@@ -31,9 +31,9 @@ export default function AppShell({ children }) {
       <header style={{
         height: 56, display: 'flex', alignItems: 'center', justifyContent: 'space-between',
         padding: '0 1.5rem',
-        background: 'linear-gradient(135deg, #1E3A8A 0%, #1D4ED8 45%, #2563EB 100%)',
+        background: 'linear-gradient(135deg, #0F766E 0%, #0D9488 45%, #14B8A6 100%)',
         position: 'sticky', top: 0, zIndex: 40,
-        boxShadow: '0 2px 20px rgba(29,78,216,0.30)',
+        boxShadow: '0 2px 20px rgba(13,148,136,0.30)',
         borderBottom: '1px solid rgba(255,255,255,0.08)',
       }}>
 
