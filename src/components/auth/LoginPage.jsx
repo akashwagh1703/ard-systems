@@ -52,18 +52,16 @@ export default function LoginPage() {
         <div style={{ position: 'relative', zIndex: 1 }}>
           {/* Logo */}
           <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: '3rem' }}>
-            <div style={{
-              width: 48, height: 48, borderRadius: 14,
-              background: 'linear-gradient(135deg, #F97316, #EA580C)',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              fontSize: 14, fontWeight: 800, color: '#fff',
-              boxShadow: '0 4px 20px rgba(249,115,22,0.50)',
-              letterSpacing: '0.04em',
-            }}>ARD</div>
-            <div>
-              <p style={{ color: '#fff', fontWeight: 700, fontSize: 15, lineHeight: 1.3 }}>Animal Resources Development</p>
-              <p style={{ color: 'rgba(255,255,255,0.50)', fontSize: 12 }}>Government of Odisha</p>
-            </div>
+            <img 
+              src="/ard-systems/logo.jpeg" 
+              alt="ARD Logo" 
+              style={{
+                height: 48,
+                width: 'auto',
+                objectFit: 'contain',
+                boxShadow: '0 4px 20px rgba(249,115,22,0.50)',
+              }}
+            />
           </div>
 
           <h1 style={{ color: '#fff', fontSize: '2.125rem', fontWeight: 800, lineHeight: 1.2, letterSpacing: '-0.025em', marginBottom: '1rem' }}>
@@ -123,16 +121,15 @@ export default function LoginPage() {
 
           {/* Mobile logo */}
           <div className="flex lg:hidden items-center gap-3 mb-8">
-            <div style={{
-              width: 40, height: 40, borderRadius: 11,
-              background: 'linear-gradient(135deg, #3B82F6, #2563EB)',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              fontSize: 12, fontWeight: 800, color: '#fff',
-            }}>ARD</div>
-            <div>
-              <p style={{ fontWeight: 700, fontSize: 14, color: 'var(--blue)' }}>Animal Resources Development</p>
-              <p style={{ fontSize: 11, color: 'var(--text-3)' }}>Government of Odisha</p>
-            </div>
+            <img 
+              src="/ard-systems/logo.jpeg" 
+              alt="ARD Logo" 
+              style={{
+                height: 40,
+                width: 'auto',
+                objectFit: 'contain',
+              }}
+            />
           </div>
 
           {/* Heading */}

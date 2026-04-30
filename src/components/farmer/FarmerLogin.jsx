@@ -55,14 +55,16 @@ export default function FarmerLogin() {
     <div style={{ background: 'var(--surface)', border: isDesktop ? 'none' : '1px solid var(--border)', borderRadius: isDesktop ? 0 : 'var(--r-2xl)', padding: isDesktop ? '3rem 3.5rem' : '2.5rem 2rem', width: '100%', maxWidth: isDesktop ? 480 : 420, boxShadow: isDesktop ? 'none' : 'var(--shadow-md)', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
 
       {/* Logo */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 32 }}>
-        <div style={{ width: 46, height: 46, borderRadius: 13, background: 'linear-gradient(135deg, #0F766E, #0D9488)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <Leaf size={22} color="#fff" />
-        </div>
-        <div>
-          <p style={{ fontSize: 17, fontWeight: 700, color: 'var(--text-1)' }}>Farmer Portal</p>
-          <p style={{ fontSize: 13, color: 'var(--text-3)' }}>Government of Odisha · ARD</p>
-        </div>
+      <div style={{ marginBottom: 32 }}>
+        <img 
+          src="/ard-systems/logo.jpeg" 
+          alt="ARD Logo" 
+          style={{
+            height: 46,
+            width: 'auto',
+            objectFit: 'contain',
+          }}
+        />
       </div>
 
       <h2 style={{ fontSize: 26, fontWeight: 800, color: 'var(--text-1)', marginBottom: 6, letterSpacing: '-0.02em' }}>

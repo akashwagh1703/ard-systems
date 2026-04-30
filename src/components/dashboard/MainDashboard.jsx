@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { MAIN_DASHBOARD_DATA } from '../../data/mockData';
+import DailyAnalytics from './DailyAnalytics';
+import ResourceAnalytics from './ResourceAnalytics';
 import {
   Syringe, Shield, Pill, Activity, Truck,
   GraduationCap, DollarSign, FileText, Phone, MessageSquare,
@@ -11,6 +13,7 @@ import {
 
 const SERVICES = [
   { id: 'ai-management',         title: 'AI Management',       desc: 'Semen procurement & utilization',    icon: Syringe,       path: '/services/ai-management',         roles: ['super_admin','district_officer','block_officer','field_user'], stat: { v: '15,000', l: 'Semen Doses',    t: '+12%', up: true  }, color: '#2563EB' },
+  { id: 'semen-services',        title: 'Semen Services',      desc: 'Quality control & bull management',  icon: Syringe,       path: '/services/semen-services',        roles: ['super_admin','district_officer','block_officer','field_user'], stat: { v: '94%',    l: 'Quality Rate',   t: '+2%',  up: true  }, color: '#0EA5E9', modules: 6 },
   { id: 'vaccine-management',    title: 'Vaccine Management',  desc: 'Inventory, distribution & coverage', icon: Shield,        path: '/services/vaccine-management',    roles: ['super_admin','district_officer','block_officer','field_user'], stat: { v: '85%',    l: 'Coverage Rate',  t: '+5%',  up: true  }, color: '#059669' },
   { id: 'medicine-management',   title: 'Medicine Mgmt',       desc: 'Procurement & emergency stock',      icon: Pill,          path: '/services/medicine-management',   roles: ['super_admin','district_officer','block_officer','field_user'], stat: { v: '200',    l: 'Medicine Types', t: '+8%',  up: true  }, color: '#7C3AED' },
   { id: 'disease-surveillance',  title: 'Disease Surveillance',desc: 'Monitoring, lab reports & alerts',   icon: Activity,      path: '/services/disease-surveillance',  roles: ['super_admin','district_officer','field_user'],                 stat: { v: '45',     l: 'Active Cases',   t: '-15%', up: false }, color: '#DC2626' },
@@ -36,6 +39,8 @@ export default function MainDashboard() {
   const navigate = useNavigate();
   const [time, setTime] = useState(new Date());
   const [hoveredSvc, setHoveredSvc] = useState(null);
+
+
 
   useEffect(() => {
     const t = setInterval(() => setTime(new Date()), 1000);
@@ -188,6 +193,12 @@ export default function MainDashboard() {
           </div>
         </div>
       )}
+
+      {/* ── Daily Analytics Section ── */}
+      <DailyAnalytics />
+
+      {/* ── Resource Analytics Section ── */}
+      <ResourceAnalytics />
 
       {/* ── Services Grid ── */}
       <div style={{ animation: 'fadeUp 0.4s ease 0.24s both' }}>

@@ -33,14 +33,17 @@ export default function FarmerShell({ children }) {
         <aside style={{ width: 240, background: 'linear-gradient(180deg, #0F766E 0%, #0D9488 100%)', display: 'flex', flexDirection: 'column', position: 'fixed', top: 0, left: 0, bottom: 0, zIndex: 40 }}>
           {/* Brand */}
           <div style={{ padding: '1.5rem 1.25rem 1rem', borderBottom: '1px solid rgba(255,255,255,0.12)' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12 }}>
-              <div style={{ width: 38, height: 38, borderRadius: 11, background: 'rgba(255,255,255,0.18)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <Leaf size={18} color="#fff" />
-              </div>
-              <div>
-                <p style={{ fontSize: 14, fontWeight: 700, color: '#fff', lineHeight: 1.2 }}>Farmer Portal</p>
-                <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.60)' }}>ARD · Odisha</p>
-              </div>
+            <div style={{ marginBottom: 12 }}>
+              <img 
+                src="/ard-systems/logo.jpeg" 
+                alt="ARD Logo" 
+                style={{
+                  height: 38,
+                  width: 'auto',
+                  objectFit: 'contain',
+                  marginBottom: 12,
+                }}
+              />
             </div>
             {/* Farmer info */}
             <div style={{ background: 'rgba(255,255,255,0.10)', borderRadius: 10, padding: '10px 12px' }}>
@@ -102,15 +105,15 @@ export default function FarmerShell({ children }) {
   return (
     <div style={{ minHeight: '100vh', background: 'var(--base)', display: 'flex', flexDirection: 'column' }}>
       <header style={{ height: 58, background: 'linear-gradient(135deg, #0F766E 0%, #0D9488 60%, #14B8A6 100%)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 1.25rem', position: 'sticky', top: 0, zIndex: 40, boxShadow: '0 2px 16px rgba(13,148,136,0.25)' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-          <div style={{ width: 34, height: 34, borderRadius: 10, background: 'rgba(255,255,255,0.18)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <span style={{ fontSize: 16 }}>🌾</span>
-          </div>
-          <div>
-            <p style={{ fontSize: 14, fontWeight: 700, color: '#fff', lineHeight: 1.2 }}>Farmer Portal</p>
-            <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.65)' }}>Welcome, {farmer.name}</p>
-          </div>
-        </div>
+        <img 
+          src="/ard-systems/logo.jpeg" 
+          alt="ARD Logo" 
+          style={{
+            height: 34,
+            width: 'auto',
+            objectFit: 'contain',
+          }}
+        />
         <button onClick={() => { farmerLogout(); navigate('/farmer/login'); }} style={{ width: 34, height: 34, borderRadius: 9, border: 'none', background: 'rgba(255,255,255,0.12)', color: 'rgba(255,255,255,0.80)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }} title="Logout">
           <LogOut size={16} />
         </button>

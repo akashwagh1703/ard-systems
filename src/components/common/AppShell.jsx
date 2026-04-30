@@ -2,7 +2,7 @@ import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import AIAssistant from './AIAssistant';
-import { LogOut, ArrowLeft, Zap, Globe, BarChart3, Cpu } from 'lucide-react';
+import { LogOut, ArrowLeft, Zap, Globe, BarChart3 } from 'lucide-react';
 
 const ROLE_LABEL = {
   super_admin:      'Super Admin',
@@ -15,7 +15,6 @@ const ROLE_LABEL = {
 const NAV_LINKS = [
   { path: '/integrations', label: 'Integrations', icon: Globe    },
   { path: '/reports',      label: 'Reports',      icon: BarChart3 },
-  { path: '/tech-stack',   label: 'Tech Stack',   icon: Cpu       },
 ];
 
 export default function AppShell({ children }) {
@@ -55,18 +54,17 @@ export default function AppShell({ children }) {
           )}
 
           <button onClick={() => navigate('/dashboard')} style={{ display: 'flex', alignItems: 'center', gap: 10, background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>
-            <div style={{
-              width: 32, height: 32, borderRadius: 9,
-              background: 'linear-gradient(135deg, #F97316, #EA580C)',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              fontSize: 10, fontWeight: 800, color: '#fff',
-              boxShadow: '0 2px 10px rgba(249,115,22,0.45)',
-              letterSpacing: '0.04em', flexShrink: 0,
-            }}>ARD</div>
-            <div className="hidden sm:block">
-              <p style={{ fontSize: 13, fontWeight: 700, color: '#fff', lineHeight: 1.2 }}>Animal Resources Development</p>
-              <p style={{ fontSize: 10, color: 'rgba(255,255,255,0.50)', lineHeight: 1 }}>Government of Odisha</p>
-            </div>
+            <img 
+              src="/ard-systems/logo.jpeg" 
+              alt="ARD Logo" 
+              style={{
+                height: 32,
+                width: 'auto',
+                objectFit: 'contain',
+                boxShadow: '0 2px 10px rgba(249,115,22,0.45)',
+                flexShrink: 0,
+              }}
+            />
           </button>
 
           {/* Nav links */}

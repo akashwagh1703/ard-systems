@@ -9,6 +9,7 @@ import AppShell from './components/common/AppShell';
 
 // Microservice Dashboards
 import AIDashboard from './components/microservices/ai-management/AIDashboard';
+import SemenServicesDashboard from './components/microservices/semen-services/SemenServicesDashboard';
 import VaccineDashboard from './components/microservices/vaccine-management/VaccineDashboard';
 import MedicineDashboard from './components/microservices/medicine-management/MedicineDashboard';
 import DiseaseDashboard from './components/microservices/disease-surveillance/DiseaseDashboard';
@@ -20,7 +21,14 @@ import OnCallAIDashboard from './components/microservices/oncall-ai/OnCallAIDash
 import GrievanceDashboard from './components/microservices/grievance-system/GrievanceDashboard';
 import IntegrationHub from './components/integrations/IntegrationHub';
 import ReportCenter from './components/reports/ReportCenter';
-import TechStack from './components/common/TechStack';
+
+// Test Components (can be removed after verification)
+import TestDailyAnalytics from './components/dashboard/TestDailyAnalytics';
+import TestResourceData from './components/dashboard/TestResourceData';
+import TestDistrictCharts from './components/dashboard/TestDistrictCharts';
+import TestMonthlyTrends from './components/dashboard/TestMonthlyTrends';
+import TestFarmerCharts from './components/dashboard/TestFarmerCharts';
+import TestResourceAnalytics from './components/dashboard/TestResourceAnalytics';
 
 // Farmer Portal
 import FarmerLogin from './components/farmer/FarmerLogin';
@@ -57,6 +65,7 @@ function App() {
             <Route path="/dashboard" element={<Protected><MainDashboard /></Protected>} />
 
             <Route path="/services/ai-management/*"         element={<Protected roles={['super_admin','district_officer','block_officer','field_user']}><AIDashboard /></Protected>} />
+            <Route path="/services/semen-services/*"        element={<Protected roles={['super_admin','district_officer','block_officer','field_user']}><SemenServicesDashboard /></Protected>} />
             <Route path="/services/vaccine-management/*"    element={<Protected roles={['super_admin','district_officer','block_officer','field_user']}><VaccineDashboard /></Protected>} />
             <Route path="/services/medicine-management/*"   element={<Protected roles={['super_admin','district_officer','block_officer','field_user']}><MedicineDashboard /></Protected>} />
             <Route path="/services/disease-surveillance/*"  element={<Protected roles={['super_admin','district_officer','field_user']}><DiseaseDashboard /></Protected>} />
@@ -68,7 +77,12 @@ function App() {
             <Route path="/services/grievance-system/*"      element={<Protected><GrievanceDashboard /></Protected>} />
             <Route path="/integrations"                      element={<Protected><IntegrationHub /></Protected>} />
             <Route path="/reports"                           element={<Protected><ReportCenter /></Protected>} />
-            <Route path="/tech-stack"                        element={<Protected><TechStack /></Protected>} />
+            <Route path="/test-analytics"                    element={<Protected><TestDailyAnalytics /></Protected>} />
+            <Route path="/test-resource-data"                element={<Protected><TestResourceData /></Protected>} />
+            <Route path="/test-district-charts"              element={<Protected><TestDistrictCharts /></Protected>} />
+            <Route path="/test-monthly-trends"               element={<Protected><TestMonthlyTrends /></Protected>} />
+            <Route path="/test-farmer-charts"                element={<Protected><TestFarmerCharts /></Protected>} />
+            <Route path="/test-resource-analytics"           element={<Protected><TestResourceAnalytics /></Protected>} />
 
             {/* ── Farmer Portal ── */}
             <Route path="/farmer/login"     element={<FarmerLogin />} />
