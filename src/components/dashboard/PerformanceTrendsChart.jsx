@@ -9,16 +9,16 @@ const PerformanceTrendsChart = ({ filters }) => {
   const [selectedServices, setSelectedServices] = useState(['ai_management', 'vaccine_management']);
 
   const metrics = [
-    { id: 'completion_rate', label: 'Completion Rate', unit: '%', color: '#0D9488' },
+    { id: 'completion_rate', label: 'Completion Rate', unit: '%', color: '#006F8E' },
     { id: 'response_time', label: 'Response Time', unit: 'hrs', color: '#F97316' },
-    { id: 'satisfaction_score', label: 'Satisfaction Score', unit: '/5', color: '#14B8A6' },
-    { id: 'efficiency_index', label: 'Efficiency Index', unit: '%', color: '#0F766E' }
+    { id: 'satisfaction_score', label: 'Satisfaction Score', unit: '/5', color: '#1C89A8' },
+    { id: 'efficiency_index', label: 'Efficiency Index', unit: '%', color: '#005A73' }
   ];
 
   const services = [
-    { id: 'ai_management', label: 'AI Management', color: '#0D9488' },
-    { id: 'semen_services', label: 'Semen Services', color: '#14B8A6' },
-    { id: 'vaccine_management', label: 'Vaccine Management', color: '#0F766E' },
+    { id: 'ai_management', label: 'AI Management', color: '#006F8E' },
+    { id: 'semen_services', label: 'Semen Services', color: '#1C89A8' },
+    { id: 'vaccine_management', label: 'Vaccine Management', color: '#005A73' },
     { id: 'medicine_management', label: 'Medicine Management', color: '#F97316' },
     { id: 'disease_surveillance', label: 'Disease Surveillance', color: '#EF4444' },
     { id: 'mvu_management', label: 'MVU Management', color: '#8B5CF6' },
@@ -107,7 +107,7 @@ const PerformanceTrendsChart = ({ filters }) => {
                   border: 'none',
                   cursor: 'pointer',
                   transition: 'all 0.2s',
-                  background: selectedMetric === metric.id ? '#0D9488' : '#F3F4F6',
+                  background: selectedMetric === metric.id ? '#006F8E' : '#F3F4F6',
                   color: selectedMetric === metric.id ? 'white' : '#374151'
                 }}
               >

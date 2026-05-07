@@ -70,7 +70,7 @@ const AIPredictionsChart = ({ filters }) => {
   }, [currentPrediction]);
 
   const lines = [
-    { key: 'actual', label: 'Actual Data', color: '#0D9488' },
+    { key: 'actual', label: 'Actual Data', color: '#006F8E' },
     { key: 'predicted', label: 'AI Prediction', color: '#F97316' }
   ];
 
@@ -211,7 +211,7 @@ const AIPredictionsChart = ({ filters }) => {
       </div>
 
       {/* AI Recommendation */}
-      <div className="p-4 bg-gradient-to-r from-teal-50 to-orange-50 border border-teal-200 rounded-lg">
+      <div className="p-4 bg-slate-700 border border-teal-200 rounded-lg">
         <div className="flex items-start gap-3">
           <div className="w-8 h-8 rounded-lg bg-teal-600 flex items-center justify-center flex-shrink-0">
             <Brain className="w-4 h-4 text-white" />

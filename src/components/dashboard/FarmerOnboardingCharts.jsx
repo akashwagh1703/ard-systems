@@ -394,8 +394,8 @@ export default function FarmerOnboardingCharts() {
                 onClick={() => setShowAllDistricts(!showAllDistricts)}
                 style={{
                   padding: '0.375rem 0.625rem',
-                  background: showAllDistricts ? '#0D9488' : 'var(--surface)',
-                  border: `1px solid ${showAllDistricts ? '#0D9488' : 'var(--border)'}`,
+                  background: showAllDistricts ? '#006F8E' : 'var(--surface)',
+                  border: `1px solid ${showAllDistricts ? '#006F8E' : 'var(--border)'}`,
                   borderRadius: 8,
                   fontSize: 11,
                   fontWeight: 600,
@@ -407,7 +407,7 @@ export default function FarmerOnboardingCharts() {
                 onMouseEnter={(e) => {
                   if (!showAllDistricts) {
                     e.currentTarget.style.background = 'var(--base-2)';
-                    e.currentTarget.style.borderColor = '#0D9488';
+                    e.currentTarget.style.borderColor = '#006F8E';
                   }
                 }}
                 onMouseLeave={(e) => {

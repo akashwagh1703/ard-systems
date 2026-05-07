@@ -113,9 +113,9 @@ export default function MainDashboard() {
   ];
   const adminInsights = activeLivestock ? AI_INSIGHTS.filter((item) => item.category === activeLivestock) : AI_INSIGHTS;
   const insightStyle = (severity) => {
-    if (severity === 'critical') return { bg: 'linear-gradient(145deg,#FFF1F2,#FFE4E6)', border: '#FECACA', badge: '#DC2626', label: 'Critical', glow: 'rgba(220,38,38,0.22)' };
-    if (severity === 'warning') return { bg: 'linear-gradient(145deg,#FFFBEB,#FEF3C7)', border: '#FDE68A', badge: '#D97706', label: 'Warning', glow: 'rgba(217,119,6,0.22)' };
-    return { bg: 'linear-gradient(145deg,#EFF6FF,#DBEAFE)', border: '#BFDBFE', badge: '#2563EB', label: 'Info', glow: 'rgba(37,99,235,0.2)' };
+    if (severity === 'critical') return { bg: '#FFF1F2', border: '#FECACA', badge: '#DC2626', label: 'Critical', glow: 'rgba(220,38,38,0.22)' };
+    if (severity === 'warning') return { bg: '#FFFBEB', border: '#FDE68A', badge: '#D97706', label: 'Warning', glow: 'rgba(217,119,6,0.22)' };
+    return { bg: '#EFF6FF', border: '#BFDBFE', badge: '#2563EB', label: 'Info', glow: 'rgba(37,99,235,0.2)' };
   };
 
   return (
@@ -135,7 +135,7 @@ export default function MainDashboard() {
         {/* Welcome card — spans 2 cols */}
         <div style={{
           gridColumn: 'span 2',
-          background: 'linear-gradient(135deg, #0F766E 0%, #0D9488 40%, #14B8A6 70%, #5EEAD4 100%)',
+          background: '#005A73',
           borderRadius: 18, padding: '0.9rem 1rem',
           position: 'relative', overflow: 'hidden',
           boxShadow: '0 4px 20px rgba(29,78,216,0.22)',
@@ -186,7 +186,7 @@ export default function MainDashboard() {
         }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 5 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-              <div style={{ width: 22, height: 22, borderRadius: 7, background: 'linear-gradient(135deg,#F97316,#FB923C)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <div style={{ width: 22, height: 22, borderRadius: 7, background: '#F97316', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <Clock className="icon-xs" style={{ color: '#fff' }} />
               </div>
               <span style={{ fontSize: 11, color: 'var(--text-4)', textTransform: 'uppercase', letterSpacing: '0.07em', fontWeight: 700 }}>Current Time</span>
@@ -310,7 +310,7 @@ export default function MainDashboard() {
       <div style={{ background: '#FFFFFF', border: '1px solid var(--border)', borderRadius: 18, padding: '1.1rem 1.25rem', marginBottom: 16, boxShadow: 'var(--shadow-xs)', animation: 'fadeUp 0.4s ease 0.2s both', position: 'relative', overflow: 'hidden' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-            <div style={{ width: 26, height: 26, borderRadius: 8, background: 'linear-gradient(145deg,#8B5CF6,#06B6D4)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 0 0 2px rgba(255,255,255,0.06)' }}>
+            <div style={{ width: 26, height: 26, borderRadius: 8, background: '#8B5CF6', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 0 0 2px rgba(255,255,255,0.06)' }}>
               <Sparkles className="icon-xs" style={{ color: '#fff' }} />
             </div>
             <div>
@@ -349,7 +349,7 @@ export default function MainDashboard() {
                     <span style={{ fontSize: 10, color: sx.badge, fontWeight: 700 }}>{insight.confidence}%</span>
                   </div>
                   <div style={{ height: 6, borderRadius: 999, background: 'rgba(148,163,184,0.25)', overflow: 'hidden' }}>
-                    <div style={{ height: '100%', width: `${insight.confidence}%`, background: `linear-gradient(90deg, ${sx.badge}, #06B6D4)`, transition: 'width 0.35s ease' }} />
+                    <div style={{ height: '100%', width: `${insight.confidence}%`, background: `#06B6D4`, transition: 'width 0.35s ease' }} />
                   </div>
                 </div>
                 <div style={{ marginTop: 8, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>

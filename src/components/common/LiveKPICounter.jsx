@@ -29,7 +29,7 @@ const useAnimatedValue = (target, duration = 600) => {
   return display;
 };
 
-const KPICard = ({ label, value, unit = '', icon: Icon, color, trend, isDark, isLive }) => {
+const KPICard = ({ label, value, unit = '', icon: Icon, colorClass, trend, isDark, isLive }) => {
   const animated = useAnimatedValue(typeof value === 'number' ? value : 0);
   const display  = typeof value === 'number' ? animated : value;
 
@@ -42,7 +42,7 @@ const KPICard = ({ label, value, unit = '', icon: Icon, color, trend, isDark, is
     <div className={`relative rounded-2xl border p-5 overflow-hidden transition-all hover:scale-[1.02] ${
       isDark ? 'bg-slate-900/80 border-white/10' : 'bg-white border-gray-200'
     }`}>
-      <div className={`absolute inset-0 opacity-10 bg-gradient-to-br ${color}`} />
+      <div className={`absolute inset-0 opacity-10 ${colorClass}`} />
 
       {isLive && (
         <div className="absolute top-3 right-3">
@@ -54,7 +54,7 @@ const KPICard = ({ label, value, unit = '', icon: Icon, color, trend, isDark, is
       )}
 
       <div className="relative">
-        <div className={`h-10 w-10 rounded-xl bg-gradient-to-br ${color} flex items-center justify-center mb-3`}>
+        <div className={`h-10 w-10 rounded-xl ${colorClass} flex items-center justify-center mb-3`}>
           <Icon className="h-5 w-5 text-white" />
         </div>
         <p className={`text-xs font-medium mb-1 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>{label}</p>
@@ -79,14 +79,14 @@ const LiveKPICounter = ({ kpis, isDark = false, isLive = true }) => {
   if (!kpis) return null;
 
   const cards = [
-    { label: 'Total Livestock',      value: kpis.totalLivestock,      unit: '',    icon: Activity,      color: 'from-blue-500 to-cyan-500',     trend: 0.5  },
-    { label: 'AI Coverage',          value: kpis.aiCoverage,          unit: '%',   icon: Syringe,       color: 'from-green-500 to-emerald-500',  trend: 2.1  },
-    { label: 'Vaccination Coverage', value: kpis.vaccinationCoverage, unit: '%',   icon: Shield,        color: 'from-orange-500 to-red-500',     trend: 1.8  },
-    { label: 'Active MVUs',          value: kpis.activeMVUs,          unit: '',    icon: Truck,         color: 'from-purple-500 to-pink-500',    trend: 4.3  },
-    { label: 'Pending Grievances',   value: kpis.pendingGrievances,   unit: '',    icon: MessageSquare, color: 'from-red-500 to-rose-500',       trend: -12  },
-    { label: 'Budget Utilization',   value: kpis.budgetUtilization,   unit: '%',   icon: DollarSign,    color: 'from-teal-500 to-green-500',     trend: 3    },
-    { label: 'On-Call Requests',     value: kpis.onCallRequests,      unit: '',    icon: Phone,         color: 'from-indigo-500 to-blue-500',    trend: 12   },
-    { label: 'Avg Response Time',    value: kpis.avgResponseTime,     unit: 'min', icon: Clock,         color: 'from-yellow-500 to-orange-500',  trend: -5   },
+    { label: 'Total Livestock',      value: kpis.totalLivestock,      unit: '',    icon: Activity,      colorClass: 'bg-blue-500',   trend: 0.5  },
+    { label: 'AI Coverage',          value: kpis.aiCoverage,          unit: '%',   icon: Syringe,       colorClass: 'bg-green-500',  trend: 2.1  },
+    { label: 'Vaccination Coverage', value: kpis.vaccinationCoverage, unit: '%',   icon: Shield,        colorClass: 'bg-orange-500', trend: 1.8  },
+    { label: 'Active MVUs',          value: kpis.activeMVUs,          unit: '',    icon: Truck,         colorClass: 'bg-purple-500', trend: 4.3  },
+    { label: 'Pending Grievances',   value: kpis.pendingGrievances,   unit: '',    icon: MessageSquare, colorClass: 'bg-red-500',    trend: -12  },
+    { label: 'Budget Utilization',   value: kpis.budgetUtilization,   unit: '%',   icon: DollarSign,    colorClass: 'bg-teal-500',   trend: 3    },
+    { label: 'On-Call Requests',     value: kpis.onCallRequests,      unit: '',    icon: Phone,         colorClass: 'bg-indigo-500', trend: 12   },
+    { label: 'Avg Response Time',    value: kpis.avgResponseTime,     unit: 'min', icon: Clock,         colorClass: 'bg-yellow-500', trend: -5   },
   ];
 
   return (

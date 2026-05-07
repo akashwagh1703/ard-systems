@@ -15,7 +15,7 @@ const AIOnCallAnalytics = () => {
   return (
     <div className="space-y-6">
       {/* AI Header */}
-      <div className="bg-gradient-to-r from-indigo-500 to-purple-600 rounded-xl p-6 text-white">
+      <div className="bg-slate-700 rounded-xl p-6 text-white">
         <div className="flex items-center space-x-3 mb-4">
           <Brain className="h-8 w-8" />
           <h3 className="text-2xl font-bold"> AI On-Call Intelligence</h3>

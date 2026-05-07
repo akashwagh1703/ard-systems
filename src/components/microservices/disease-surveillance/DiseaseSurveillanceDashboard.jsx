@@ -28,11 +28,11 @@ const DiseaseSurveillanceDashboard = () => {
       {/* Welcome Section */}
       <div className={`rounded-2xl p-6 border ${
         isDark 
-          ? 'bg-gradient-to-r from-slate-900/90 to-slate-800/90 backdrop-blur-xl border-white/10' 
-          : 'bg-gradient-to-r from-red-50 to-orange-50 border-red-200'
+          ? 'bg-slate-700 backdrop-blur-xl border-white/10' 
+          : 'bg-slate-700 border-red-200'
       }`}>
         <div className="flex items-center space-x-4">
-          <div className="h-16 w-16 bg-gradient-to-br from-red-500 to-orange-600 rounded-2xl flex items-center justify-center">
+          <div className="h-16 w-16 bg-slate-700 rounded-2xl flex items-center justify-center">
             <Shield className="h-8 w-8 text-white" />
           </div>
           <div>
@@ -53,7 +53,7 @@ const DiseaseSurveillanceDashboard = () => {
             title: 'Active Cases', 
             value: DISEASE_SURVEILLANCE_DATA.dashboard.activeCases.toString(), 
             icon: AlertTriangle, 
-            color: 'from-red-500 to-pink-500',
+            color: 'bg-red-500',
             description: 'Under investigation',
             aiInsight: '🔍 3 new cases detected'
           },
@@ -61,7 +61,7 @@ const DiseaseSurveillanceDashboard = () => {
             title: 'Samples Tested', 
             value: DISEASE_SURVEILLANCE_DATA.dashboard.samplesProcessed.toLocaleString(), 
             icon: Microscope, 
-            color: 'from-blue-500 to-cyan-500',
+            color: 'bg-blue-500',
             description: 'This month',
             aiInsight: '📊 15% increase from last month'
           },
@@ -69,7 +69,7 @@ const DiseaseSurveillanceDashboard = () => {
             title: 'Risk Level', 
             value: DISEASE_SURVEILLANCE_DATA.dashboard.riskLevel, 
             icon: Shield, 
-            color: 'from-green-500 to-emerald-500',
+            color: 'bg-green-500',
             description: 'Overall assessment',
             aiInsight: '🛡️ Well controlled region'
           },
@@ -77,7 +77,7 @@ const DiseaseSurveillanceDashboard = () => {
             title: 'Response Time', 
             value: `${DISEASE_SURVEILLANCE_DATA.dashboard.avgResponseTime}h`, 
             icon: Clock, 
-            color: 'from-purple-500 to-indigo-500',
+            color: 'bg-purple-500',
             description: 'Average response',
             aiInsight: '⚡ 25% faster than target'
           }
@@ -85,14 +85,14 @@ const DiseaseSurveillanceDashboard = () => {
           const IconComponent = stat.icon;
           return (
             <div key={index} className="group relative">
-              <div className={`absolute inset-0 bg-gradient-to-r ${stat.color} rounded-2xl opacity-20 group-hover:opacity-30 transition-opacity`}></div>
+              <div className={`absolute inset-0 ${stat.color} rounded-2xl opacity-20 group-hover:opacity-30 transition-opacity`}></div>
               <div className={`relative rounded-2xl p-6 border transition-all hover:scale-105 ${
                 isDark 
                   ? 'bg-slate-900/80 backdrop-blur-xl border-white/10' 
                   : 'bg-white border-gray-200'
               }`}>
                 <div className="flex items-center justify-between mb-4">
-                  <div className={`h-12 w-12 bg-gradient-to-r ${stat.color} rounded-xl flex items-center justify-center`}>
+                  <div className={`h-12 w-12 ${stat.color} rounded-xl flex items-center justify-center`}>
                     <IconComponent className="h-6 w-6 text-white" />
                   </div>
                   <Brain className="h-5 w-5 text-purple-500" title="AI-Simulated Decision Support" />

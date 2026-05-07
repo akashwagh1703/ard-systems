@@ -90,7 +90,7 @@ export default function DailyAnalytics() {
             width: 36,
             height: 36,
             borderRadius: 10,
-            background: 'linear-gradient(135deg, #0EA5E9 0%, #0284C7 100%)',
+            background: '#0EA5E9',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center'

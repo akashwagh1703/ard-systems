@@ -171,7 +171,7 @@ export function AIAlert({ title, message, color = 'var(--orange)', actions = [] 
       {activeAction && detailBlocks && (
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(15,23,42,0.45)', zIndex: 120, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 16 }}>
           <div style={{ width: '100%', maxWidth: 760, background: 'var(--surface)', borderRadius: 18, border: `1px solid ${color}35`, boxShadow: `0 0 0 1px ${color}16 inset, var(--shadow-lg)`, overflow: 'hidden' }}>
-            <div style={{ background: 'linear-gradient(135deg, rgba(66,133,244,0.14), rgba(14,165,233,0.10))', borderBottom: '1px solid var(--border)', padding: '0.95rem 1.1rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', position: 'relative', overflow: 'hidden' }}>
+            <div style={{ background: 'rgba(66,133,244,0.14), rgba(14,165,233,0.10))', borderBottom: '1px solid var(--border)', padding: '0.95rem 1.1rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', position: 'relative', overflow: 'hidden' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                 {actionType(activeAction) === 'optimize' ? <CalendarCheck2 className="icon-sm" style={{ color: '#4285F4' }} /> : <FileText className="icon-sm" style={{ color: '#4285F4' }} />}
                 <div>

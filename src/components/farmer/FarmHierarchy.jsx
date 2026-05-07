@@ -230,7 +230,7 @@ export default function FarmHierarchy() {
           ]}
         />
 
-        <div style={{ background: 'linear-gradient(135deg,#0f766e,#14b8a6)', borderRadius: 16, padding: 16, color: '#fff' }}>
+        <div style={{ background: '#0f766e', borderRadius: 16, padding: 16, color: '#fff' }}>
           <p style={{ fontSize: 12, opacity: 0.8, marginBottom: 4 }}>Animal Report</p>
           <h3 style={{ fontSize: 24, fontWeight: 800, marginBottom: 6 }}>{animal.name} {animal.tag}</h3>
           <p style={{ fontSize: 13, opacity: 0.9 }}>Context-aware report generated from farm and group performance.</p>

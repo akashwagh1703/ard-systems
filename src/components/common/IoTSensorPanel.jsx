@@ -60,7 +60,7 @@ const IoTSensorPanel = ({ sensors, isDark = false }) => {
         onClick={() => setExpanded(v => !v)}
       >
         <div className="flex items-center gap-3">
-          <div className="h-8 w-8 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-lg flex items-center justify-center">
+          <div className="h-8 w-8 bg-slate-700 rounded-lg flex items-center justify-center">
             <Wifi className="h-4 w-4 text-white" />
           </div>
           <div>

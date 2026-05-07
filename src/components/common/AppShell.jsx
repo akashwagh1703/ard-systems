@@ -30,9 +30,9 @@ export default function AppShell({ children }) {
       <header style={{
         height: 56, display: 'flex', alignItems: 'center', justifyContent: 'space-between',
         padding: '0 1.5rem',
-        background: 'linear-gradient(135deg, #0F766E 0%, #0D9488 45%, #14B8A6 100%)',
+        background: '#005A73',
         position: 'sticky', top: 0, zIndex: 40,
-        boxShadow: '0 2px 20px rgba(13,148,136,0.30)',
+        boxShadow: '0 2px 20px rgba(0,111,142,0.30)',
         borderBottom: '1px solid rgba(255,255,255,0.08)',
       }}>
 
@@ -124,7 +124,7 @@ export default function AppShell({ children }) {
           }} className="hidden md:flex">
             <div style={{
               width: 24, height: 24, borderRadius: '50%',
-              background: 'linear-gradient(135deg, #F97316, #EA580C)',
+              background: '#F97316',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               fontSize: 11, fontWeight: 700, color: '#fff', flexShrink: 0,
             }}>{user?.name?.charAt(0)}</div>

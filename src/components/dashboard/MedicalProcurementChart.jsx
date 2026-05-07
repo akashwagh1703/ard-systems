@@ -57,7 +57,7 @@ export default function MedicalProcurementChart() {
           </div>
           <div>
             <span style={{ opacity: 0.8 }}>Districts: </span>
-            <span style={{ fontWeight: 700, color: '#0D9488' }}>
+            <span style={{ fontWeight: 700, color: '#006F8E' }}>
               {payload[0].payload.districts}
             </span>
           </div>
@@ -85,7 +85,7 @@ export default function MedicalProcurementChart() {
   const latestMonth = data[data.length - 1] || { medicines: 0 };
   const categoryMixData = [
     { name: 'Antibiotics', value: Math.round(latestMonth.medicines * 0.32), color: '#7C3AED' },
-    { name: 'Vaccines', value: Math.round(latestMonth.medicines * 0.28), color: '#0D9488' },
+    { name: 'Vaccines', value: Math.round(latestMonth.medicines * 0.28), color: '#006F8E' },
     { name: 'Supplements', value: Math.round(latestMonth.medicines * 0.22), color: '#F97316' },
     { name: 'Others', value: Math.round(latestMonth.medicines * 0.18), color: '#64748B' },
   ];
@@ -284,12 +284,12 @@ export default function MedicalProcurementChart() {
           textAlign: 'center'
         }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, marginBottom: 6 }}>
-            <MapPin style={{ width: 16, height: 16, color: '#0D9488' }} />
+            <MapPin style={{ width: 16, height: 16, color: '#006F8E' }} />
             <span style={{ fontSize: 10, fontWeight: 600, color: '#115E59', textTransform: 'uppercase' }}>
               Districts
             </span>
           </div>
-          <p style={{ fontSize: 24, fontWeight: 800, color: '#0D9488', marginBottom: 4 }}>
+          <p style={{ fontSize: 24, fontWeight: 800, color: '#006F8E', marginBottom: 4 }}>
             {stats.districtsCovered}/30
           </p>
           <p style={{ fontSize: 10, color: '#115E59' }}>

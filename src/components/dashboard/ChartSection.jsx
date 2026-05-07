@@ -46,7 +46,7 @@ export default function ChartSection({ children }) {
             width: 36,
             height: 36,
             borderRadius: 10,
-            background: 'linear-gradient(135deg, #2563EB, #7C3AED)',
+            background: '#2563EB',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center'

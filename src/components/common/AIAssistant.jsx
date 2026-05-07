@@ -103,7 +103,7 @@ const AIAssistant = ({ isDark = false, serviceData = {}, userRole = 'super_admin
       {/* FAB */}
       <button
         onClick={() => setOpen(v => !v)}
-        className="fixed bottom-6 right-6 z-50 h-14 w-14 bg-gradient-to-br from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 rounded-full shadow-xl flex items-center justify-center transition-all hover:scale-110 active:scale-95"
+        className="fixed bottom-6 right-6 z-50 h-14 w-14 bg-slate-700 hover:bg-slate-800 rounded-full shadow-xl flex items-center justify-center transition-all hover:scale-110 active:scale-95"
         title="AI Assistant"
       >
         {open ? <X className="h-6 w-6 text-white" /> : <Sparkles className="h-6 w-6 text-white" />}
@@ -121,7 +121,7 @@ const AIAssistant = ({ isDark = false, serviceData = {}, userRole = 'super_admin
         }`} style={{ height: '560px' }}>
 
           {/* Header */}
-          <div className="bg-gradient-to-r from-purple-600 to-indigo-600 p-4 shrink-0">
+          <div className="bg-slate-700 p-4 shrink-0">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className="h-9 w-9 bg-white/20 rounded-xl flex items-center justify-center">

@@ -11,8 +11,8 @@ export default function ServiceShell({ title, subtitle, icon: Icon, color = 'var
 
       {/* ── Page Hero ── */}
       <div style={{
-        background: `linear-gradient(135deg, ${color}18 0%, ${color}08 100%)`,
-        border: `1px solid ${color}25`,
+        background: 'rgba(0,111,142,0.10)',
+        border: '1px solid rgba(0,111,142,0.28)',
         borderRadius: 'var(--r-2xl)',
         padding: '1rem 1rem',
         marginBottom: 20,
@@ -25,7 +25,7 @@ export default function ServiceShell({ title, subtitle, icon: Icon, color = 'var
         <div style={{ display: 'flex', alignItems: 'center', gap: 16, position: 'relative', zIndex: 1 }}>
           {/* <div style={{
             width: 48, height: 48, borderRadius: 'var(--r-lg)',
-            background: `linear-gradient(135deg, ${color}, ${color}cc)`,
+            background: `var(--blue)`,
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             boxShadow: `0 4px 16px ${color}35`, flexShrink: 0,
           }}>

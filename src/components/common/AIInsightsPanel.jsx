@@ -90,7 +90,7 @@ const AIInsightsPanel = ({
         onClick={() => setExpanded(v => !v)}
       >
         <div className="flex items-center gap-3">
-          <div className="h-9 w-9 bg-gradient-to-br from-purple-500 to-indigo-600 rounded-xl flex items-center justify-center">
+          <div className="h-9 w-9 bg-slate-700 rounded-xl flex items-center justify-center">
             <Brain className="h-5 w-5 text-white" />
           </div>
           <div>

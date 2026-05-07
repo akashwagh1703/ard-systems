@@ -287,7 +287,7 @@ const ReportCenter = () => {
             <p style={{ fontSize: 12, color: 'var(--text-3)', marginTop: 2 }}>Generate, schedule, and export reports across all services</p>
           </div>
         </div>
-        <button style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '8px 16px', background: 'linear-gradient(135deg, #2563EB 0%, #6366F1 100%)', color: '#fff', border: 'none', borderRadius: 'var(--r-xl)', fontSize: 13, fontWeight: 600, cursor: 'pointer', transition: 'all 0.15s ease' }}
+        <button style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '8px 16px', background: '#2563EB', color: '#fff', border: 'none', borderRadius: 'var(--r-xl)', fontSize: 13, fontWeight: 600, cursor: 'pointer', transition: 'all 0.15s ease' }}
           onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-1px)'}
           onMouseLeave={e => e.currentTarget.style.transform = 'translateY(0)'}>
           <Plus className="icon-xs" /> Custom Report
@@ -297,10 +297,10 @@ const ReportCenter = () => {
       {/* Summary KPIs */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 12, marginBottom: 20 }}>
         {[
-          { label: 'Report Templates', value: REPORT_TEMPLATES.length,    icon: FileText,   gradient: 'linear-gradient(135deg, #2563EB 0%, #6366F1 100%)' },
-          { label: 'Scheduled Reports', value: SCHEDULED_REPORTS.length,  icon: Calendar,   gradient: 'linear-gradient(135deg, #059669 0%, #10B981 100%)' },
-          { label: 'Active Schedules',  value: SCHEDULED_REPORTS.filter(r => r.status === 'active').length, icon: CheckCircle, gradient: 'linear-gradient(135deg, #7C3AED 0%, #A855F7 100%)' },
-          { label: 'Export Formats',    value: 3,                          icon: Download,   gradient: 'linear-gradient(135deg, #EA580C 0%, #EF4444 100%)' },
+          { label: 'Report Templates', value: REPORT_TEMPLATES.length,    icon: FileText,   gradient: '#2563EB' },
+          { label: 'Scheduled Reports', value: SCHEDULED_REPORTS.length,  icon: Calendar,   gradient: '#059669' },
+          { label: 'Active Schedules',  value: SCHEDULED_REPORTS.filter(r => r.status === 'active').length, icon: CheckCircle, gradient: '#7C3AED' },
+          { label: 'Export Formats',    value: 3,                          icon: Download,   gradient: '#EA580C' },
         ].map((kpi, i) => {
           const Icon = kpi.icon;
           return (
@@ -331,7 +331,7 @@ const ReportCenter = () => {
           const isActive = activeTab === tab.id;
           return (
             <button key={tab.id} onClick={() => setActiveTab(tab.id)}
-              style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '8px 16px', borderRadius: 'var(--r-lg)', fontSize: 13, fontWeight: 600, border: 'none', cursor: 'pointer', transition: 'all 0.15s ease', background: isActive ? 'linear-gradient(135deg, #2563EB 0%, #6366F1 100%)' : 'transparent', color: isActive ? '#fff' : 'var(--text-3)', boxShadow: isActive ? '0 2px 8px rgba(37,99,235,0.3)' : 'none' }}>
+              style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '8px 16px', borderRadius: 'var(--r-lg)', fontSize: 13, fontWeight: 600, border: 'none', cursor: 'pointer', transition: 'all 0.15s ease', background: isActive ? '#2563EB' : 'transparent', color: isActive ? '#fff' : 'var(--text-3)', boxShadow: isActive ? '0 2px 8px rgba(37,99,235,0.3)' : 'none' }}>
               <Icon className="icon-xs" />
               {tab.label}
             </button>

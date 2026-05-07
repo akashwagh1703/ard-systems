@@ -65,7 +65,7 @@ export default function ResourceAnalytics() {
             width: 42,
             height: 42,
             borderRadius: 12,
-            background: 'linear-gradient(135deg, #0EA5E9 0%, #0284C7 100%)',
+            background: '#0EA5E9',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -141,8 +141,8 @@ export default function ResourceAnalytics() {
               alignItems: 'center',
               gap: 8,
               padding: '0.625rem 1rem',
-              background: '#0D9488',
-              border: '1px solid #0D9488',
+              background: '#006F8E',
+              border: '1px solid #006F8E',
               borderRadius: 12,
               fontSize: 13,
               fontWeight: 600,
@@ -153,14 +153,14 @@ export default function ResourceAnalytics() {
               boxShadow: '0 4px 12px rgba(13, 148, 136, 0.3)'
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.background = '#0F766E';
-              e.currentTarget.style.borderColor = '#0F766E';
+              e.currentTarget.style.background = '#005A73';
+              e.currentTarget.style.borderColor = '#005A73';
               e.currentTarget.style.transform = 'translateY(-1px)';
               e.currentTarget.style.boxShadow = '0 6px 16px rgba(13, 148, 136, 0.4)';
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.background = '#0D9488';
-              e.currentTarget.style.borderColor = '#0D9488';
+              e.currentTarget.style.background = '#006F8E';
+              e.currentTarget.style.borderColor = '#006F8E';
               e.currentTarget.style.transform = 'none';
               e.currentTarget.style.boxShadow = '0 4px 12px rgba(13, 148, 136, 0.3)';
             }}

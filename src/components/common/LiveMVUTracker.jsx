@@ -35,7 +35,7 @@ const LiveMVUTracker = ({ mvus = [], isDark = false }) => {
       {/* Header */}
       <div className={`flex items-center justify-between px-4 py-3 border-b ${isDark ? 'border-white/10' : 'border-gray-100'}`}>
         <div className="flex items-center gap-3">
-          <div className="h-8 w-8 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-lg flex items-center justify-center">
+          <div className="h-8 w-8 bg-slate-700 rounded-lg flex items-center justify-center">
             <Navigation className="h-4 w-4 text-white" />
           </div>
           <div>

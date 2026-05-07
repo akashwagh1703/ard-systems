@@ -5,7 +5,7 @@ import { SAMPLE_USERS } from '../../data/mockData';
 import { User, Shield, Building, Users, Wheat, ArrowRight, CheckCircle } from 'lucide-react';
 
 const ROLE_META = {
-  super_admin:      { icon: Shield,   label: 'Super Admin',      color: '#0D9488', bg: '#F0FDFA', desc: 'Full system · All services · State-level'  },
+  super_admin:      { icon: Shield,   label: 'Super Admin',      color: '#006F8E', bg: '#EEF6F9', desc: 'Full system · All services · State-level'  },
   district_officer: { icon: Building, label: 'District Officer', color: '#0891B2', bg: '#ECFEFF', desc: 'District access · CDVO operations'          },
   block_officer:    { icon: Users,    label: 'Block Officer',    color: '#059669', bg: '#ECFDF5', desc: 'Block operations · BVO functions'           },
   field_user:       { icon: User,     label: 'Field User',       color: '#D97706', bg: '#FFFBEB', desc: 'Field operations · Service delivery'       },
@@ -32,7 +32,7 @@ export default function LoginPage() {
       {/* ── Left panel — 30% Royal Blue ── */}
       <div style={{
         width: '42%', minHeight: '100vh', flexShrink: 0,
-        background: 'linear-gradient(160deg, #0F766E 0%, #0D9488 50%, #14B8A6 100%)',
+        background: '#005A73',
         display: 'flex', flexDirection: 'column', justifyContent: 'space-between',
         padding: '3rem', position: 'relative', overflow: 'hidden',
       }}
@@ -198,7 +198,7 @@ export default function LoginPage() {
                 width: '100%', padding: '14px',
                 borderRadius: 12, border: 'none',
                 fontSize: 14, fontWeight: 700, color: '#fff',
-                background: selected ? 'linear-gradient(135deg, #F97316, #EA580C)' : 'var(--base-3)',
+                background: selected ? '#F97316' : 'var(--base-3)',
                 cursor: selected ? 'pointer' : 'not-allowed',
                 boxShadow: selected ? '0 4px 20px rgba(249,115,22,0.35)' : 'none',
                 transition: 'all 0.2s ease',

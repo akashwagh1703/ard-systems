@@ -59,7 +59,7 @@ export default function FarmerShell({ children }) {
     return (
       <div style={{ ...FARMER_THEME_VARS, minHeight: '100vh', display: 'flex', background: 'var(--base)' }}>
         {/* Sidebar */}
-        <aside style={{ width: 240, background: 'linear-gradient(180deg, #2F6FE4 0%, #4285F4 100%)', display: 'flex', flexDirection: 'column', position: 'fixed', top: 0, left: 0, bottom: 0, zIndex: 40 }}>
+        <aside style={{ width: 240, background: '#2F6FE4', display: 'flex', flexDirection: 'column', position: 'fixed', top: 0, left: 0, bottom: 0, zIndex: 40 }}>
           {/* Brand */}
           <div style={{ padding: '1.5rem 1.25rem 1rem', borderBottom: '1px solid rgba(255,255,255,0.12)' }}>
             <div style={{ marginBottom: 12 }}>
@@ -137,7 +137,7 @@ export default function FarmerShell({ children }) {
   // Mobile layout
   return (
     <div style={{ ...FARMER_THEME_VARS, minHeight: '100vh', background: 'var(--base)', display: 'flex', flexDirection: 'column' }}>
-      <header style={{ height: 58, background: 'linear-gradient(135deg, #2F6FE4 0%, #4285F4 60%, #5B9CFF 100%)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 1.25rem', position: 'sticky', top: 0, zIndex: 40, boxShadow: '0 2px 16px rgba(66,133,244,0.28)' }}>
+      <header style={{ height: 58, background: '#2F6FE4', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 1.25rem', position: 'sticky', top: 0, zIndex: 40, boxShadow: '0 2px 16px rgba(66,133,244,0.28)' }}>
         <img 
           src="/ard-systems/logo.jpeg" 
           alt="ARD Logo" 
@@ -174,7 +174,7 @@ export default function FarmerShell({ children }) {
         })}
       </nav>
 
-      <button onClick={() => navigate('/farmer/ai')} style={{ position: 'fixed', bottom: 72, right: 20, width: 52, height: 52, borderRadius: '50%', background: 'linear-gradient(135deg, var(--orange), var(--orange-dark))', border: 'none', boxShadow: '0 4px 20px rgba(249,115,22,0.40)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 50 }}
+      <button onClick={() => navigate('/farmer/ai')} style={{ position: 'fixed', bottom: 72, right: 20, width: 52, height: 52, borderRadius: '50%', background: 'var(--orange), var(--orange-dark))', border: 'none', boxShadow: '0 4px 20px rgba(249,115,22,0.40)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 50 }}
         onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.10)'}
         onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}
         title="AI Assistant"

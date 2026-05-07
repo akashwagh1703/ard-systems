@@ -28,7 +28,7 @@ const Header = ({ isDark = false, setIsDark }) => {
 
   return (
     <header style={{
-      background: 'linear-gradient(135deg, #0F766E 0%, #0D9488 100%)',
+      background: '#005A73',
       borderBottom: '1px solid rgba(255,255,255,0.08)',
       position: 'sticky', top: 0, zIndex: 40,
       boxShadow: '0 2px 16px rgba(13,148,136,0.25)',
@@ -44,7 +44,7 @@ const Header = ({ isDark = false, setIsDark }) => {
             {/* Amber mark — 10% accent */}
             <div style={{
               width: 34, height: 34, borderRadius: 9,
-              background: 'linear-gradient(135deg, #F97316, #EA580C)',
+              background: '#F97316',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               fontSize: 11, fontWeight: 700, color: '#fff',
               boxShadow: '0 2px 8px rgba(245,158,11,0.4)',

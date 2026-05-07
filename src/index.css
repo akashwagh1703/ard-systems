@@ -9,27 +9,27 @@
   ║  ARD 2026  ·  Fresh Teal-Mint Design System     ║
   ║  60-30-10 Rule                                  ║
   ║  60% → #F0FDF9  Fresh mint-white  (base)        ║
-  ║  30% → #0D9488  Vivid teal        (structure)   ║
+  ║  30% → #006F8E  Admin blue        (structure)   ║
   ║  10% → #F97316  Vibrant orange    (accent/CTA)  ║
   ╚══════════════════════════════════════════════════╝
 */
 
 :root {
   /* ── 60% Base — Fresh Mint White ── */
-  --base:          #F0FDF9;
-  --base-2:        #E0F7F2;
-  --base-3:        #CCFBF1;
+  --base:          #f1f3f4;
+  --base-2:        #e8ecef;
+  --base-3:        #dde3e7;
   --surface:       #FFFFFF;
   --surface-2:     #F5FFFE;
   --surface-3:     #ECFDF8;
 
   /* ── 30% Teal ── */
-  --blue:          #0D9488;
-  --blue-dark:     #0F766E;
-  --blue-light:    #14B8A6;
-  --blue-pale:     #CCFBF1;
-  --blue-subtle:   #F0FDFA;
-  --blue-muted:    #99F6E4;
+  --blue:          #006F8E;
+  --blue-dark:     #005A73;
+  --blue-light:    #1C89A8;
+  --blue-pale:     #D8ECF2;
+  --blue-subtle:   #EEF6F9;
+  --blue-muted:    #B8D8E3;
 
   /* ── 10% Orange Accent ── */
   --orange:        #F97316;
@@ -49,9 +49,9 @@
   --text-white:    #FFFFFF;
 
   /* ── Borders ── */
-  --border:        #B2E8E0;
-  --border-2:      #7DD3C8;
-  --border-blue:   #99F6E4;
+  --border:        #d6dde3;
+  --border-2:      #c3cdd6;
+  --border-blue:   #d6dde3;
 
   /* ── Semantic ── */
   --success:       #059669;
@@ -68,12 +68,12 @@
   --info-border:   #A5F3FC;
 
   /* ── Shadows ── */
-  --shadow-xs:   0 1px 3px rgba(13,148,136,0.08), 0 1px 2px rgba(0,0,0,0.04);
-  --shadow-sm:   0 2px 8px rgba(13,148,136,0.10), 0 1px 3px rgba(0,0,0,0.05);
-  --shadow-md:   0 4px 20px rgba(13,148,136,0.14), 0 2px 8px rgba(0,0,0,0.06);
-  --shadow-lg:   0 8px 40px rgba(13,148,136,0.18), 0 4px 16px rgba(0,0,0,0.08);
-  --shadow-card: 0 2px 8px rgba(13,148,136,0.10), 0 0 0 1px rgba(13,148,136,0.06);
-  --shadow-blue: 0 4px 20px rgba(13,148,136,0.30);
+  --shadow-xs:   0 1px 3px rgba(0,111,142,0.08), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-sm:   0 2px 8px rgba(0,111,142,0.10), 0 1px 3px rgba(0,0,0,0.05);
+  --shadow-md:   0 4px 20px rgba(0,111,142,0.14), 0 2px 8px rgba(0,0,0,0.06);
+  --shadow-lg:   0 8px 40px rgba(0,111,142,0.18), 0 4px 16px rgba(0,0,0,0.08);
+  --shadow-card: 0 2px 8px rgba(0,111,142,0.10), 0 0 0 1px rgba(0,111,142,0.06);
+  --shadow-blue: 0 4px 20px rgba(0,111,142,0.30);
   --shadow-orange:0 4px 20px rgba(249,115,22,0.28);
 
   /* ── Radius ── */
@@ -108,18 +108,18 @@
     font-size: 16px;
     line-height: 1.65;
     background-image:
-      radial-gradient(ellipse at 10% 0%, rgba(13,148,136,0.10) 0%, transparent 55%),
-      radial-gradient(ellipse at 90% 100%, rgba(249,115,22,0.07) 0%, transparent 55%),
-      radial-gradient(ellipse at 50% 50%, rgba(20,184,166,0.05) 0%, transparent 70%);
+      transparent 0%, transparent 55%),
+      transparent 0%, transparent 55%),
+      transparent 0%, transparent 70%);
     background-attachment: fixed;
   }
 
   ::selection { background: var(--blue-pale); color: var(--blue-dark); }
 
   ::-webkit-scrollbar { width: 6px; height: 6px; }
-  ::-webkit-scrollbar-track { background: var(--base-2); }
-  ::-webkit-scrollbar-thumb { background: var(--blue-muted); border-radius: 99px; }
-  ::-webkit-scrollbar-thumb:hover { background: var(--blue); }
+  ::-webkit-scrollbar-track { background: #f1f3f4; }
+  ::-webkit-scrollbar-thumb { background: #d6dde3; border-radius: 99px; }
+  ::-webkit-scrollbar-thumb:hover { background: #c3cdd6; }
 }
 
 /* ── Components ── */
@@ -260,10 +260,10 @@
   /* Progress */
   .progress { width: 100%; height: 6px; background: var(--base-3); border-radius: var(--r-full); overflow: hidden; }
   .progress-fill { height: 100%; border-radius: var(--r-full); transition: width 0.8s cubic-bezier(0.4,0,0.2,1); }
-  .progress-fill.blue   { background: linear-gradient(90deg, var(--blue-dark), var(--blue-light)); }
-  .progress-fill.orange { background: linear-gradient(90deg, var(--orange-dark), var(--orange-light)); }
-  .progress-fill.success{ background: linear-gradient(90deg, #047857, var(--success)); }
-  .progress-fill.danger { background: linear-gradient(90deg, #B91C1C, var(--danger)); }
+  .progress-fill.blue   { background: var(--blue-dark), var(--blue-light)); }
+  .progress-fill.orange { background: var(--orange-dark), var(--orange-light)); }
+  .progress-fill.success{ background: #047857); }
+  .progress-fill.danger { background: #B91C1C); }
 
   /* Sidebar nav item */
   .nav-item {
@@ -283,14 +283,14 @@
     -webkit-backdrop-filter: blur(16px);
     border: 1px solid rgba(255,255,255,0.60);
     border-radius: var(--r-xl);
-    box-shadow: 0 4px 24px rgba(13,148,136,0.10);
+    box-shadow: 0 4px 24px rgba(0,111,142,0.10);
   }
 
   /* Mesh gradient */
   .mesh-blue {
     background:
-      radial-gradient(ellipse at 20% 20%, rgba(13,148,136,0.12) 0%, transparent 60%),
-      radial-gradient(ellipse at 80% 80%, rgba(249,115,22,0.08) 0%, transparent 60%),
+      transparent 0%, transparent 60%),
+      transparent 0%, transparent 60%),
       var(--base);
   }
 
@@ -345,7 +345,7 @@
   .icon-xl  { width: 34px; height: 34px; flex-shrink: 0; stroke-width: 1.25; }
 
   .gradient-text {
-    background: linear-gradient(135deg, var(--blue), var(--orange));
+    background: var(--blue), var(--orange));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -388,7 +388,7 @@
 }
 
 .skeleton {
-  background: linear-gradient(90deg, var(--base-2) 25%, var(--base-3) 50%, var(--base-2) 75%);
+  background: var(--base-2) 25%, var(--base-3) 50%, var(--base-2) 75%);
   background-size: 200% 100%;
   animation: shimmer 1.5s infinite;
   border-radius: var(--r-md);

@@ -86,7 +86,7 @@ export default function DistrictDistributionChart({ filters, onFilterChange }) {
                 border: 'none',
                 cursor: 'pointer',
                 transition: 'all 0.2s',
-                background: districtFilter === option.id ? '#0D9488' : 'var(--surface)',
+                background: districtFilter === option.id ? '#006F8E' : 'var(--surface)',
                 color: districtFilter === option.id ? 'white' : 'var(--text-3)'
               }}
             >

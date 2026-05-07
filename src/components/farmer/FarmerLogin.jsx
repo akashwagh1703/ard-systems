@@ -119,7 +119,7 @@ export default function FarmerLogin() {
             </div>
             {errors.mobile && <p style={{ fontSize: 14, color: 'var(--danger)', marginTop: 5 }}>{errors.mobile}</p>}
           </div>
-          <button type="submit" disabled={loading} style={{ width: '100%', padding: 14, borderRadius: 'var(--r-md)', background: 'linear-gradient(135deg, #2F6FE4, #4285F4)', color: '#fff', border: 'none', fontSize: 16, fontWeight: 700, cursor: loading ? 'not-allowed' : 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, opacity: loading ? 0.7 : 1 }}>
+          <button type="submit" disabled={loading} style={{ width: '100%', padding: 14, borderRadius: 'var(--r-md)', background: '#2F6FE4', color: '#fff', border: 'none', fontSize: 16, fontWeight: 700, cursor: loading ? 'not-allowed' : 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, opacity: loading ? 0.7 : 1 }}>
             {loading ? <RefreshCw size={16} style={{ animation: 'spin 1s linear infinite' }} /> : <><span>Send OTP</span><ArrowRight size={16} /></>}
           </button>
         </form>
@@ -142,7 +142,7 @@ export default function FarmerLogin() {
             </div>
             {errors.otp && <p style={{ fontSize: 14, color: 'var(--danger)', marginTop: 5 }}>{errors.otp}</p>}
           </div>
-          <button type="submit" disabled={loading} style={{ width: '100%', padding: 14, borderRadius: 'var(--r-md)', background: 'linear-gradient(135deg, #2F6FE4, #4285F4)', color: '#fff', border: 'none', fontSize: 16, fontWeight: 700, cursor: loading ? 'not-allowed' : 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, opacity: loading ? 0.7 : 1 }}>
+          <button type="submit" disabled={loading} style={{ width: '100%', padding: 14, borderRadius: 'var(--r-md)', background: '#2F6FE4', color: '#fff', border: 'none', fontSize: 16, fontWeight: 700, cursor: loading ? 'not-allowed' : 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, opacity: loading ? 0.7 : 1 }}>
             {loading ? <RefreshCw size={16} style={{ animation: 'spin 1s linear infinite' }} /> : <><span>Verify &amp; Login</span><ArrowRight size={16} /></>}
           </button>
           <button type="button" onClick={() => { setStep('mobile'); setOtp(''); setErrors({}); }} style={{ width: '100%', marginTop: 12, background: 'none', border: 'none', color: '#4285F4', fontSize: 15, cursor: 'pointer', textAlign: 'center', padding: 8 }}>
@@ -168,7 +168,7 @@ export default function FarmerLogin() {
   return (
     <div style={{ ...FARMER_THEME_VARS, minHeight: '100vh', display: 'flex' }}>
       {/* Left branding panel */}
-      <div style={{ flex: '0 0 52%', background: 'linear-gradient(160deg, #2F6FE4 0%, #4285F4 50%, #5B9CFF 100%)', display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '4rem 4rem', position: 'relative', overflow: 'hidden' }}>
+      <div style={{ flex: '0 0 52%', background: '#2F6FE4', display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '4rem 4rem', position: 'relative', overflow: 'hidden' }}>
         {/* Decorative circles */}
         <div style={{ position: 'absolute', top: -80, right: -80, width: 320, height: 320, borderRadius: '50%', background: 'rgba(255,255,255,0.06)' }} />
         <div style={{ position: 'absolute', bottom: -60, left: -60, width: 240, height: 240, borderRadius: '50%', background: 'rgba(255,255,255,0.05)' }} />

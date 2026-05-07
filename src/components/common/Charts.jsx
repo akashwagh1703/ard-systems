@@ -147,7 +147,7 @@ export const LineChart = ({ data, xKey, lines, height = 300, showLegend = true, 
                 height: 3, 
                 borderRadius: 2, 
                 background: line.color,
-                ...(line.dashed && { backgroundImage: `linear-gradient(to right, ${line.color} 50%, transparent 50%)`, backgroundSize: '8px 3px' })
+                ...(line.dashed && { backgroundImage: `var(--blue)`, backgroundSize: '8px 3px' })
               }} />
               <span style={{ fontSize: 11, color: 'var(--text-3)', fontWeight: 500 }}>{line.label}</span>
             </div>

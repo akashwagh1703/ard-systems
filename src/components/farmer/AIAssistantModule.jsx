@@ -62,7 +62,7 @@ export default function AIAssistantModule() {
 
       {/* Header */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
-        <div style={{ width: 42, height: 42, borderRadius: 12, background: 'linear-gradient(135deg, var(--orange), var(--orange-dark))', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div style={{ width: 42, height: 42, borderRadius: 12, background: 'var(--orange), var(--orange-dark))', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <Bot size={20} color="#fff" />
         </div>
         <div>
@@ -78,7 +78,7 @@ export default function AIAssistantModule() {
       <div style={{ flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: 12, paddingBottom: 8 }}>
         {messages.map(m => (
           <div key={m.id} style={{ display: 'flex', gap: 10, flexDirection: m.role === 'user' ? 'row-reverse' : 'row', alignItems: 'flex-end' }}>
-            <div style={{ width: 32, height: 32, borderRadius: '50%', background: m.role === 'ai' ? 'linear-gradient(135deg, var(--orange), var(--orange-dark))' : 'var(--blue)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+            <div style={{ width: 32, height: 32, borderRadius: '50%', background: m.role === 'ai' ? 'var(--orange), var(--orange-dark))' : 'var(--blue)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
               {m.role === 'ai' ? <Bot size={15} color="#fff" /> : <User size={15} color="#fff" />}
             </div>
             <div style={{ maxWidth: '78%' }}>
@@ -92,7 +92,7 @@ export default function AIAssistantModule() {
 
         {loading && (
           <div style={{ display: 'flex', gap: 10, alignItems: 'flex-end' }}>
-            <div style={{ width: 32, height: 32, borderRadius: '50%', background: 'linear-gradient(135deg, var(--orange), var(--orange-dark))', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <div style={{ width: 32, height: 32, borderRadius: '50%', background: 'var(--orange), var(--orange-dark))', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <Bot size={15} color="#fff" />
             </div>
             <div style={{ padding: '12px 16px', borderRadius: '18px 18px 18px 4px', background: 'var(--surface)', border: '1px solid var(--border)', boxShadow: 'var(--shadow-xs)', display: 'flex', gap: 5, alignItems: 'center' }}>

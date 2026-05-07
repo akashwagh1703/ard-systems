@@ -71,7 +71,7 @@ export default function FarmerDashboard() {
     <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
 
       {/* Welcome Banner */}
-      <div style={{ background: 'linear-gradient(135deg, #2F6FE4 0%, #4285F4 60%, #5B9CFF 100%)', borderRadius: 'var(--r-xl)', padding: '1.35rem', position: 'relative', overflow: 'hidden', boxShadow: 'var(--shadow-sm)' }}>
+      <div style={{ background: '#2F6FE4', borderRadius: 'var(--r-xl)', padding: '1.35rem', position: 'relative', overflow: 'hidden', boxShadow: 'var(--shadow-sm)' }}>
         <div style={{ position: 'absolute', top: -30, right: -30, width: 120, height: 120, borderRadius: '50%', background: 'rgba(255,255,255,0.07)' }} />
         <div style={{ position: 'absolute', bottom: -20, right: 60, width: 80, height: 80, borderRadius: '50%', background: 'rgba(249,115,22,0.12)' }} />
         <div style={{ position: 'relative', zIndex: 1 }}>
@@ -276,7 +276,7 @@ export default function FarmerDashboard() {
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(200px,1fr))', gap: 12 }}>
           {DONUT_DATA.map((item) => (
-            <div key={item.title} style={{ borderRadius: 14, border: '1px solid var(--border)', background: 'linear-gradient(145deg,#ffffff,#f8fafc)', padding: 12 }}>
+            <div key={item.title} style={{ borderRadius: 14, border: '1px solid var(--border)', background: '#ffffff', padding: 12 }}>
               <p style={{ fontSize: 12, fontWeight: 700, color: 'var(--text-3)', textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: 8 }}>{item.title}</p>
               <div style={{ position: 'relative', width: '100%', height: 150 }}>
                 <ResponsiveContainer>

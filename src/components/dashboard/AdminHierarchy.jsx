@@ -162,7 +162,7 @@ export default function AdminHierarchy() {
     return (
       <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
         <Crumbs items={[{ label: 'Dashboard', path: '/dashboard' }, { label: farm.name, path: `/admin/farms/${farm.id}` }, { label: group.name, path: `/admin/farms/${farm.id}/groups/${group.id}` }, { label: animal.name, path: `/admin/farms/${farm.id}/groups/${group.id}/animals/${animal.id}` }, { label: 'Report' }]} />
-        <div style={{ background: 'linear-gradient(135deg,#0f766e,#14b8a6)', borderRadius: 16, padding: 16 }}>
+        <div style={{ background: '#0f766e', borderRadius: 16, padding: 16 }}>
           <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.85)' }}>Admin Animal Report</p>
           <h3 style={{ fontSize: 24, fontWeight: 800, color: '#fff' }}>{animal.name}</h3>
         </div>
