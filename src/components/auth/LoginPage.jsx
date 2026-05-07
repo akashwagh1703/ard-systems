@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { SAMPLE_USERS } from '../../data/mockData';
-import { User, Shield, Building, Users, Wheat, ArrowRight, CheckCircle, Zap, BarChart2, Globe } from 'lucide-react';
+import { User, Shield, Building, Users, Wheat, ArrowRight, CheckCircle } from 'lucide-react';
 
 const ROLE_META = {
   super_admin:      { icon: Shield,   label: 'Super Admin',      color: '#0D9488', bg: '#F0FDFA', desc: 'Full system · All services · State-level'  },
@@ -12,12 +12,6 @@ const ROLE_META = {
   farmer:           { icon: Wheat,    label: 'Farmer',           color: '#7C3AED', bg: '#F5F3FF', desc: 'Service booking · Limited access'          },
 };
 
-const FEATURES = [
-  { text: '10 Independent Microservices',    sub: 'AI, Vaccine, Disease, MVU, Grievance & more' },
-  { text: 'AI-Enabled Predictive Analytics', sub: 'Demand forecasting · Anomaly detection' },
-  { text: 'Role-Based Access Control',       sub: '5 user roles with granular permissions' },
-  { text: '2026 Bento Grid Design System',   sub: 'Sidebar nav · Micro-interactions · Fresh UI' },
-];
 
 export default function LoginPage() {
   const [selected, setSelected] = useState('');
@@ -51,12 +45,12 @@ export default function LoginPage() {
 
         <div style={{ position: 'relative', zIndex: 1 }}>
           {/* Logo */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: '3rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: '2rem' }}>
             <img 
               src="/ard-systems/logo.jpeg" 
               alt="ARD Logo" 
               style={{
-                height: 48,
+                height: 72,
                 width: 'auto',
                 objectFit: 'contain',
                 boxShadow: '0 4px 20px rgba(249,115,22,0.50)',
@@ -64,54 +58,46 @@ export default function LoginPage() {
             />
           </div>
 
-          <h1 style={{ color: '#fff', fontSize: '2.125rem', fontWeight: 800, lineHeight: 1.2, letterSpacing: '-0.025em', marginBottom: '1rem' }}>
-            Microservices-Based<br />
-            <span style={{ color: '#FCD34D' }}>Management Platform</span>
-          </h1>
-          <p style={{ color: 'rgba(255,255,255,0.60)', fontSize: 13, lineHeight: 1.75, marginBottom: '2.5rem', maxWidth: 340 }}>
-            A proof-of-concept demonstrating enterprise-grade architecture for the ARD Department with AI-enabled features.
-          </p>
-
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
-            {FEATURES.map((f, i) => (
-              <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: 12 }}>
-                <div style={{
-                  width: 26, height: 26, borderRadius: 8, flexShrink: 0, marginTop: 1,
-                  background: 'rgba(249,115,22,0.20)',
-                  border: '1px solid rgba(249,115,22,0.35)',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                }}>
-                  <CheckCircle className="icon-xs" style={{ color: '#FCD34D' }} />
-                </div>
-                <div>
-                  <p style={{ color: '#fff', fontSize: 13, fontWeight: 600, lineHeight: 1.3 }}>{f.text}</p>
-                  <p style={{ color: 'rgba(255,255,255,0.45)', fontSize: 11, marginTop: 2 }}>{f.sub}</p>
-                </div>
-              </div>
-            ))}
+          {/* History Section */}
+          <div style={{ marginBottom: '2rem' }}>
+            <h2 style={{ color: '#FCD34D', fontSize: '1.125rem', fontWeight: 700, marginBottom: '0.75rem', letterSpacing: '-0.01em' }}>
+              History
+            </h2>
+            <p style={{ color: 'rgba(255,255,255,0.75)', fontSize: 12, lineHeight: 1.7 }}>
+              The Department of Fisheries & Animal Resources Development was created in 1991 after being bifurcated from the erstwhile Forestry, Fisheries & Animal Husbandry Department vide GA Department Resolution No.28038/Gen., dt. 10.10.1990. The Department acts as the nodal bureau for formulating plans, policies, and programs for Fisheries and the Animal Resources sector and ensuring its successful implementation.
+            </p>
           </div>
-        </div>
 
-        {/* Stats */}
-        <div style={{ display: 'flex', gap: 10, position: 'relative', zIndex: 1 }}>
-          {[
-            { icon: Zap,       value: '10',  label: 'Services'  },
-            { icon: BarChart2, value: '5',   label: 'Roles'     },
-            { icon: Globe,     value: 'AI',  label: 'Powered'   },
-          ].map((s, i) => {
-            const Icon = s.icon;
-            return (
-              <div key={i} style={{
-                flex: 1, padding: '12px 10px', borderRadius: 12, textAlign: 'center',
-                background: 'rgba(255,255,255,0.10)',
-                border: '1px solid rgba(255,255,255,0.12)',
-              }}>
-                <Icon className="icon-sm" style={{ color: '#FCD34D', margin: '0 auto 6px' }} />
-                <p style={{ fontSize: 20, fontWeight: 800, color: '#fff', letterSpacing: '-0.02em' }}>{s.value}</p>
-                <p style={{ fontSize: 10, color: 'rgba(255,255,255,0.45)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{s.label}</p>
-              </div>
-            );
-          })}
+          {/* Function Section */}
+          <div>
+            <h2 style={{ color: '#FCD34D', fontSize: '1.125rem', fontWeight: 700, marginBottom: '0.75rem', letterSpacing: '-0.01em' }}>
+              Functions
+            </h2>
+            <p style={{ color: 'rgba(255,255,255,0.65)', fontSize: 11, marginBottom: '0.75rem', fontWeight: 600 }}>
+              Functions of the Directorate of Animal Husbandry and Veterinary Services
+            </p>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+              {[
+                'To improve the genetic potential of the livestock through organized breeding.',
+                'To provide quality livestock health care services in the state.',
+                'To educate the livestock owners in modern animal husbandry practices.',
+                'To promote animal welfare measures to reduce the suffering of animals and birds.',
+                'To provide livelihood to the farmers of the state through economic livestock and poultry rearing.',
+              ].map((func, i) => (
+                <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: 10 }}>
+                  <div style={{
+                    width: 20, height: 20, borderRadius: 6, flexShrink: 0, marginTop: 1,
+                    background: 'rgba(249,115,22,0.20)',
+                    border: '1px solid rgba(249,115,22,0.35)',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  }}>
+                    <CheckCircle className="icon-xs" style={{ color: '#FCD34D', width: 12, height: 12 }} />
+                  </div>
+                  <p style={{ color: 'rgba(255,255,255,0.75)', fontSize: 11.5, lineHeight: 1.6, flex: 1 }}>{func}</p>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
 
