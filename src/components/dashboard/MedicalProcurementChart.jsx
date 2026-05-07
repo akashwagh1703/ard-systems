@@ -77,7 +77,7 @@ export default function MedicalProcurementChart() {
         textAlign: 'center',
         color: 'var(--text-3)'
       }}>
-        Loading medical procurement data...
+        Official medical procurement data is being loaded...
       </div>
     );
   }
@@ -149,7 +149,7 @@ export default function MedicalProcurementChart() {
             color: 'var(--text-1)',
             marginBottom: 4
           }}>
-            💊 Medical Procurement Trends
+            Medical Procurement Trends
           </h2>
           <p style={{
             fontSize: 12,

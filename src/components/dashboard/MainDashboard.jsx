@@ -119,6 +119,10 @@ export default function MainDashboard() {
 
   return (
     <div style={{ maxWidth: 1200, margin: '0 auto' }}>
+      <div style={{ marginBottom: 12, border: '1px solid var(--border)', background: 'var(--surface)', borderRadius: 12, padding: '7px 12px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <span style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-2)', letterSpacing: '0.04em' }}>GOVERNMENT OF ODISHA · ARD COMMAND CONSOLE · PILOT</span>
+        <span style={{ fontSize: 10, fontWeight: 700, color: 'var(--blue-dark)', background: 'var(--blue-subtle)', border: '1px solid var(--blue-muted)', borderRadius: 999, padding: '2px 8px' }}>ADMIN VIEW</span>
+      </div>
 
       {/* ── Hero Row ── */}
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 16, marginBottom: 16, animation: 'fadeUp 0.4s ease forwards' }}>
@@ -145,7 +149,7 @@ export default function MainDashboard() {
               </span>
             </div>
             <h1 style={{ fontSize: '1.2rem', fontWeight: 800, color: '#fff', letterSpacing: '-0.02em', marginBottom: 2 }}>
-              Welcome back, {user?.name?.split(' ')[0]} 👋
+              Welcome, {user?.name?.split(' ')[0]}
             </h1>
             <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.70)', marginBottom: 6 }}>
               {user?.designation} · {user?.district} District · {accessible.length} services accessible
@@ -303,17 +307,15 @@ export default function MainDashboard() {
 
       {/* ── AI Insight Cards ── */}
       <div style={{ background: '#FFFFFF', border: '1px solid var(--border)', borderRadius: 20, padding: '1.25rem 1.5rem', marginBottom: 16, boxShadow: 'var(--shadow-xs)', animation: 'fadeUp 0.4s ease 0.2s both', position: 'relative', overflow: 'hidden' }}>
-        <span className="ai-spark" style={{ top: 14, right: 18, width: 5, height: 5, background: '#8B5CF6', animationDelay: '0.2s' }} />
-        <span className="ai-spark" style={{ top: 38, right: 52, width: 3, height: 3, background: '#06B6D4', animationDelay: '0.9s' }} />
-        <span className="ai-spark" style={{ bottom: 18, left: 16, width: 4, height: 4, background: '#4285F4', animationDelay: '1.1s' }} />
+        <span className="ai-spark" style={{ top: 14, right: 18, width: 3, height: 3, background: '#8B5CF6', animationDelay: '0.2s', opacity: 0.45 }} />
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
             <div style={{ width: 26, height: 26, borderRadius: 8, background: 'linear-gradient(145deg,#8B5CF6,#06B6D4)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 0 0 2px rgba(255,255,255,0.06)' }}>
               <Sparkles className="icon-xs" style={{ color: '#fff' }} />
             </div>
             <div>
-              <p style={{ fontSize: 14, fontWeight: 700, color: 'var(--text-1)' }}>AI Insight Cards</p>
-              <p style={{ fontSize: 11, color: 'var(--text-4)' }}>Adaptive intelligence feed · confidence ranked</p>
+              <p style={{ fontSize: 14, fontWeight: 700, color: 'var(--text-1)' }}>AI-Simulated Insight Cards</p>
+              <p style={{ fontSize: 11, color: 'var(--text-4)' }}>Simulation feed for pilot review · confidence ranked</p>
             </div>
           </div>
           <button

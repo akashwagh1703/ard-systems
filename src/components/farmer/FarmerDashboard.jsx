@@ -75,8 +75,13 @@ export default function FarmerDashboard() {
         <div style={{ position: 'absolute', bottom: -20, right: 60, width: 80, height: 80, borderRadius: '50%', background: 'rgba(249,115,22,0.12)' }} />
         <div style={{ position: 'relative', zIndex: 1 }}>
           <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.65)', marginBottom: 4 }}>{today}</p>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
+            <span style={{ fontSize: 10, fontWeight: 700, padding: '2px 8px', borderRadius: 999, background: 'rgba(255,255,255,0.16)', color: '#fff', letterSpacing: '0.05em' }}>
+              FARMER PORTAL
+            </span>
+          </div>
           <h2 style={{ fontSize: 24, fontWeight: 800, color: '#fff', marginBottom: 4, letterSpacing: '-0.02em' }}>
-            Welcome, {farmer?.name} 👋
+            Welcome, {farmer?.name}
           </h2>
           <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.70)' }}>{farmer?.village}, {farmer?.district} · {farmer?.animals} animals registered</p>
         </div>
@@ -207,7 +212,7 @@ export default function FarmerDashboard() {
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
             <Sparkles size={16} color="#7C3AED" />
-            <p style={{ fontSize: 15, fontWeight: 700, color: 'var(--text-1)' }}>AI Insights</p>
+            <p style={{ fontSize: 15, fontWeight: 700, color: 'var(--text-1)' }}>AI-Simulated Insights</p>
           </div>
           <button
             type="button"

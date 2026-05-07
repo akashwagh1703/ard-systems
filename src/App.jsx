@@ -22,13 +22,6 @@ import GrievanceDashboard from './components/microservices/grievance-system/Grie
 import IntegrationHub from './components/integrations/IntegrationHub';
 import ReportCenter from './components/reports/ReportCenter';
 
-// Test Components (can be removed after verification)
-import TestDailyAnalytics from './components/dashboard/TestDailyAnalytics';
-import TestResourceData from './components/dashboard/TestResourceData';
-import TestDistrictCharts from './components/dashboard/TestDistrictCharts';
-import TestMonthlyTrends from './components/dashboard/TestMonthlyTrends';
-import TestFarmerCharts from './components/dashboard/TestFarmerCharts';
-import TestResourceAnalytics from './components/dashboard/TestResourceAnalytics';
 import AdminHierarchy from './components/dashboard/AdminHierarchy';
 
 // Farmer Portal
@@ -79,12 +72,6 @@ function App() {
             <Route path="/services/grievance-system/*"      element={<Protected><GrievanceDashboard /></Protected>} />
             <Route path="/integrations"                      element={<Protected><IntegrationHub /></Protected>} />
             <Route path="/reports"                           element={<Protected><ReportCenter /></Protected>} />
-            <Route path="/test-analytics"                    element={<Protected><TestDailyAnalytics /></Protected>} />
-            <Route path="/test-resource-data"                element={<Protected><TestResourceData /></Protected>} />
-            <Route path="/test-district-charts"              element={<Protected><TestDistrictCharts /></Protected>} />
-            <Route path="/test-monthly-trends"               element={<Protected><TestMonthlyTrends /></Protected>} />
-            <Route path="/test-farmer-charts"                element={<Protected><TestFarmerCharts /></Protected>} />
-            <Route path="/test-resource-analytics"           element={<Protected><TestResourceAnalytics /></Protected>} />
             <Route path="/admin/farms" element={<Protected roles={['super_admin','district_officer','block_officer','field_user']}><AdminHierarchy /></Protected>} />
             <Route path="/admin/farms/:farmId" element={<Protected roles={['super_admin','district_officer','block_officer','field_user']}><AdminHierarchy /></Protected>} />
             <Route path="/admin/farms/:farmId/groups/:groupId" element={<Protected roles={['super_admin','district_officer','block_officer','field_user']}><AdminHierarchy /></Protected>} />

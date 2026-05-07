@@ -97,7 +97,7 @@ export default function FarmerLogin() {
         {step === 'mobile' ? 'Login with Mobile' : 'Enter OTP'}
       </h2>
       <p style={{ fontSize: 15, color: 'var(--text-3)', marginBottom: 28, lineHeight: 1.6 }}>
-        {step === 'mobile' ? 'Enter your registered 10-digit mobile number' : `OTP sent to +91 ${mobile} · Demo OTP: 1234`}
+        {step === 'mobile' ? 'Enter your registered 10-digit mobile number' : `OTP sent to +91 ${mobile}`}
       </p>
 
       {step === 'mobile' ? (
@@ -152,7 +152,7 @@ export default function FarmerLogin() {
       )}
 
       <p style={{ textAlign: 'center', fontSize: 13, color: 'var(--text-4)', marginTop: 24 }}>
-        Demo: any 10-digit number → OTP: 1234
+        OTP verification is enabled for authenticated farmer access.
       </p>
     </div>
   );
@@ -176,7 +176,7 @@ export default function FarmerLogin() {
         <div style={{ position: 'relative', zIndex: 1 }}>
           {/* Gov badge */}
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, background: 'rgba(255,255,255,0.15)', borderRadius: 30, padding: '6px 14px', marginBottom: 32 }}>
-            <span style={{ fontSize: 18 }}>🏛️</span>
+            <span style={{ fontSize: 14, fontWeight: 800, color: 'rgba(255,255,255,0.95)' }}>GOO</span>
             <span style={{ fontSize: 13, fontWeight: 600, color: 'rgba(255,255,255,0.90)' }}>Government of Odisha</span>
           </div>
 

@@ -64,7 +64,7 @@ export default function OnCallAIDashboard() {
   const verifyOtp = () => {
     if (otpInput === '1234' && otpReqId) {
       completeReq(otpReqId); setOtpInput(''); setOtpReqId('');
-    } else { toast('Invalid OTP. Use 1234 for demo', 'error'); }
+    } else { toast('Invalid OTP. Please enter the valid closure OTP.', 'error'); }
   };
 
   const saveFeedback = () => {
@@ -156,7 +156,7 @@ export default function OnCallAIDashboard() {
         return (
           <ContentCard>
             <SectionHeader title="OTP Service Closure" icon={Lock} color="var(--success)" />
-            <p style={{ fontSize: 12, color: 'var(--text-3)', marginBottom: 16 }}>Enter the OTP provided by the farmer to close the service. <strong style={{ color: 'var(--blue)' }}>Demo OTP: 1234</strong></p>
+            <p style={{ fontSize: 12, color: 'var(--text-3)', marginBottom: 16 }}>Enter the OTP provided by the farmer to close the service request.</p>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 16 }}>
               <FormField label="Select Service Request">
                 <Select value={otpReqId} onChange={e => setOtpReqId(e.target.value)}>

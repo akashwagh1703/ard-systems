@@ -61,7 +61,7 @@ export default function DailyAnalytics() {
         textAlign: 'center',
         color: 'var(--text-3)'
       }}>
-        Loading analytics...
+        Official analytics data is being loaded...
       </div>
     );
   }
@@ -151,7 +151,7 @@ export default function DailyAnalytics() {
               height: 14,
               animation: isRefreshing ? 'spin 1s linear infinite' : 'none'
             }} />
-            {isRefreshing ? 'Refreshing...' : 'Refresh'}
+            {isRefreshing ? 'Refreshing data...' : 'Refresh'}
           </button>
 
           <button
@@ -307,7 +307,7 @@ export default function DailyAnalytics() {
         <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
           <div className="dot dot-success dot-pulse" style={{ width: 6, height: 6 }} />
           <span style={{ fontSize: 11, color: 'var(--text-3)' }}>
-            Live data • Auto-refresh every 5 minutes
+            Live operational data • Auto-refresh every 5 minutes
           </span>
         </div>
         <span style={{ fontSize: 11, color: 'var(--text-4)' }}>

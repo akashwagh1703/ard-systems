@@ -75,7 +75,7 @@ export function AIAlert({ title, message, color = 'var(--orange)', actions = [] 
     if (type === 'optimize') {
       return {
         heading: `Optimize Schedule · ${moduleProfile.name}`,
-        subtitle: 'AI-generated sequence for the next 7 operational days',
+        subtitle: 'AI-simulated sequence for the next 7 operational days',
         bullets: [
           `Priority focus: ${moduleProfile.focus}`,
           `Expected impact: ${moduleProfile.impact}`,
@@ -90,7 +90,7 @@ export function AIAlert({ title, message, color = 'var(--orange)', actions = [] 
     }
     return {
       heading: `AI Report · ${moduleProfile.name}`,
-      subtitle: 'Decision-ready insight summary for administrative review',
+      subtitle: 'AI-simulated insight summary for administrative review',
       bullets: [
         `${moduleProfile.metric}: ${moduleProfile.value}`,
         `Net projected uplift: ${moduleProfile.impact}`,
@@ -118,13 +118,9 @@ export function AIAlert({ title, message, color = 'var(--orange)', actions = [] 
         overflow: 'hidden',
       }}>
         <div style={{ position: 'absolute', top: 10, right: 14, display: 'flex', alignItems: 'center', gap: 6, pointerEvents: 'none' }}>
-          <Sparkles className="icon-xs" style={{ color, opacity: 0.85 }} />
-          <span className="dot dot-pulse" style={{ width: 5, height: 5, background: color }} />
-          <span className="dot dot-pulse" style={{ width: 4, height: 4, background: color, opacity: 0.7, animationDelay: '0.4s' }} />
+          <Sparkles className="icon-xs" style={{ color, opacity: 0.5 }} />
         </div>
-        <span className="ai-spark" style={{ top: 18, left: 54, width: 4, height: 4, background: color, animationDelay: '0.2s' }} />
-        <span className="ai-spark" style={{ top: 34, right: 72, width: 3, height: 3, background: color, animationDelay: '0.8s' }} />
-        <span className="ai-spark" style={{ bottom: 14, left: 120, width: 5, height: 5, background: `${color}AA`, animationDelay: '1.2s' }} />
+        <span className="ai-spark" style={{ top: 18, left: 54, width: 3, height: 3, background: color, animationDelay: '0.2s', opacity: 0.4 }} />
         <div style={{ position: 'absolute', bottom: -18, right: -18, width: 64, height: 64, borderRadius: '50%', background: `${color}20`, filter: 'blur(4px)', pointerEvents: 'none' }} />
         <div style={{
           width: 40, height: 40, borderRadius: 'var(--r-md)', flexShrink: 0,
@@ -214,9 +210,9 @@ export function AIAlert({ title, message, color = 'var(--orange)', actions = [] 
               <div style={{ marginTop: 10, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                 {applied ? (
                   <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 12, color: 'var(--success)', fontWeight: 700 }}>
-                    <CheckCircle2 className="icon-xs" /> Action applied successfully for this module.
+                    <CheckCircle2 className="icon-xs" /> {actionType(activeAction) === 'optimize' ? 'Schedule optimized for this module.' : 'Report published for this module.'}
                   </span>
-                ) : <span style={{ fontSize: 12, color: 'var(--text-4)' }}>Review insights and apply action for admin workflow.</span>}
+                ) : <span style={{ fontSize: 12, color: 'var(--text-4)' }}>Review simulated insights and apply action for administrative workflow.</span>}
                 <div style={{ display: 'flex', gap: 8 }}>
                   <button onClick={() => setActiveAction(null)} style={{ padding: '7px 12px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--surface)', color: 'var(--text-2)', fontSize: 12, fontWeight: 700, cursor: 'pointer' }}>Close</button>
                   <button onClick={() => setApplied(true)} style={{ padding: '7px 12px', borderRadius: 8, border: 'none', background: '#4285F4', color: '#fff', fontSize: 12, fontWeight: 700, cursor: 'pointer' }}>

@@ -214,7 +214,7 @@ export default function LoginPage() {
           </form>
 
           <p style={{ textAlign: 'center', fontSize: 11, color: 'var(--text-4)', marginTop: 20 }}>
-            Demo system · Role-based access · 10 microservices · AI-enabled
+            Government operations portal · Role-based access · 10 microservices · AI-assisted insights
           </p>
 
           {/* Farmer Portal Link */}
@@ -223,7 +223,7 @@ export default function LoginPage() {
             <button onClick={() => navigate('/farmer/login')} style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '10px 24px', borderRadius: 'var(--r-md)', background: 'var(--blue-subtle)', border: '1.5px solid var(--blue-muted)', color: 'var(--blue-dark)', fontSize: 14, fontWeight: 600, cursor: 'pointer', transition: 'all 0.15s ease' }}
               onMouseEnter={e => { e.currentTarget.style.background = 'var(--blue-pale)'; }}
               onMouseLeave={e => { e.currentTarget.style.background = 'var(--blue-subtle)'; }}>
-              🌾 Go to Farmer Portal
+              Go to Farmer Portal
             </button>
           </div>
         </div>

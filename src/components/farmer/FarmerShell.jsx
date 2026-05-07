@@ -124,6 +124,10 @@ export default function FarmerShell({ children }) {
 
         {/* Main content */}
         <main style={{ marginLeft: 240, flex: 1, padding: '2rem 2.5rem', minHeight: '100vh', boxSizing: 'border-box', maxWidth: 'calc(100vw - 240px)' }}>
+          <div style={{ marginBottom: 12, border: '1px solid var(--border)', background: 'var(--surface)', borderRadius: 12, padding: '7px 12px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <span style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-2)', letterSpacing: '0.04em' }}>GOVERNMENT OF ODISHA · ARD FARMER PORTAL · PILOT</span>
+            <span style={{ fontSize: 10, fontWeight: 700, color: 'var(--blue-dark)', background: 'var(--blue-subtle)', border: '1px solid var(--blue-muted)', borderRadius: 999, padding: '2px 8px' }}>FARMER VIEW</span>
+          </div>
           {children}
         </main>
       </div>
@@ -149,6 +153,10 @@ export default function FarmerShell({ children }) {
       </header>
 
       <main style={{ flex: 1, padding: '1.25rem 1rem 5.5rem', maxWidth: 900, width: '100%', margin: '0 auto', boxSizing: 'border-box' }}>
+        <div style={{ marginBottom: 12, border: '1px solid var(--border)', background: 'var(--surface)', borderRadius: 12, padding: '7px 10px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <span style={{ fontSize: 10, fontWeight: 700, color: 'var(--text-2)', letterSpacing: '0.03em' }}>GOVERNMENT OF ODISHA · ARD FARMER PORTAL · PILOT</span>
+          <span style={{ fontSize: 9, fontWeight: 700, color: 'var(--blue-dark)' }}>FARMER</span>
+        </div>
         {children}
       </main>
 
