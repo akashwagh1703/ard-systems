@@ -186,7 +186,7 @@ export default function FarmReportingDashboard() {
 
   return (
     <>
-      <ServiceShell title="Farm Reporting" subtitle="Animal records, production reports & AI breeding insights" icon={FileText} color={COLOR} badge="AI Powered" modules={MODULES} activeModule={active} onModuleChange={setActive}>
+      <ServiceShell title="Farm Reporting" subtitle="Animal records, production reports & AI-simulated breeding insights" icon={FileText} color={COLOR} badge="AI Powered" modules={MODULES} activeModule={active} onModuleChange={setActive}>
         {renderContent()}
       </ServiceShell>
       <Toast toasts={toasts} remove={remove} />

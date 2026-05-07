@@ -265,7 +265,7 @@ export default function OnCallAIDashboard() {
 
   return (
     <>
-      <ServiceShell title="On-Call AI Service" subtitle="Farmer booking, technician assignment & OTP closure" icon={Phone} color={COLOR} badge="AI Powered" modules={MODULES} activeModule={active} onModuleChange={setActive}>
+      <ServiceShell title="On-Call Veterinary Service" subtitle="Farmer booking, technician assignment & OTP closure" icon={Phone} color={COLOR} badge="AI Powered" modules={MODULES} activeModule={active} onModuleChange={setActive}>
         {renderContent()}
       </ServiceShell>
       <AIAssistant isDark={false} userRole="field_user" serviceData={ONCALL_AI_DATA.dashboard} />

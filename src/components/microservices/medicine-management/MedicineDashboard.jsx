@@ -136,7 +136,7 @@ export default function MedicineDashboard() {
         return (
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
             <ContentCard><SectionHeader title="Usage Trends" icon={TrendingUp} color="var(--blue)" /><p style={{ fontSize: '2rem', fontWeight: 800, color: 'var(--blue)', letterSpacing: '-0.03em' }}>+18%</p><p style={{ fontSize: 11, color: 'var(--text-3)', marginTop: 4 }}>Antibiotic usage increase</p></ContentCard>
-            <ContentCard><SectionHeader title="Cost Optimization" icon={Target} color={COLOR} /><p style={{ fontSize: '2rem', fontWeight: 800, color: COLOR, letterSpacing: '-0.03em' }}>₹25K</p><p style={{ fontSize: 11, color: 'var(--text-3)', marginTop: 4 }}>Saved through AI optimization</p></ContentCard>
+            <ContentCard><SectionHeader title="Cost Optimization" icon={Target} color={COLOR} /><p style={{ fontSize: '2rem', fontWeight: 800, color: COLOR, letterSpacing: '-0.03em' }}>₹25K</p><p style={{ fontSize: 11, color: 'var(--text-3)', marginTop: 4 }}>Saved through AI-simulated optimization</p></ContentCard>
           </div>
         );
 

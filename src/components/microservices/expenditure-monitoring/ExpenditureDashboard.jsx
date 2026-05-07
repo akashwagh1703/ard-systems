@@ -190,7 +190,7 @@ export default function ExpenditureDashboard() {
 
   return (
     <>
-      <ServiceShell title="Expenditure Monitoring" subtitle="Fund tracking, budget utilization & AI anomaly detection" icon={DollarSign} color={COLOR} badge="AI Powered" modules={MODULES} activeModule={active} onModuleChange={setActive}>
+      <ServiceShell title="Expenditure Monitoring" subtitle="Fund tracking, budget utilization & AI-simulated anomaly signals" icon={DollarSign} color={COLOR} badge="AI Powered" modules={MODULES} activeModule={active} onModuleChange={setActive}>
         {renderContent()}
       </ServiceShell>
       <Toast toasts={toasts} remove={remove} />

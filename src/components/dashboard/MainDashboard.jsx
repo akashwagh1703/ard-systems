@@ -13,7 +13,7 @@ import {
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
 
 const SERVICES = [
-  { id: 'ai-management',         title: 'AI Management',       desc: 'Semen procurement & utilization',    icon: Syringe,       path: '/services/ai-management',         roles: ['super_admin','district_officer','block_officer','field_user'], stat: { v: '15,000', l: 'Semen Doses',    t: '+12%', up: true  }, color: '#2563EB' },
+  { id: 'ai-management',         title: 'Artificial Insemination', desc: 'Semen procurement & utilization', icon: Syringe,       path: '/services/ai-management',         roles: ['super_admin','district_officer','block_officer','field_user'], stat: { v: '15,000', l: 'Semen Doses',    t: '+12%', up: true  }, color: '#2563EB' },
   { id: 'semen-services',        title: 'Semen Services',      desc: 'Quality control & bull management',  icon: Syringe,       path: '/services/semen-services',        roles: ['super_admin','district_officer','block_officer','field_user'], stat: { v: '94%',    l: 'Quality Rate',   t: '+2%',  up: true  }, color: '#0EA5E9', modules: 6 },
   { id: 'vaccine-management',    title: 'Vaccine Management',  desc: 'Inventory, distribution & coverage', icon: Shield,        path: '/services/vaccine-management',    roles: ['super_admin','district_officer','block_officer','field_user'], stat: { v: '85%',    l: 'Coverage Rate',  t: '+5%',  up: true  }, color: '#059669' },
   { id: 'medicine-management',   title: 'Medicine Mgmt',       desc: 'Procurement & emergency stock',      icon: Pill,          path: '/services/medicine-management',   roles: ['super_admin','district_officer','block_officer','field_user'], stat: { v: '200',    l: 'Medicine Types', t: '+8%',  up: true  }, color: '#7C3AED' },
@@ -22,7 +22,7 @@ const SERVICES = [
   { id: 'training-management',   title: 'Training',            desc: 'Programs, approvals & capacity',     icon: GraduationCap, path: '/services/training-management',   roles: ['super_admin','district_officer'],                              stat: { v: '8',      l: 'Upcoming',       t: '+25%', up: true  }, color: '#D97706' },
   { id: 'expenditure-monitoring',title: 'Expenditure',         desc: 'Budget tracking & fund utilization', icon: DollarSign,    path: '/services/expenditure-monitoring',roles: ['super_admin','district_officer'],                              stat: { v: '67%',    l: 'Budget Used',    t: '+3%',  up: true  }, color: '#059669' },
   { id: 'farm-reporting',        title: 'Farm Reporting',      desc: 'Livestock records & production',     icon: FileText,      path: '/services/farm-reporting',        roles: ['super_admin','district_officer','farmer'],                     stat: { v: '8,500',  l: 'Farms',          t: '+18%', up: true  }, color: '#EA580C' },
-  { id: 'oncall-ai',             title: 'On-Call AI',          desc: 'Farmer booking & technician assign', icon: Phone,         path: '/services/oncall-ai',             roles: ['farmer','field_user','super_admin'],                           stat: { v: '78%',    l: 'Success Rate',   t: '+7%',  up: true  }, color: '#0891B2' },
+  { id: 'oncall-ai',             title: 'On-Call Veterinary Service', desc: 'Farmer booking & technician assign', icon: Phone,     path: '/services/oncall-ai',             roles: ['farmer','field_user','super_admin'],                           stat: { v: '78%',    l: 'Success Rate',   t: '+7%',  up: true  }, color: '#0891B2' },
   { id: 'grievance-system',      title: 'Grievances',          desc: 'Issue reporting & resolution',       icon: MessageSquare, path: '/services/grievance-system',      roles: [],                                                             stat: { v: '23',     l: 'Pending',        t: '-12%', up: false }, color: '#BE185D' },
 ];
 
@@ -89,6 +89,7 @@ export default function MainDashboard() {
   const [hoveredSvc, setHoveredSvc] = useState(null);
   const [activeLivestock, setActiveLivestock] = useState(null);
   const [expandedInsight, setExpandedInsight] = useState(null);
+  const lastUpdated = time.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
 
 
 
@@ -119,9 +120,13 @@ export default function MainDashboard() {
 
   return (
     <div style={{ maxWidth: 1200, margin: '0 auto' }}>
-      <div style={{ marginBottom: 12, border: '1px solid var(--border)', background: 'var(--surface)', borderRadius: 12, padding: '7px 12px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <span style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-2)', letterSpacing: '0.04em' }}>GOVERNMENT OF ODISHA · ARD COMMAND CONSOLE · PILOT</span>
+      <div style={{ marginBottom: 10, border: '1px solid var(--border)', background: 'var(--surface)', borderRadius: 12, padding: '7px 12px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <span style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-2)', letterSpacing: '0.04em' }}>GOVERNMENT OF ODISHA · ARD COMMAND CONSOLE</span>
         <span style={{ fontSize: 10, fontWeight: 700, color: 'var(--blue-dark)', background: 'var(--blue-subtle)', border: '1px solid var(--blue-muted)', borderRadius: 999, padding: '2px 8px' }}>ADMIN VIEW</span>
+      </div>
+      <div style={{ marginBottom: 14, border: '1px solid var(--border)', background: 'var(--surface)', borderRadius: 12, padding: '6px 10px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <span style={{ fontSize: 11, color: 'var(--text-3)' }}>Source: District Operations Feed (AI-simulated)</span>
+        <span style={{ fontSize: 11, color: 'var(--text-4)' }}>Last updated: {lastUpdated}</span>
       </div>
 
       {/* ── Hero Row ── */}
@@ -131,14 +136,10 @@ export default function MainDashboard() {
         <div style={{
           gridColumn: 'span 2',
           background: 'linear-gradient(135deg, #0F766E 0%, #0D9488 40%, #14B8A6 70%, #5EEAD4 100%)',
-          borderRadius: 20, padding: '0.85rem 1rem',
+          borderRadius: 18, padding: '0.9rem 1rem',
           position: 'relative', overflow: 'hidden',
-          boxShadow: '0 8px 32px rgba(29,78,216,0.30)',
+          boxShadow: '0 4px 20px rgba(29,78,216,0.22)',
         }}>
-          {/* Decorative blobs */}
-          <div style={{ position: 'absolute', top: -60, right: -60, width: 220, height: 220, borderRadius: '50%', background: 'rgba(255,255,255,0.06)', pointerEvents: 'none' }} />
-          <div style={{ position: 'absolute', bottom: -40, right: 100, width: 160, height: 160, borderRadius: '50%', background: 'rgba(249,115,22,0.14)', pointerEvents: 'none' }} />
-          <div style={{ position: 'absolute', top: '30%', left: '45%', width: 80, height: 80, borderRadius: '50%', background: 'rgba(255,255,255,0.04)', pointerEvents: 'none' }} />
 
           <div style={{ position: 'relative', zIndex: 1 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10 }}>
@@ -179,7 +180,7 @@ export default function MainDashboard() {
         <div style={{
           background: 'var(--surface)',
           border: '1px solid var(--border)',
-          borderRadius: 20, padding: '0.95rem 1rem',
+          borderRadius: 18, padding: '0.95rem 1rem',
           display: 'flex', flexDirection: 'column', justifyContent: 'center',
           boxShadow: 'var(--shadow-xs)',
         }}>
@@ -206,7 +207,7 @@ export default function MainDashboard() {
       </div>
 
       {/* ── Livestock Doughnut ── */}
-      <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 20, padding: '1.25rem 1.5rem', marginBottom: 16, boxShadow: 'var(--shadow-xs)', animation: 'fadeUp 0.4s ease 0.06s both' }}>
+      <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 18, padding: '1.1rem 1.25rem', marginBottom: 16, boxShadow: 'var(--shadow-xs)', animation: 'fadeUp 0.4s ease 0.06s both' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
           <div>
             <p style={{ fontSize: 14, fontWeight: 700, color: 'var(--text-1)' }}>Livestock Distribution</p>
@@ -306,8 +307,7 @@ export default function MainDashboard() {
       </div>
 
       {/* ── AI Insight Cards ── */}
-      <div style={{ background: '#FFFFFF', border: '1px solid var(--border)', borderRadius: 20, padding: '1.25rem 1.5rem', marginBottom: 16, boxShadow: 'var(--shadow-xs)', animation: 'fadeUp 0.4s ease 0.2s both', position: 'relative', overflow: 'hidden' }}>
-        <span className="ai-spark" style={{ top: 14, right: 18, width: 3, height: 3, background: '#8B5CF6', animationDelay: '0.2s', opacity: 0.45 }} />
+      <div style={{ background: '#FFFFFF', border: '1px solid var(--border)', borderRadius: 18, padding: '1.1rem 1.25rem', marginBottom: 16, boxShadow: 'var(--shadow-xs)', animation: 'fadeUp 0.4s ease 0.2s both', position: 'relative', overflow: 'hidden' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
             <div style={{ width: 26, height: 26, borderRadius: 8, background: 'linear-gradient(145deg,#8B5CF6,#06B6D4)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 0 0 2px rgba(255,255,255,0.06)' }}>
@@ -315,7 +315,7 @@ export default function MainDashboard() {
             </div>
             <div>
               <p style={{ fontSize: 14, fontWeight: 700, color: 'var(--text-1)' }}>AI-Simulated Insight Cards</p>
-              <p style={{ fontSize: 11, color: 'var(--text-4)' }}>Simulation feed for pilot review · confidence ranked</p>
+              <p style={{ fontSize: 11, color: 'var(--text-4)' }}>Simulation feed for administrative review · confidence ranked</p>
             </div>
           </div>
           <button
@@ -335,9 +335,8 @@ export default function MainDashboard() {
                 key={insight.id}
                 type="button"
                 onClick={() => setExpandedInsight(open ? null : insight.id)}
-                style={{ border: `1px solid ${sx.border}`, background: sx.bg, borderRadius: 12, padding: 12, textAlign: 'left', cursor: 'pointer', boxShadow: `0 6px 16px ${sx.glow}`, position: 'relative', overflow: 'hidden' }}
+                style={{ border: `1px solid ${sx.border}`, background: sx.bg, borderRadius: 12, padding: 12, textAlign: 'left', cursor: 'pointer', boxShadow: `0 3px 10px ${sx.glow}`, position: 'relative', overflow: 'hidden' }}
               >
-                <span className="ai-spark" style={{ top: 10, right: 12, width: 3, height: 3, background: sx.badge, animationDelay: '0.4s' }} />
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8 }}>
                   <span style={{ fontSize: 11, fontWeight: 700, color: sx.badge, background: '#fff', borderRadius: 999, padding: '2px 8px' }}>{sx.label}</span>
                   <span style={{ fontSize: 11, color: 'var(--text-3)', fontWeight: 700 }}>AI {insight.confidence}%</span>
@@ -370,6 +369,10 @@ export default function MainDashboard() {
               No admin insights available for the selected livestock category.
             </div>
           )}
+        </div>
+        <div style={{ marginTop: 10, borderTop: '1px dashed var(--border)', paddingTop: 8, display: 'flex', justifyContent: 'space-between' }}>
+          <span style={{ fontSize: 11, color: 'var(--text-4)' }}>Source: Pattern Intelligence Layer (AI-simulated)</span>
+          <span style={{ fontSize: 11, color: 'var(--text-4)' }}>Updated: {lastUpdated}</span>
         </div>
       </div>
 

@@ -24,6 +24,7 @@ export default function FarmerDashboard() {
   const [expandedInsight, setExpandedInsight] = useState(null);
   const [activeCategory, setActiveCategory] = useState(null);
   const today = new Date().toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long' });
+  const nowLabel = new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
 
   const totalLivestock = useMemo(() => LIVESTOCK_BREAKDOWN.reduce((sum, item) => sum + item.value, 0), []);
   const selectedSlice = useMemo(
@@ -70,7 +71,7 @@ export default function FarmerDashboard() {
     <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
 
       {/* Welcome Banner */}
-      <div style={{ background: 'linear-gradient(135deg, #2F6FE4 0%, #4285F4 60%, #5B9CFF 100%)', borderRadius: 'var(--r-2xl)', padding: '1.5rem', position: 'relative', overflow: 'hidden' }}>
+      <div style={{ background: 'linear-gradient(135deg, #2F6FE4 0%, #4285F4 60%, #5B9CFF 100%)', borderRadius: 'var(--r-xl)', padding: '1.35rem', position: 'relative', overflow: 'hidden', boxShadow: 'var(--shadow-sm)' }}>
         <div style={{ position: 'absolute', top: -30, right: -30, width: 120, height: 120, borderRadius: '50%', background: 'rgba(255,255,255,0.07)' }} />
         <div style={{ position: 'absolute', bottom: -20, right: 60, width: 80, height: 80, borderRadius: '50%', background: 'rgba(249,115,22,0.12)' }} />
         <div style={{ position: 'relative', zIndex: 1 }}>
@@ -84,6 +85,7 @@ export default function FarmerDashboard() {
             Welcome, {farmer?.name}
           </h2>
           <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.70)' }}>{farmer?.village}, {farmer?.district} · {farmer?.animals} animals registered</p>
+          <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.78)', marginTop: 6 }}>Source: Village Livestock Records (AI-simulated) · Updated {nowLabel}</p>
         </div>
       </div>
 
@@ -256,6 +258,10 @@ export default function FarmerDashboard() {
               </button>
             );
           })}
+        </div>
+        <div style={{ marginTop: 10, borderTop: '1px dashed var(--border)', paddingTop: 8, display: 'flex', justifyContent: 'space-between' }}>
+          <span style={{ fontSize: 11, color: 'var(--text-4)' }}>Source: Farm Advisory Feed (AI-simulated)</span>
+          <span style={{ fontSize: 11, color: 'var(--text-4)' }}>Updated: {nowLabel}</span>
         </div>
       </div>
 

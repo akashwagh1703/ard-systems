@@ -95,7 +95,7 @@ const DiseaseSurveillanceDashboard = () => {
                   <div className={`h-12 w-12 bg-gradient-to-r ${stat.color} rounded-xl flex items-center justify-center`}>
                     <IconComponent className="h-6 w-6 text-white" />
                   </div>
-                  <Brain className="h-5 w-5 text-purple-500" title="AI Powered" />
+                  <Brain className="h-5 w-5 text-purple-500" title="AI-Simulated Decision Support" />
                 </div>
                 <h3 className={`text-sm font-medium mb-1 ${
                   isDark ? 'text-gray-400' : 'text-gray-600'
@@ -279,7 +279,7 @@ const DiseaseSurveillanceDashboard = () => {
               }`}>Disease Surveillance</h1>
               <p className={`text-lg ${
                 isDark ? 'text-gray-400' : 'text-gray-600'
-              }`}>AI-powered disease monitoring and prevention</p>
+              }`}>AI-simulated disease monitoring and prevention</p>
             </div>
           </div>
         </div>

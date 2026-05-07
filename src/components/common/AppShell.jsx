@@ -159,7 +159,7 @@ export default function AppShell({ children }) {
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
           <Zap className="icon-xs" style={{ color: 'var(--orange)' }} />
-          <span style={{ fontSize: 10, color: 'var(--text-4)', fontWeight: 500 }}>ARD POC · Government of Odisha · AI-Enabled Platform</span>
+          <span style={{ fontSize: 10, color: 'var(--text-4)', fontWeight: 500 }}>ARD Digital Operations Platform · Government of Odisha · AI-Simulated Decision Support</span>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
           <div style={{ width: 6, height: 6, borderRadius: '50%', background: 'var(--success)', animation: 'dotPulse 2s ease-in-out infinite' }} />

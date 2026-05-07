@@ -142,7 +142,7 @@ export default function MVUDashboard() {
         return (
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 12 }}>
             <StatCard label="Distance Covered" value="245 km" icon={Navigation2} color="var(--blue)" sub="AI optimized routes" />
-            <StatCard label="Fuel Saved" value="27 L" icon={Droplets} color="var(--success)" sub="Through AI optimization" />
+            <StatCard label="Fuel Saved" value="27 L" icon={Droplets} color="var(--success)" sub="Through AI-simulated optimization" />
             <StatCard label="Time Saved" value="3.2 hrs" icon={Clock} color="#7C3AED" sub="Efficient scheduling" />
             <StatCard label="Satisfaction" value="4.8/5" icon={Target} color="var(--orange)" sub="Farmer feedback" />
           </div>
@@ -173,7 +173,7 @@ export default function MVUDashboard() {
 
   return (
     <>
-      <ServiceShell title="Mobile Veterinary Units" subtitle="Tour planning, vehicle tracking & AI route optimization" icon={Truck} color={COLOR} badge="AI Powered" modules={MODULES} activeModule={active} onModuleChange={setActive}>
+      <ServiceShell title="Mobile Veterinary Units" subtitle="Tour planning, vehicle tracking & AI-simulated route optimization" icon={Truck} color={COLOR} badge="AI Powered" modules={MODULES} activeModule={active} onModuleChange={setActive}>
         {renderContent()}
       </ServiceShell>
       <Toast toasts={toasts} remove={remove} />

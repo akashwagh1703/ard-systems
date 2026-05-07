@@ -203,7 +203,7 @@ export default function DiseaseDashboard() {
 
   return (
     <>
-      <ServiceShell title="Disease Surveillance" subtitle="Monitoring, lab reports & AI outbreak detection" icon={Activity} color={COLOR} badge="AI Powered" modules={MODULES} activeModule={active} onModuleChange={setActive}>
+      <ServiceShell title="Disease Surveillance" subtitle="Monitoring, lab reports & AI-simulated outbreak signals" icon={Activity} color={COLOR} badge="AI Powered" modules={MODULES} activeModule={active} onModuleChange={setActive}>
         {renderContent()}
       </ServiceShell>
       <Toast toasts={toasts} remove={remove} />

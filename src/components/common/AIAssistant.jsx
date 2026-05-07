@@ -40,7 +40,7 @@ const AIAssistant = ({ isDark = false, serviceData = {}, userRole = 'super_admin
   const [messages, setMessages] = useState([
     {
       id: 1, role: 'assistant',
-      text: 'Hello! I\'m your ARD AI Assistant. I can help you with stock levels, disease alerts, budget analysis, MVU tracking, and more. What would you like to know?',
+      text: 'Welcome to ARD Decision Support Assistant. I can help with stock levels, disease alerts, budget analysis, MVU tracking, and related operational queries.',
       timestamp: new Date().toISOString(),
       suggestions: QUICK_PROMPTS.slice(0, 3),
     }
@@ -128,10 +128,10 @@ const AIAssistant = ({ isDark = false, serviceData = {}, userRole = 'super_admin
                   <Bot className="h-5 w-5 text-white" />
                 </div>
                 <div>
-                  <p className="text-white font-semibold text-sm">ARD AI Assistant</p>
+                    <p className="text-white font-semibold text-sm">ARD Decision Support Assistant</p>
                   <div className="flex items-center gap-1">
                     <div className="h-1.5 w-1.5 bg-green-400 rounded-full animate-pulse" />
-                    <p className="text-purple-200 text-xs">Online • Powered by AI Engine</p>
+                    <p className="text-purple-200 text-xs">Online • AI-Simulated Decision Support</p>
                   </div>
                 </div>
               </div>
@@ -279,7 +279,7 @@ const AIAssistant = ({ isDark = false, serviceData = {}, userRole = 'super_admin
           {tab === 'recommendations' && (
             <div className="flex-1 overflow-y-auto p-3 space-y-3 min-h-0">
               <p className={`text-xs font-medium uppercase tracking-wide ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
-                AI-Generated Insights & Actions
+                AI-Simulated Insights & Actions
               </p>
               {recommendations.map(rec => (
                 <div key={rec.id} className={`rounded-xl border p-4 ${isDark ? 'bg-white/5 border-white/10' : 'bg-gray-50 border-gray-200'}`}>

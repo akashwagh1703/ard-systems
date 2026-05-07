@@ -104,7 +104,7 @@ export default function GrievanceDashboard() {
           <ContentCard>
             <SectionHeader title="Pending Resolution" icon={CheckCircle} color="var(--success)" />
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-              {grievances.filter(g => g.status === 'open').length === 0 && <p style={{ fontSize: 12, color: 'var(--text-4)', textAlign: 'center', padding: '2rem' }}>All grievances resolved! 🎉</p>}
+              {grievances.filter(g => g.status === 'open').length === 0 && <p style={{ fontSize: 12, color: 'var(--text-4)', textAlign: 'center', padding: '2rem' }}>All grievances resolved.</p>}
               {grievances.filter(g => g.status === 'open').map(g => (
                 <div key={g.id} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 14px', borderRadius: 'var(--r-lg)', background: 'var(--warning-bg)', border: '1px solid var(--warning-border)' }}>
                   <div>
@@ -185,7 +185,7 @@ export default function GrievanceDashboard() {
 
   return (
     <>
-      <ServiceShell title="Grievance System" subtitle="Issue reporting, tracking & AI-powered resolution" icon={MessageSquare} color={COLOR} badge="AI Powered" modules={MODULES} activeModule={active} onModuleChange={setActive}>
+      <ServiceShell title="Grievance System" subtitle="Issue reporting, tracking & AI-simulated resolution support" icon={MessageSquare} color={COLOR} badge="AI Powered" modules={MODULES} activeModule={active} onModuleChange={setActive}>
         {renderContent()}
       </ServiceShell>
       <Toast toasts={toasts} remove={remove} />

@@ -182,7 +182,7 @@ export default function TrainingDashboard() {
 
   return (
     <>
-      <ServiceShell title="Training Management" subtitle="Applications, approvals, slot allocation & AI optimization" icon={GraduationCap} color={COLOR} badge="AI Powered" modules={MODULES} activeModule={active} onModuleChange={setActive}>
+      <ServiceShell title="Training Management" subtitle="Applications, approvals, slot allocation & AI-simulated decision support" icon={GraduationCap} color={COLOR} badge="AI Powered" modules={MODULES} activeModule={active} onModuleChange={setActive}>
         {renderContent()}
       </ServiceShell>
       <Toast toasts={toasts} remove={remove} />

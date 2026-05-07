@@ -247,7 +247,7 @@ export default function AIDashboard() {
 
   return (
     <>
-      <ServiceShell title="AI Management" subtitle="Semen procurement, allocation & utilization tracking" icon={Syringe} color={COLOR} badge="AI Powered" modules={MODULES} activeModule={active} onModuleChange={setActive}>
+      <ServiceShell title="Artificial Insemination Management" subtitle="Semen procurement, allocation & utilization tracking" icon={Syringe} color={COLOR} badge="AI Powered" modules={MODULES} activeModule={active} onModuleChange={setActive}>
         {renderContent()}
       </ServiceShell>
       <Toast toasts={toasts} remove={remove} />
