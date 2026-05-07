@@ -29,6 +29,7 @@ import TestDistrictCharts from './components/dashboard/TestDistrictCharts';
 import TestMonthlyTrends from './components/dashboard/TestMonthlyTrends';
 import TestFarmerCharts from './components/dashboard/TestFarmerCharts';
 import TestResourceAnalytics from './components/dashboard/TestResourceAnalytics';
+import AdminHierarchy from './components/dashboard/AdminHierarchy';
 
 // Farmer Portal
 import FarmerLogin from './components/farmer/FarmerLogin';
@@ -40,6 +41,7 @@ import HealthRecords from './components/farmer/HealthRecords';
 import ServicesModule from './components/farmer/ServicesModule';
 import ReportsModule from './components/farmer/ReportsModule';
 import AIAssistantModule from './components/farmer/AIAssistantModule';
+import FarmHierarchy from './components/farmer/FarmHierarchy';
 
 /* Wrap a page with ProtectedRoute + AppShell */
 const Protected = ({ children, roles = [] }) => (
@@ -83,6 +85,11 @@ function App() {
             <Route path="/test-monthly-trends"               element={<Protected><TestMonthlyTrends /></Protected>} />
             <Route path="/test-farmer-charts"                element={<Protected><TestFarmerCharts /></Protected>} />
             <Route path="/test-resource-analytics"           element={<Protected><TestResourceAnalytics /></Protected>} />
+            <Route path="/admin/farms" element={<Protected roles={['super_admin','district_officer','block_officer','field_user']}><AdminHierarchy /></Protected>} />
+            <Route path="/admin/farms/:farmId" element={<Protected roles={['super_admin','district_officer','block_officer','field_user']}><AdminHierarchy /></Protected>} />
+            <Route path="/admin/farms/:farmId/groups/:groupId" element={<Protected roles={['super_admin','district_officer','block_officer','field_user']}><AdminHierarchy /></Protected>} />
+            <Route path="/admin/farms/:farmId/groups/:groupId/animals/:animalId" element={<Protected roles={['super_admin','district_officer','block_officer','field_user']}><AdminHierarchy /></Protected>} />
+            <Route path="/admin/farms/:farmId/groups/:groupId/animals/:animalId/report" element={<Protected roles={['super_admin','district_officer','block_officer','field_user']}><AdminHierarchy /></Protected>} />
 
             {/* ── Farmer Portal ── */}
             <Route path="/farmer/login"     element={<FarmerLogin />} />
@@ -93,6 +100,11 @@ function App() {
             <Route path="/farmer/services"  element={<FarmerPage><ServicesModule /></FarmerPage>} />
             <Route path="/farmer/reports"   element={<FarmerPage><ReportsModule /></FarmerPage>} />
             <Route path="/farmer/ai"        element={<FarmerPage><AIAssistantModule /></FarmerPage>} />
+            <Route path="/farmer/farms"     element={<FarmerPage><FarmHierarchy /></FarmerPage>} />
+            <Route path="/farmer/farms/:farmId" element={<FarmerPage><FarmHierarchy /></FarmerPage>} />
+            <Route path="/farmer/farms/:farmId/groups/:groupId" element={<FarmerPage><FarmHierarchy /></FarmerPage>} />
+            <Route path="/farmer/farms/:farmId/groups/:groupId/animals/:animalId" element={<FarmerPage><FarmHierarchy /></FarmerPage>} />
+            <Route path="/farmer/farms/:farmId/groups/:groupId/animals/:animalId/report" element={<FarmerPage><FarmHierarchy /></FarmerPage>} />
           </Routes>
         </Router>
       </AuthProvider>

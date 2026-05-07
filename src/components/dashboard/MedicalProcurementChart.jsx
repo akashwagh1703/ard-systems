@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend, PieChart, Pie, Cell, BarChart, Bar } from 'recharts';
 import { getMonthlyProcurement, getProcurementStats, exportToCSV, formatCurrency } from '../../services/medicalProcurementData';
 import { Package, DollarSign, MapPin, TrendingUp, Download } from 'lucide-react';
 
@@ -81,6 +81,48 @@ export default function MedicalProcurementChart() {
       </div>
     );
   }
+
+  const latestMonth = data[data.length - 1] || { medicines: 0 };
+  const categoryMixData = [
+    { name: 'Antibiotics', value: Math.round(latestMonth.medicines * 0.32), color: '#7C3AED' },
+    { name: 'Vaccines', value: Math.round(latestMonth.medicines * 0.28), color: '#0D9488' },
+    { name: 'Supplements', value: Math.round(latestMonth.medicines * 0.22), color: '#F97316' },
+    { name: 'Others', value: Math.round(latestMonth.medicines * 0.18), color: '#64748B' },
+  ];
+  const categoryMixTotal = categoryMixData.reduce((sum, item) => sum + item.value, 0);
+
+  const budgetSplitData = [
+    { name: 'Utilized', value: 74, color: '#059669' },
+    { name: 'Remaining', value: 26, color: '#E5E7EB' },
+  ];
+
+  const stockAvailabilityData = [
+    { name: 'Antibiotics', availability: 91 },
+    { name: 'Vaccines', availability: 87 },
+    { name: 'Supplements', availability: 84 },
+    { name: 'Emergency Drugs', availability: 78 },
+    { name: 'Consumables', availability: 93 },
+  ];
+
+  const renderPieLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent, name }) => {
+    const RADIAN = Math.PI / 180;
+    const radius = innerRadius + (outerRadius - innerRadius) * 1.2;
+    const x = cx + radius * Math.cos(-midAngle * RADIAN);
+    const y = cy + radius * Math.sin(-midAngle * RADIAN);
+    const percentage = `${(percent * 100).toFixed(0)}%`;
+    return (
+      <text
+        x={x}
+        y={y}
+        fill="#334155"
+        textAnchor={x > cx ? 'start' : 'end'}
+        dominantBaseline="central"
+        style={{ fontSize: 11, fontWeight: 600 }}
+      >
+        {`${name} ${percentage}`}
+      </text>
+    );
+  };
 
   return (
     <div style={{
@@ -274,6 +316,83 @@ export default function MedicalProcurementChart() {
           <p style={{ fontSize: 10, color: '#065F46' }}>
             {formatCurrency(stats.avgCost)}
           </p>
+        </div>
+      </div>
+
+      {/* Line Chart */}
+      <div style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(3, 1fr)',
+        gap: 12,
+        marginBottom: '1rem'
+      }}>
+        <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 16, padding: '1rem' }}>
+          <h3 style={{ fontSize: 13, fontWeight: 700, color: 'var(--text-1)', marginBottom: 8 }}>Procurement Mix</h3>
+          <div style={{ height: 240 }}>
+            <ResponsiveContainer width="100%" height="100%">
+              <PieChart>
+                <Pie
+                  data={categoryMixData}
+                  dataKey="value"
+                  nameKey="name"
+                  outerRadius={72}
+                  animationDuration={800}
+                  paddingAngle={2}
+                  labelLine={{ stroke: '#94A3B8', strokeWidth: 1 }}
+                  label={renderPieLabel}
+                >
+                  {categoryMixData.map((entry) => <Cell key={entry.name} fill={entry.color} />)}
+                </Pie>
+                <Tooltip formatter={(value) => `${value.toLocaleString()} units`} />
+              </PieChart>
+            </ResponsiveContainer>
+          </div>
+          <div style={{ marginTop: 4, display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: 6 }}>
+            {categoryMixData.map((item) => (
+              <div key={item.name} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', border: '1px solid var(--border)', borderRadius: 10, padding: '5px 8px' }}>
+                <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 11, color: 'var(--text-2)', fontWeight: 600 }}>
+                  <span style={{ width: 8, height: 8, borderRadius: 99, background: item.color }} />
+                  {item.name}
+                </span>
+                <span style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-3)' }}>{Math.round((item.value / categoryMixTotal) * 100)}%</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 16, padding: '1rem' }}>
+          <h3 style={{ fontSize: 13, fontWeight: 700, color: 'var(--text-1)', marginBottom: 8 }}>Budget Utilization</h3>
+          <div style={{ height: 220, position: 'relative' }}>
+            <ResponsiveContainer width="100%" height="100%">
+              <PieChart>
+                <Pie data={budgetSplitData} dataKey="value" nameKey="name" innerRadius={52} outerRadius={72} animationDuration={900}>
+                  {budgetSplitData.map((entry) => <Cell key={entry.name} fill={entry.color} />)}
+                </Pie>
+                <Tooltip formatter={(value) => `${value}%`} />
+              </PieChart>
+            </ResponsiveContainer>
+            <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', pointerEvents: 'none' }}>
+              <div style={{ textAlign: 'center' }}>
+                <p style={{ fontSize: 23, fontWeight: 800, color: '#059669', lineHeight: 1 }}>74%</p>
+                <p style={{ fontSize: 11, color: 'var(--text-4)' }}>Utilized</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 16, padding: '1rem' }}>
+          <h3 style={{ fontSize: 13, fontWeight: 700, color: 'var(--text-1)', marginBottom: 8 }}>Stock Availability</h3>
+          <div style={{ height: 220 }}>
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={stockAvailabilityData} layout="vertical" margin={{ top: 5, right: 12, left: 12, bottom: 5 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#EEF2F7" />
+                <XAxis type="number" domain={[0, 100]} tick={{ fontSize: 10 }} />
+                <YAxis type="category" dataKey="name" tick={{ fontSize: 10 }} width={90} />
+                <Tooltip formatter={(value) => `${value}%`} />
+                <Bar dataKey="availability" fill="#0891B2" radius={[0, 8, 8, 0]} />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
         </div>
       </div>
 

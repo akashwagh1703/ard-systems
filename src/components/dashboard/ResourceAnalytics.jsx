@@ -352,7 +352,7 @@ export default function ResourceAnalytics() {
               borderRadius: 6,
               border: '1px solid var(--border)'
             }}>
-              Line Chart
+              Trend View
             </span>
           </div>
           {collapsedSections.medical ? (

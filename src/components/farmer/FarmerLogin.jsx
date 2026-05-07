@@ -12,6 +12,32 @@ const FEATURES = [
   { icon: BarChart3,  label: 'Production Reports',   desc: 'Milk yield and productivity insights' },
 ];
 
+const FARMER_THEME_VARS = {
+  '--base': '#f1f3f4',
+  '--base-2': '#e9f3ff',
+  '--base-3': '#dbeafe',
+  '--surface': '#ffffff',
+  '--surface-2': '#f8fbff',
+  '--surface-3': '#eff6ff',
+  '--blue': '#4285F4',
+  '--blue-dark': '#2F6FE4',
+  '--blue-light': '#5B9CFF',
+  '--blue-pale': '#dbeafe',
+  '--blue-subtle': '#eff6ff',
+  '--blue-muted': '#bfdbfe',
+  '--border': '#cfe0fd',
+  '--border-2': '#93c5fd',
+  '--border-blue': '#93c5fd',
+  '--text-1': '#0f172a',
+  '--text-2': '#1e293b',
+  '--text-3': '#475569',
+  '--text-4': '#64748b',
+  '--shadow-xs': '0 1px 3px rgba(66,133,244,0.08), 0 1px 2px rgba(15,23,42,0.04)',
+  '--shadow-sm': '0 2px 8px rgba(66,133,244,0.10), 0 1px 3px rgba(15,23,42,0.05)',
+  '--shadow-md': '0 4px 20px rgba(66,133,244,0.14), 0 2px 8px rgba(15,23,42,0.06)',
+  '--shadow-lg': '0 8px 40px rgba(66,133,244,0.18), 0 4px 16px rgba(15,23,42,0.08)',
+};
+
 export default function FarmerLogin() {
   const { farmerLogin } = useFarmerAuth();
   const navigate = useNavigate();
@@ -93,7 +119,7 @@ export default function FarmerLogin() {
             </div>
             {errors.mobile && <p style={{ fontSize: 14, color: 'var(--danger)', marginTop: 5 }}>{errors.mobile}</p>}
           </div>
-          <button type="submit" disabled={loading} style={{ width: '100%', padding: 14, borderRadius: 'var(--r-md)', background: 'linear-gradient(135deg, #0F766E, #0D9488)', color: '#fff', border: 'none', fontSize: 16, fontWeight: 700, cursor: loading ? 'not-allowed' : 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, opacity: loading ? 0.7 : 1 }}>
+          <button type="submit" disabled={loading} style={{ width: '100%', padding: 14, borderRadius: 'var(--r-md)', background: 'linear-gradient(135deg, #2F6FE4, #4285F4)', color: '#fff', border: 'none', fontSize: 16, fontWeight: 700, cursor: loading ? 'not-allowed' : 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, opacity: loading ? 0.7 : 1 }}>
             {loading ? <RefreshCw size={16} style={{ animation: 'spin 1s linear infinite' }} /> : <><span>Send OTP</span><ArrowRight size={16} /></>}
           </button>
         </form>
@@ -116,10 +142,10 @@ export default function FarmerLogin() {
             </div>
             {errors.otp && <p style={{ fontSize: 14, color: 'var(--danger)', marginTop: 5 }}>{errors.otp}</p>}
           </div>
-          <button type="submit" disabled={loading} style={{ width: '100%', padding: 14, borderRadius: 'var(--r-md)', background: 'linear-gradient(135deg, #0F766E, #0D9488)', color: '#fff', border: 'none', fontSize: 16, fontWeight: 700, cursor: loading ? 'not-allowed' : 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, opacity: loading ? 0.7 : 1 }}>
+          <button type="submit" disabled={loading} style={{ width: '100%', padding: 14, borderRadius: 'var(--r-md)', background: 'linear-gradient(135deg, #2F6FE4, #4285F4)', color: '#fff', border: 'none', fontSize: 16, fontWeight: 700, cursor: loading ? 'not-allowed' : 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, opacity: loading ? 0.7 : 1 }}>
             {loading ? <RefreshCw size={16} style={{ animation: 'spin 1s linear infinite' }} /> : <><span>Verify &amp; Login</span><ArrowRight size={16} /></>}
           </button>
-          <button type="button" onClick={() => { setStep('mobile'); setOtp(''); setErrors({}); }} style={{ width: '100%', marginTop: 12, background: 'none', border: 'none', color: '#0D9488', fontSize: 15, cursor: 'pointer', textAlign: 'center', padding: 8 }}>
+          <button type="button" onClick={() => { setStep('mobile'); setOtp(''); setErrors({}); }} style={{ width: '100%', marginTop: 12, background: 'none', border: 'none', color: '#4285F4', fontSize: 15, cursor: 'pointer', textAlign: 'center', padding: 8 }}>
             ← Change mobile number
           </button>
         </form>
@@ -133,16 +159,16 @@ export default function FarmerLogin() {
 
   if (!isDesktop) {
     return (
-      <div style={{ minHeight: '100vh', background: 'var(--base)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20 }}>
+      <div style={{ ...FARMER_THEME_VARS, minHeight: '100vh', background: 'var(--base)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20 }}>
         {FormPanel}
       </div>
     );
   }
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex' }}>
+    <div style={{ ...FARMER_THEME_VARS, minHeight: '100vh', display: 'flex' }}>
       {/* Left branding panel */}
-      <div style={{ flex: '0 0 52%', background: 'linear-gradient(160deg, #0F766E 0%, #0D9488 50%, #14B8A6 100%)', display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '4rem 4rem', position: 'relative', overflow: 'hidden' }}>
+      <div style={{ flex: '0 0 52%', background: 'linear-gradient(160deg, #2F6FE4 0%, #4285F4 50%, #5B9CFF 100%)', display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '4rem 4rem', position: 'relative', overflow: 'hidden' }}>
         {/* Decorative circles */}
         <div style={{ position: 'absolute', top: -80, right: -80, width: 320, height: 320, borderRadius: '50%', background: 'rgba(255,255,255,0.06)' }} />
         <div style={{ position: 'absolute', bottom: -60, left: -60, width: 240, height: 240, borderRadius: '50%', background: 'rgba(255,255,255,0.05)' }} />

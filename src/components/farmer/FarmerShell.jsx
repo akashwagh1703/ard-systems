@@ -5,12 +5,39 @@ import { LayoutDashboard, Heart, Droplets, Stethoscope, Wrench, BarChart3, Bot, 
 
 const NAV = [
   { path: '/farmer/dashboard',  label: 'Home',     icon: LayoutDashboard },
+  { path: '/farmer/farms',      label: 'Farms',    icon: Leaf            },
   { path: '/farmer/animals',    label: 'Animals',  icon: Heart           },
   { path: '/farmer/milk',       label: 'Milk',     icon: Droplets        },
   { path: '/farmer/health',     label: 'Health',   icon: Stethoscope     },
   { path: '/farmer/services',   label: 'Services', icon: Wrench          },
   { path: '/farmer/reports',    label: 'Reports',  icon: BarChart3       },
 ];
+
+const FARMER_THEME_VARS = {
+  '--base': '#f1f3f4',
+  '--base-2': '#e9f3ff',
+  '--base-3': '#dbeafe',
+  '--surface': '#ffffff',
+  '--surface-2': '#f8fbff',
+  '--surface-3': '#eff6ff',
+  '--blue': '#4285F4',
+  '--blue-dark': '#2F6FE4',
+  '--blue-light': '#5B9CFF',
+  '--blue-pale': '#dbeafe',
+  '--blue-subtle': '#eff6ff',
+  '--blue-muted': '#bfdbfe',
+  '--border': '#cfe0fd',
+  '--border-2': '#93c5fd',
+  '--border-blue': '#93c5fd',
+  '--text-1': '#0f172a',
+  '--text-2': '#1e293b',
+  '--text-3': '#475569',
+  '--text-4': '#64748b',
+  '--shadow-xs': '0 1px 3px rgba(66,133,244,0.08), 0 1px 2px rgba(15,23,42,0.04)',
+  '--shadow-sm': '0 2px 8px rgba(66,133,244,0.10), 0 1px 3px rgba(15,23,42,0.05)',
+  '--shadow-md': '0 4px 20px rgba(66,133,244,0.14), 0 2px 8px rgba(15,23,42,0.06)',
+  '--shadow-lg': '0 8px 40px rgba(66,133,244,0.18), 0 4px 16px rgba(15,23,42,0.08)',
+};
 
 export default function FarmerShell({ children }) {
   const { farmer, farmerLogout } = useFarmerAuth();
@@ -26,11 +53,13 @@ export default function FarmerShell({ children }) {
 
   if (!farmer) return <Navigate to="/farmer/login" replace />;
 
+  const isPathActive = (path) => pathname === path || pathname.startsWith(`${path}/`);
+
   if (isDesktop) {
     return (
-      <div style={{ minHeight: '100vh', display: 'flex', background: 'var(--base)' }}>
+      <div style={{ ...FARMER_THEME_VARS, minHeight: '100vh', display: 'flex', background: 'var(--base)' }}>
         {/* Sidebar */}
-        <aside style={{ width: 240, background: 'linear-gradient(180deg, #0F766E 0%, #0D9488 100%)', display: 'flex', flexDirection: 'column', position: 'fixed', top: 0, left: 0, bottom: 0, zIndex: 40 }}>
+        <aside style={{ width: 240, background: 'linear-gradient(180deg, #2F6FE4 0%, #4285F4 100%)', display: 'flex', flexDirection: 'column', position: 'fixed', top: 0, left: 0, bottom: 0, zIndex: 40 }}>
           {/* Brand */}
           <div style={{ padding: '1.5rem 1.25rem 1rem', borderBottom: '1px solid rgba(255,255,255,0.12)' }}>
             <div style={{ marginBottom: 12 }}>
@@ -56,10 +85,10 @@ export default function FarmerShell({ children }) {
           <nav style={{ flex: 1, padding: '1rem 0.75rem', display: 'flex', flexDirection: 'column', gap: 4 }}>
             {NAV.map(item => {
               const Icon = item.icon;
-              const active = pathname === item.path;
+              const active = isPathActive(item.path);
               return (
                 <button key={item.path} onClick={() => navigate(item.path)}
-                  style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '10px 14px', borderRadius: 10, border: 'none', cursor: 'pointer', background: active ? 'rgba(255,255,255,0.18)' : 'transparent', color: active ? '#fff' : 'rgba(255,255,255,0.70)', fontSize: 14, fontWeight: active ? 700 : 500, textAlign: 'left', transition: 'all 0.15s' }}
+                  style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '10px 14px', borderRadius: 10, border: 'none', cursor: 'pointer', background: active ? 'rgba(255,255,255,0.18)' : 'transparent', color: '#fff', fontSize: 14, fontWeight: active ? 700 : 500, textAlign: 'left', transition: 'all 0.15s' }}
                   onMouseEnter={e => { if (!active) e.currentTarget.style.background = 'rgba(255,255,255,0.08)'; }}
                   onMouseLeave={e => { if (!active) e.currentTarget.style.background = 'transparent'; }}
                 >
@@ -103,8 +132,8 @@ export default function FarmerShell({ children }) {
 
   // Mobile layout
   return (
-    <div style={{ minHeight: '100vh', background: 'var(--base)', display: 'flex', flexDirection: 'column' }}>
-      <header style={{ height: 58, background: 'linear-gradient(135deg, #0F766E 0%, #0D9488 60%, #14B8A6 100%)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 1.25rem', position: 'sticky', top: 0, zIndex: 40, boxShadow: '0 2px 16px rgba(13,148,136,0.25)' }}>
+    <div style={{ ...FARMER_THEME_VARS, minHeight: '100vh', background: 'var(--base)', display: 'flex', flexDirection: 'column' }}>
+      <header style={{ height: 58, background: 'linear-gradient(135deg, #2F6FE4 0%, #4285F4 60%, #5B9CFF 100%)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 1.25rem', position: 'sticky', top: 0, zIndex: 40, boxShadow: '0 2px 16px rgba(66,133,244,0.28)' }}>
         <img 
           src="/ard-systems/logo.jpeg" 
           alt="ARD Logo" 
@@ -123,15 +152,15 @@ export default function FarmerShell({ children }) {
         {children}
       </main>
 
-      <nav style={{ position: 'fixed', bottom: 0, left: 0, right: 0, background: 'var(--surface)', borderTop: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'space-around', padding: '6px 0 8px', zIndex: 40, boxShadow: '0 -4px 20px rgba(13,148,136,0.10)' }}>
+      <nav style={{ position: 'fixed', bottom: 0, left: 0, right: 0, background: 'var(--surface)', borderTop: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'space-around', padding: '6px 0 8px', zIndex: 40, boxShadow: '0 -4px 20px rgba(66,133,244,0.10)' }}>
         {NAV.map(item => {
           const Icon = item.icon;
-          const active = pathname === item.path;
+          const active = isPathActive(item.path);
           return (
             <button key={item.path} onClick={() => navigate(item.path)} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 3, background: 'none', border: 'none', cursor: 'pointer', padding: '4px 10px', borderRadius: 10, minWidth: 52 }}>
-              <Icon size={20} color={active ? '#0D9488' : 'var(--text-4)'} strokeWidth={active ? 2.2 : 1.75} />
-              <span style={{ fontSize: 10, fontWeight: active ? 700 : 500, color: active ? '#0D9488' : 'var(--text-4)' }}>{item.label}</span>
-              {active && <div style={{ width: 4, height: 4, borderRadius: '50%', background: '#0D9488', marginTop: -2 }} />}
+              <Icon size={20} color={active ? '#4285F4' : 'var(--text-4)'} strokeWidth={active ? 2.2 : 1.75} />
+              <span style={{ fontSize: 10, fontWeight: active ? 700 : 500, color: active ? '#4285F4' : 'var(--text-4)' }}>{item.label}</span>
+              {active && <div style={{ width: 4, height: 4, borderRadius: '50%', background: '#4285F4', marginTop: -2 }} />}
             </button>
           );
         })}

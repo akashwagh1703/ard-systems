@@ -374,9 +374,18 @@
   0%   { background-position: -200% 0; }
   100% { background-position:  200% 0; }
 }
+@keyframes aiTwinkle {
+  0%, 100% { opacity: 0.25; transform: scale(0.8); }
+  50% { opacity: 1; transform: scale(1.15); }
+}
 
 .animate-fade-up  { animation: fadeUp 0.35s ease forwards; }
 .animate-slide-in { animation: slideInLeft 0.35s ease forwards; }
+.ai-spark {
+  position: absolute;
+  border-radius: 999px;
+  animation: aiTwinkle 1.8s ease-in-out infinite;
+}
 
 .skeleton {
   background: linear-gradient(90deg, var(--base-2) 25%, var(--base-3) 50%, var(--base-2) 75%);
