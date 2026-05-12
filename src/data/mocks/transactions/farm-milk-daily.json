@@ -1,0 +1,22 @@
+[
+  {
+    "id": "fmd_seed_1",
+    "farmId": "farm_1",
+    "animalId": "farm_an_1",
+    "animalDisplayName": "Lakshmi",
+    "date": "2026-05-11",
+    "litres": 11.5,
+    "farmerMobile": "9876543210",
+    "createdAt": "2026-05-11T18:00:00.000Z"
+  },
+  {
+    "id": "fmd_seed_2",
+    "farmId": "farm_1",
+    "animalId": "farm_an_1",
+    "animalDisplayName": "Lakshmi",
+    "date": "2026-05-12",
+    "litres": 12,
+    "farmerMobile": "9876543210",
+    "createdAt": "2026-05-12T07:30:00.000Z"
+  }
+]

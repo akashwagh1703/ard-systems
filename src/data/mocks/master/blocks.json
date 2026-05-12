@@ -1,0 +1,10 @@
+[
+  { "id": "blk_bbsr", "name": "Bhubaneswar", "districtId": "dst_khordha" },
+  { "id": "blk_jatni", "name": "Jatni", "districtId": "dst_khordha" },
+  { "id": "blk_balianta", "name": "Balianta", "districtId": "dst_khordha" },
+  { "id": "blk_ctc_urban", "name": "Cuttack Sadar", "districtId": "dst_cuttack" },
+  { "id": "blk_banki", "name": "Banki", "districtId": "dst_cuttack" },
+  { "id": "blk_chatrapur", "name": "Chatrapur", "districtId": "dst_ganjam" },
+  { "id": "blk_pipili", "name": "Pipili", "districtId": "dst_puri" },
+  { "id": "blk_nilgiri", "name": "Nilgiri", "districtId": "dst_balasore" }
+]

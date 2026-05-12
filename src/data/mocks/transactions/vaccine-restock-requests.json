@@ -1,0 +1,24 @@
+[
+  {
+    "id": "vac_rst_1",
+    "requesterName": "Dr. Priya Sharma",
+    "requesterRole": "district_officer",
+    "district": "Khordha",
+    "block": "All",
+    "vaccineId": "vac_fmd",
+    "batchNumber": "",
+    "quantity": 1500,
+    "urgency": "high",
+    "status": "submitted",
+    "history": [
+      {
+        "at": "2026-01-12T09:00:00.000Z",
+        "status": "submitted",
+        "by": "Dr. Priya Sharma",
+        "note": "Campaign buffer"
+      }
+    ],
+    "createdAt": "2026-01-12T09:00:00.000Z",
+    "updatedAt": "2026-01-12T09:00:00.000Z"
+  }
+]

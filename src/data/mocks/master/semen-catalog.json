@@ -1,0 +1,5 @@
+[
+  { "id": "sem_bull_045", "semenUniqueCode": "OD-FSB-045-SS-2024", "bullOrBuckId": "Bull-045", "semenType": "sex_sorted", "animalType": "cattle", "breedLabel": "Sahiwal" },
+  { "id": "sem_bull_078", "semenUniqueCode": "OD-FSB-078-N-2024", "bullOrBuckId": "Bull-078", "semenType": "normal", "animalType": "cattle", "breedLabel": "Gir" },
+  { "id": "sem_buck_012", "semenUniqueCode": "OD-FSB-G12-N-2024", "bullOrBuckId": "Buck-012", "semenType": "normal", "animalType": "goat", "breedLabel": "Black Bengal" }
+]

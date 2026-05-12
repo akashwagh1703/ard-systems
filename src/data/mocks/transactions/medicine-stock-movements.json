@@ -1,0 +1,41 @@
+[
+  {
+    "id": "med_mv_1",
+    "level": "central",
+    "direction": "out",
+    "skuId": "med_antibiotic_01",
+    "medicineName": "Oxytetracycline",
+    "qty": 400,
+    "method": "bulk",
+    "siteId": "loc_state_med_store",
+    "district": "State",
+    "recordedAt": "2026-02-03T06:30:00.000Z",
+    "recordedBy": "Directorate Store"
+  },
+  {
+    "id": "med_mv_2",
+    "level": "district",
+    "direction": "in",
+    "skuId": "med_antibiotic_01",
+    "medicineName": "Oxytetracycline",
+    "qty": 400,
+    "method": "scan",
+    "siteId": "loc_khordha_cdvo",
+    "district": "Khordha",
+    "recordedAt": "2026-02-03T11:10:00.000Z",
+    "recordedBy": "CDVO Khordha"
+  },
+  {
+    "id": "med_mv_3",
+    "level": "block",
+    "direction": "out",
+    "skuId": "med_deworm_01",
+    "medicineName": "Albendazole",
+    "qty": 150,
+    "method": "bulk",
+    "siteId": "loc_khordha_bhubaneswar_bvo",
+    "district": "Khordha",
+    "recordedAt": "2026-02-05T09:15:00.000Z",
+    "recordedBy": "BVO Bhubaneswar"
+  }
+]

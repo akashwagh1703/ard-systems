@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
-import { MAIN_DASHBOARD_DATA } from '../../data/mockData';
 import DailyAnalytics from './DailyAnalytics';
 import ResourceAnalytics from './ResourceAnalytics';
+import { HierarchyStrip } from '../common/SowDesignKit';
+import { exportExecutiveSummaryCsv, getExecutiveInsights, getExecutiveKpis, getMainDashboardTileStats } from '../../services/data/aggregateDashboard';
 import {
   Syringe, Shield, Pill, Activity, Truck,
   GraduationCap, DollarSign, FileText, Phone, MessageSquare,
@@ -13,25 +14,27 @@ import {
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
 
 const SERVICES = [
-  { id: 'ai-management',         title: 'Artificial Insemination', desc: 'Semen procurement & utilization', icon: Syringe,       path: '/services/ai-management',         roles: ['super_admin','district_officer','block_officer','field_user'], stat: { v: '15,000', l: 'Semen Doses',    t: '+12%', up: true  }, color: '#2563EB' },
-  { id: 'semen-services',        title: 'Semen Services',      desc: 'Quality control & bull management',  icon: Syringe,       path: '/services/semen-services',        roles: ['super_admin','district_officer','block_officer','field_user'], stat: { v: '94%',    l: 'Quality Rate',   t: '+2%',  up: true  }, color: '#0EA5E9', modules: 6 },
-  { id: 'vaccine-management',    title: 'Vaccine Management',  desc: 'Inventory, distribution & coverage', icon: Shield,        path: '/services/vaccine-management',    roles: ['super_admin','district_officer','block_officer','field_user'], stat: { v: '85%',    l: 'Coverage Rate',  t: '+5%',  up: true  }, color: '#059669' },
-  { id: 'medicine-management',   title: 'Medicine Mgmt',       desc: 'Procurement & emergency stock',      icon: Pill,          path: '/services/medicine-management',   roles: ['super_admin','district_officer','block_officer','field_user'], stat: { v: '200',    l: 'Medicine Types', t: '+8%',  up: true  }, color: '#7C3AED' },
-  { id: 'disease-surveillance',  title: 'Disease Surveillance',desc: 'Monitoring, lab reports & alerts',   icon: Activity,      path: '/services/disease-surveillance',  roles: ['super_admin','district_officer','field_user'],                 stat: { v: '45',     l: 'Active Cases',   t: '-15%', up: false }, color: '#DC2626' },
-  { id: 'mvu-management',        title: 'Mobile Vet. Units',   desc: 'Tracking, tour planning & coverage', icon: Truck,         path: '/services/mvu-management',        roles: ['super_admin','district_officer','block_officer','field_user'], stat: { v: '42/45',  l: 'Active Units',   t: '+2%',  up: true  }, color: '#0284C7' },
-  { id: 'training-management',   title: 'Training',            desc: 'Programs, approvals & capacity',     icon: GraduationCap, path: '/services/training-management',   roles: ['super_admin','district_officer'],                              stat: { v: '8',      l: 'Upcoming',       t: '+25%', up: true  }, color: '#D97706' },
-  { id: 'expenditure-monitoring',title: 'Expenditure',         desc: 'Budget tracking & fund utilization', icon: DollarSign,    path: '/services/expenditure-monitoring',roles: ['super_admin','district_officer'],                              stat: { v: '67%',    l: 'Budget Used',    t: '+3%',  up: true  }, color: '#059669' },
-  { id: 'farm-reporting',        title: 'Farm Reporting',      desc: 'Livestock records & production',     icon: FileText,      path: '/services/farm-reporting',        roles: ['super_admin','district_officer','farmer'],                     stat: { v: '8,500',  l: 'Farms',          t: '+18%', up: true  }, color: '#EA580C' },
-  { id: 'oncall-ai',             title: 'On-Call Veterinary Service', desc: 'Farmer booking & technician assign', icon: Phone,     path: '/services/oncall-ai',             roles: ['farmer','field_user','super_admin'],                           stat: { v: '78%',    l: 'Success Rate',   t: '+7%',  up: true  }, color: '#0891B2' },
-  { id: 'grievance-system',      title: 'Grievances',          desc: 'Issue reporting & resolution',       icon: MessageSquare, path: '/services/grievance-system',      roles: [],                                                             stat: { v: '23',     l: 'Pending',        t: '-12%', up: false }, color: '#BE185D' },
+  { id: 'ai-management',         cardTitle: 'Breeding insights',       cardDesc: 'Trends and alerts — tap for full charts.',           cardHint: 'Breeding analytics (demo). SOW §3.1. Optional computer-generated hints; detailed numbers inside the module.', icon: TrendingUp,  path: '/services/ai-management',         roles: ['super_admin','directorate','district_officer','sdvo','dd_dvh','block_officer','field_user'], color: '#4F46E5', modules: 4 },
+  { id: 'semen-services',        cardTitle: 'Semen & supplies',        cardDesc: 'Stock, quality, and movement — tap to manage.',      cardHint: 'Semen logistics (demo). SOW §3.1. Procurement, allocation, and records — all steps inside.', icon: Syringe,       path: '/services/semen-services',        roles: ['super_admin','directorate','district_officer','sdvo','dd_dvh','block_officer','field_user'], color: '#0EA5E9', modules: 6 },
+  { id: 'vaccine-management',    cardTitle: 'Vaccines',                cardDesc: 'Cold storage, batches, and village reach.',        cardHint: 'Vaccine programme (demo). SOW §3.2. Full lists and forms inside.', icon: Shield,        path: '/services/vaccine-management',    roles: ['super_admin','directorate','district_officer','sdvo','dd_dvh','block_officer','field_user'], color: '#059669' },
+  { id: 'medicine-management',   cardTitle: 'Medicines',               cardDesc: 'Orders, stock, and emergency flags.',              cardHint: 'Medicine supply (demo). SOW §3.3. Requisitions and movement inside.', icon: Pill,          path: '/services/medicine-management',   roles: ['super_admin','directorate','district_officer','sdvo','dd_dvh','block_officer','field_user'], color: '#7C3AED' },
+  { id: 'disease-surveillance',  cardTitle: 'Animal disease checks',   cardDesc: 'Registrations and lab results — tap to view.',      cardHint: 'Disease surveillance (demo). SOW §3.4. Registrations, lab tracking, charges — inside.', icon: Activity,      path: '/services/disease-surveillance',  roles: ['super_admin','directorate','district_officer','sdvo','dd_dvh','field_user'],                 color: '#DC2626' },
+  { id: 'mvu-management',        cardTitle: 'Mobile vet vans',         cardDesc: 'Routes, visits, and daily field forms.',           cardHint: 'MVU operations (demo). SOW §3.5. Tour plans and visit logs inside.', icon: Truck,         path: '/services/mvu-management',        roles: ['super_admin','directorate','district_officer','sdvo','dd_dvh','block_officer','field_user'], color: '#0284C7' },
+  { id: 'training-management',   cardTitle: 'Training & VOTI',         cardDesc: 'Courses, applications, and batch seats.',          cardHint: 'Training (demo). SOW §3.6. Programmes and approvals inside.', icon: GraduationCap, path: '/services/training-management',   roles: ['super_admin','directorate','district_officer','sdvo','dd_dvh','voti_admin'],                              color: '#D97706' },
+  { id: 'expenditure-monitoring',cardTitle: 'Budget & spending',      cardDesc: 'Plan vs actual — tap for fund lines.',             cardHint: 'Expenditure (demo). SOW §3.7. Allocations and requests inside.', icon: DollarSign,    path: '/services/expenditure-monitoring',roles: ['super_admin','directorate','district_officer','sdvo','dd_dvh'],                              color: '#059669' },
+  { id: 'farm-reporting',        cardTitle: 'Farm records',            cardDesc: 'Animals, breeding, and monthly output.',           cardHint: 'Farm reporting (demo). SOW §3.8. Records and production inside.', icon: FileText,      path: '/services/farm-reporting',        roles: ['super_admin','directorate','district_officer','sdvo','dd_dvh','farmer'],                     color: '#EA580C' },
+  { id: 'oncall-ai',             cardTitle: 'Vet on call',             cardDesc: 'Book a visit or follow-up — tap to continue.',     cardHint: 'On-call service (demo). SOW §3.9. Bookings and assignments inside.', icon: Phone,     path: '/services/oncall-ai',             roles: ['farmer','field_user','super_admin','directorate'],                           color: '#0891B2' },
+  { id: 'grievance-system',      cardTitle: 'Complaints & feedback',   cardDesc: 'Report an issue and track status — tap to start.', cardHint: 'Grievance redressal (demo). SOW §3.10. Intake, routing, and closure inside.', icon: MessageSquare, path: '/services/grievance-system',      roles: [],                                                             color: '#BE185D' },
 ];
+
+const TILE_PLACEHOLDER = { v: '—', l: 'Loading…', t: '…', up: true };
 
 const KPIS = [
   { label: 'Total Livestock', value: '1,25,000', change: '+5.2%', up: true,  icon: Activity,      color: '#2563EB', bg: '#EFF6FF' },
-  { label: 'AI Coverage',     value: '78%',      change: '+2.1%', up: true,  icon: Syringe,       color: '#059669', bg: '#ECFDF5' },
+  { label: 'Breeding coverage', value: '78%',      change: '+2.1%', up: true,  icon: Syringe,       color: '#059669', bg: '#ECFDF5' },
   { label: 'Vaccination',     value: '85%',      change: '+1.8%', up: true,  icon: Shield,        color: '#0284C7', bg: '#F0F9FF' },
   { label: 'Active MVUs',     value: '42',       change: '+4.3%', up: true,  icon: Truck,         color: '#D97706', bg: '#FFFBEB' },
-  { label: 'Grievances',      value: '23',       change: '-12%',  up: false, icon: MessageSquare, color: '#DC2626', bg: '#FEF2F2' },
+  { label: 'Complaints',      value: '23',       change: '-12%',  up: false, icon: MessageSquare, color: '#DC2626', bg: '#FEF2F2' },
   { label: 'Budget Used',     value: '67%',      change: '+3%',   up: true,  icon: DollarSign,    color: '#7C3AED', bg: '#F5F3FF' },
 ];
 
@@ -44,26 +47,26 @@ const LIVESTOCK_DISTRIBUTION = [
 const CATEGORY_KPI_MAP = {
   Cattle: [
     { label: 'Total Livestock', value: '70,200', change: '+4.1%', up: true, icon: Activity, color: '#2563EB', bg: '#EFF6FF' },
-    { label: 'AI Coverage', value: '82%', change: '+1.9%', up: true, icon: Syringe, color: '#059669', bg: '#ECFDF5' },
+    { label: 'Breeding coverage', value: '82%', change: '+1.9%', up: true, icon: Syringe, color: '#059669', bg: '#ECFDF5' },
     { label: 'Vaccination', value: '89%', change: '+2.2%', up: true, icon: Shield, color: '#0284C7', bg: '#F0F9FF' },
     { label: 'Active MVUs', value: '33', change: '+3.6%', up: true, icon: Truck, color: '#D97706', bg: '#FFFBEB' },
-    { label: 'Grievances', value: '11', change: '-9%', up: false, icon: MessageSquare, color: '#DC2626', bg: '#FEF2F2' },
+    { label: 'Complaints', value: '11', change: '-9%', up: false, icon: MessageSquare, color: '#DC2626', bg: '#FEF2F2' },
     { label: 'Budget Used', value: '64%', change: '+2%', up: true, icon: DollarSign, color: '#7C3AED', bg: '#F5F3FF' },
   ],
   Poultry: [
     { label: 'Total Livestock', value: '40,250', change: '+6.3%', up: true, icon: Activity, color: '#2563EB', bg: '#EFF6FF' },
-    { label: 'AI Coverage', value: '74%', change: '+2.4%', up: true, icon: Syringe, color: '#059669', bg: '#ECFDF5' },
+    { label: 'Breeding coverage', value: '74%', change: '+2.4%', up: true, icon: Syringe, color: '#059669', bg: '#ECFDF5' },
     { label: 'Vaccination', value: '83%', change: '+1.1%', up: true, icon: Shield, color: '#0284C7', bg: '#F0F9FF' },
     { label: 'Active MVUs', value: '18', change: '+2.1%', up: true, icon: Truck, color: '#D97706', bg: '#FFFBEB' },
-    { label: 'Grievances', value: '7', change: '-5%', up: false, icon: MessageSquare, color: '#DC2626', bg: '#FEF2F2' },
+    { label: 'Complaints', value: '7', change: '-5%', up: false, icon: MessageSquare, color: '#DC2626', bg: '#FEF2F2' },
     { label: 'Budget Used', value: '69%', change: '+4%', up: true, icon: DollarSign, color: '#7C3AED', bg: '#F5F3FF' },
   ],
   Sheep: [
     { label: 'Total Livestock', value: '14,550', change: '+3.2%', up: true, icon: Activity, color: '#2563EB', bg: '#EFF6FF' },
-    { label: 'AI Coverage', value: '68%', change: '+1.3%', up: true, icon: Syringe, color: '#059669', bg: '#ECFDF5' },
+    { label: 'Breeding coverage', value: '68%', change: '+1.3%', up: true, icon: Syringe, color: '#059669', bg: '#ECFDF5' },
     { label: 'Vaccination', value: '79%', change: '+0.9%', up: true, icon: Shield, color: '#0284C7', bg: '#F0F9FF' },
     { label: 'Active MVUs', value: '9', change: '+1.8%', up: true, icon: Truck, color: '#D97706', bg: '#FFFBEB' },
-    { label: 'Grievances', value: '5', change: '-2%', up: false, icon: MessageSquare, color: '#DC2626', bg: '#FEF2F2' },
+    { label: 'Complaints', value: '5', change: '-2%', up: false, icon: MessageSquare, color: '#DC2626', bg: '#FEF2F2' },
     { label: 'Budget Used', value: '58%', change: '+2%', up: true, icon: DollarSign, color: '#7C3AED', bg: '#F5F3FF' },
   ],
 };
@@ -85,10 +88,16 @@ const SERVICE_CATEGORY_MAP = {
 export default function MainDashboard() {
   const { user, hasAccess } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const [time, setTime] = useState(new Date());
   const [hoveredSvc, setHoveredSvc] = useState(null);
   const [activeLivestock, setActiveLivestock] = useState(null);
   const [expandedInsight, setExpandedInsight] = useState(null);
+  const [executiveKpis, setExecutiveKpis] = useState(null);
+  const [serviceTiles, setServiceTiles] = useState(null);
+  const [insightFeed, setInsightFeed] = useState([]);
+  /** Charts / livestock / KPIs are optional on the home page — services stay on top for clarity. */
+  const [showSummaryCharts, setShowSummaryCharts] = useState(false);
   const lastUpdated = time.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
 
 
@@ -98,35 +107,223 @@ export default function MainDashboard() {
     return () => clearInterval(t);
   }, []);
 
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      const [kpis, insights, tiles] = await Promise.all([
+        getExecutiveKpis(),
+        Promise.resolve(getExecutiveInsights()),
+        getMainDashboardTileStats(),
+      ]);
+      if (cancelled) return;
+      setExecutiveKpis(kpis);
+      setInsightFeed(insights);
+      const { _meta: _tileMeta, ...restTiles } = tiles;
+      setServiceTiles(restTiles);
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   const baseAccessible = SERVICES.filter(s => hasAccess(s.roles));
   const accessible = activeLivestock
     ? baseAccessible.filter((svc) => (SERVICE_CATEGORY_MAP[svc.id] || []).includes(activeLivestock))
     : baseAccessible;
   const totalLivestock = LIVESTOCK_DISTRIBUTION.reduce((sum, item) => sum + item.value, 0);
   const selectedLivestock = LIVESTOCK_DISTRIBUTION.find((item) => item.name === activeLivestock);
-  const currentKpis = activeLivestock ? CATEGORY_KPI_MAP[activeLivestock] : KPIS;
-  const AI_INSIGHTS = [
-    { id: 'outbreak', title: 'Possible outbreak cluster', severity: 'critical', confidence: 92, category: 'Cattle', description: 'Three neighboring villages show rising symptom correlation.', recommendation: 'Dispatch rapid response team and trigger containment protocol.' },
-    { id: 'coverage', title: 'Vaccination coverage lag', severity: 'warning', confidence: 84, category: 'Poultry', description: 'Poultry booster completion in 2 blocks is below threshold.', recommendation: 'Prioritize district-level vaccination camps this week.' },
-    { id: 'feed', title: 'Feed variance anomaly', severity: 'warning', confidence: 79, category: 'Sheep', description: 'Feed utilization variance crossed expected benchmark.', recommendation: 'Audit supplier delivery consistency and recalibrate feeding slots.' },
-    { id: 'mvu', title: 'MVU response optimization', severity: 'info', confidence: 88, category: 'Cattle', description: 'Route model predicts 11% faster closures with revised dispatch sequence.', recommendation: 'Apply optimized route pack for high-density zones.' },
-  ];
-  const adminInsights = activeLivestock ? AI_INSIGHTS.filter((item) => item.category === activeLivestock) : AI_INSIGHTS;
+  const liveKpis = executiveKpis
+    ? [
+        { label: 'Open complaints', value: String(executiveKpis.openGrievances), change: 'Live', up: false, icon: MessageSquare, color: '#DC2626', bg: '#FEF2F2' },
+        { label: 'Semen restock queue', value: String(executiveKpis.pendingRestocks), change: 'Live', up: false, icon: Syringe, color: '#0284C7', bg: '#F0F9FF' },
+        { label: 'Low vaccine stock', value: String(executiveKpis.lowVaccineBatches), change: 'Live', up: false, icon: Shield, color: '#D97706', bg: '#FFFBEB' },
+        { label: 'MVU visits on plan', value: `${executiveKpis.mvuCompliancePct}%`, change: 'Live', up: true, icon: Truck, color: '#2563EB', bg: '#EFF6FF' },
+        { label: 'Budget used', value: `${executiveKpis.budgetUtilizationPct}%`, change: 'Live', up: true, icon: DollarSign, color: '#7C3AED', bg: '#F5F3FF' },
+        { label: 'Complaints (all time)', value: String(executiveKpis.meta.totalGrievances), change: 'Live', up: true, icon: Activity, color: '#059669', bg: '#ECFDF5' },
+      ]
+    : KPIS;
+  const currentKpis = activeLivestock ? CATEGORY_KPI_MAP[activeLivestock] : liveKpis;
+  const adminInsights = insightFeed.map((item) => ({
+    id: item.id,
+    title: item.title,
+    severity: item.severity,
+    confidence: 80,
+    category: 'All',
+    description: item.body,
+    recommendation: `Related area: ${item.sourceModule}`,
+  }));
   const insightStyle = (severity) => {
     if (severity === 'critical') return { bg: '#FFF1F2', border: '#FECACA', badge: '#DC2626', label: 'Critical', glow: 'rgba(220,38,38,0.22)' };
     if (severity === 'warning') return { bg: '#FFFBEB', border: '#FDE68A', badge: '#D97706', label: 'Warning', glow: 'rgba(217,119,6,0.22)' };
     return { bg: '#EFF6FF', border: '#BFDBFE', badge: '#2563EB', label: 'Info', glow: 'rgba(37,99,235,0.2)' };
   };
 
+  useEffect(() => {
+    if (location.pathname !== '/dashboard' || location.hash !== '#ard-services') return undefined;
+    const id = requestAnimationFrame(() => {
+      document.getElementById('ard-services')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+    return () => cancelAnimationFrame(id);
+  }, [location.pathname, location.hash]);
+
   return (
     <div style={{ maxWidth: 1200, margin: '0 auto' }}>
-      <div style={{ marginBottom: 10, border: '1px solid var(--border)', background: 'var(--surface)', borderRadius: 12, padding: '7px 12px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <span style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-2)', letterSpacing: '0.04em' }}>GOVERNMENT OF ODISHA · ARD COMMAND CONSOLE</span>
-        <span style={{ fontSize: 10, fontWeight: 700, color: 'var(--blue-dark)', background: 'var(--blue-subtle)', border: '1px solid var(--blue-muted)', borderRadius: 999, padding: '2px 8px' }}>ADMIN VIEW</span>
+      <div style={{ marginBottom: 12, border: '1px solid var(--border)', background: 'var(--surface)', borderRadius: 12, padding: '8px 12px', display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap' }}>
+        <div style={{ flex: '1 1 220px', minWidth: 0 }}>
+          <span style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-2)', letterSpacing: '0.03em' }}>GOVERNMENT OF ODISHA · ARD DASHBOARD</span>
+          <p style={{ fontSize: 11, color: 'var(--text-3)', margin: '4px 0 0', lineHeight: 1.45 }}>Open a service first. Charts below are optional — use the green <strong style={{ color: 'var(--text-2)' }}>Service menu</strong> in the header to jump back to this list anytime.</p>
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0, flexWrap: 'wrap' }}>
+          <span style={{ fontSize: 10, fontWeight: 700, color: 'var(--blue-dark)', background: 'var(--blue-subtle)', border: '1px solid var(--blue-muted)', borderRadius: 999, padding: '2px 8px' }}>STAFF VIEW</span>
+          <span style={{ fontSize: 11, color: 'var(--text-4)' }}>Updated {lastUpdated}</span>
+        </div>
       </div>
-      <div style={{ marginBottom: 14, border: '1px solid var(--border)', background: 'var(--surface)', borderRadius: 12, padding: '6px 10px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <span style={{ fontSize: 11, color: 'var(--text-3)' }}>Source: District Operations Feed (AI-simulated)</span>
-        <span style={{ fontSize: 11, color: 'var(--text-4)' }}>Last updated: {lastUpdated}</span>
+
+      {/* ── Services first (compact home) ── */}
+      <div id="ard-services" style={{ marginBottom: 12, animation: 'fadeUp 0.35s ease both' }}>
+        <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 8, flexWrap: 'wrap', gap: 8 }}>
+          <div style={{ flex: '1 1 200px', minWidth: 0 }}>
+            <p className="section-label" style={{ marginBottom: 4 }}>Your services</p>
+            <p style={{ fontSize: 12, color: 'var(--text-3)', maxWidth: 560, lineHeight: 1.45 }}>
+              Quick buttons jump straight in; large tiles show a one-line reminder. Your role controls which items appear.
+            </p>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '4px 12px', borderRadius: 99, background: 'var(--success-bg)', border: '1px solid var(--success-border)', fontSize: 11, fontWeight: 600, color: 'var(--success)' }}>
+            <div className="dot dot-success dot-pulse" style={{ width: 6, height: 6 }} />
+            {accessible.length} open
+          </div>
+        </div>
+
+        <div style={{ display: 'flex', gap: 6, overflowX: 'auto', paddingBottom: 8, marginBottom: 8, WebkitOverflowScrolling: 'touch' }}>
+          {accessible.map((svc) => (
+            <button
+              key={`jump-${svc.id}`}
+              type="button"
+              onClick={() => navigate(svc.path)}
+              title={svc.cardHint}
+              style={{
+                flexShrink: 0,
+                padding: '6px 12px',
+                borderRadius: 999,
+                border: '1px solid var(--border)',
+                background: 'var(--surface)',
+                fontSize: 11,
+                fontWeight: 600,
+                color: 'var(--text-2)',
+                cursor: 'pointer',
+                boxShadow: 'var(--shadow-xs)',
+              }}
+            >
+              {svc.cardTitle}
+            </button>
+          ))}
+        </div>
+
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 10 }}>
+          {accessible.map(svc => {
+            const Icon = svc.icon;
+            const isHov = hoveredSvc === svc.id;
+            const stat = serviceTiles?.[svc.id] || TILE_PLACEHOLDER;
+            return (
+              <button
+                key={svc.id}
+                type="button"
+                title={svc.cardHint}
+                aria-label={`${svc.cardTitle}. ${svc.cardDesc}`}
+                onClick={() => navigate(svc.path)}
+                onMouseEnter={() => setHoveredSvc(svc.id)}
+                onMouseLeave={() => setHoveredSvc(null)}
+                style={{
+                  textAlign: 'left', padding: '0.95rem',
+                  background: isHov ? 'var(--base-2)' : 'var(--surface)',
+                  border: `1px solid ${isHov ? svc.color + '40' : 'var(--border)'}`,
+                  borderLeft: `4px solid ${svc.color}`,
+                  borderRadius: 16, cursor: 'pointer', outline: 'none',
+                  transform: isHov ? 'translateY(-2px)' : 'none',
+                  boxShadow: isHov ? `0 6px 18px ${svc.color}16` : 'var(--shadow-xs)',
+                  transition: 'all 0.2s cubic-bezier(0.4,0,0.2,1)',
+                }}
+              >
+                <div style={{
+                  width: 52, height: 52, borderRadius: 12, marginBottom: 10, marginTop: 2,
+                  background: svc.color + '12', border: `1px solid ${svc.color}20`,
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  transform: isHov ? 'scale(1.05)' : 'scale(1)',
+                  transition: 'transform 0.2s ease',
+                }}>
+                  <Icon className="icon-xl" style={{ color: svc.color }} />
+                </div>
+                <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--text-1)', marginBottom: 4, letterSpacing: '-0.01em', lineHeight: 1.3 }}>{svc.cardTitle}</p>
+                <p style={{ fontSize: 11, color: 'var(--text-3)', lineHeight: 1.45, marginBottom: 8 }}>{svc.cardDesc}</p>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 8 }}>
+                  <span style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 10, color: 'var(--text-4)' }}>
+                    <Layers className="icon-xs" />{svc.modules || 4} steps
+                  </span>
+                  <span style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 10, color: 'var(--success)' }}>
+                    <CheckCircle className="icon-xs" />Ready
+                  </span>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingTop: 8, borderTop: '1px solid var(--border)' }}>
+                  <div>
+                    <p style={{ fontSize: '1rem', fontWeight: 800, color: 'var(--text-1)', letterSpacing: '-0.02em' }}>{stat.v}</p>
+                    <p style={{ fontSize: 10, color: 'var(--text-4)' }}>{stat.l}</p>
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 3 }}>
+                      {stat.up
+                        ? <TrendingUp  className="icon-xs" style={{ color: 'var(--success)' }} />
+                        : <TrendingDown className="icon-xs" style={{ color: 'var(--danger)'  }} />
+                      }
+                      <span style={{ fontSize: 10, fontWeight: 600, color: stat.up ? 'var(--success)' : 'var(--danger)' }}>{stat.t}</span>
+                    </div>
+                    <div style={{
+                      width: 26, height: 26, borderRadius: 8,
+                      background: isHov ? 'var(--orange)' : 'var(--orange-subtle)',
+                      border: `1px solid ${isHov ? 'var(--orange)' : 'var(--orange-muted)'}`,
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      transition: 'all 0.2s ease',
+                    }}>
+                      <ArrowRight className="icon-xs" style={{ color: isHov ? '#fff' : 'var(--orange-dark)', transform: isHov ? 'translateX(1px)' : 'none', transition: 'all 0.2s ease' }} />
+                    </div>
+                  </div>
+                </div>
+              </button>
+            );
+          })}
+        </div>
+        <p style={{ marginTop: 10, fontSize: 11, color: 'var(--text-4)', lineHeight: 1.5 }}>
+          <strong style={{ color: 'var(--text-2)' }}>Breeding insights</strong> is the summary layer; <strong style={{ color: 'var(--text-2)' }}>Semen &amp; supplies</strong> is day-to-day stock work — open the one you need.
+        </p>
+      </div>
+
+      <button
+        type="button"
+        onClick={() => setShowSummaryCharts((v) => !v)}
+        style={{
+          width: '100%',
+          marginBottom: 12,
+          padding: '10px 12px',
+          borderRadius: 12,
+          border: '1px solid var(--border)',
+          background: 'var(--base-2)',
+          fontSize: 12,
+          fontWeight: 700,
+          color: 'var(--text-2)',
+          cursor: 'pointer',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: 8,
+        }}
+      >
+        <ChevronDown className="icon-sm" style={{ color: 'var(--text-3)', transform: showSummaryCharts ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s ease' }} />
+        {showSummaryCharts ? 'Hide livestock filter, KPIs & charts' : 'Show livestock filter, KPIs & charts (optional)'}
+      </button>
+
+      {showSummaryCharts && (
+      <>
+      <div style={{ marginBottom: 10, border: '1px solid var(--border)', background: 'var(--surface)', borderRadius: 12, padding: '6px 10px' }}>
+        <HierarchyStrip role={user?.role} district={user?.district} />
       </div>
 
       {/* ── Hero Row ── */}
@@ -153,13 +350,13 @@ export default function MainDashboard() {
               Welcome, {user?.name?.split(' ')[0]}
             </h1>
             <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.70)', marginBottom: 6 }}>
-              {user?.designation} · {user?.district} District · {accessible.length} services accessible
+              {user?.designation} · {user?.district} District · You can open {accessible.length} service{accessible.length === 1 ? '' : 's'} from this page (others are hidden for your role).
             </p>
             <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
-              {[
+                {[
                 { label: 'System Health', value: 'Excellent', color: '#4ADE80' },
-                { label: 'AI Status',     value: 'Active',    color: '#FCD34D' },
-                { label: 'Alerts',        value: `${MAIN_DASHBOARD_DATA.aiAlerts.length} Active`, color: '#FCA5A5' },
+                { label: 'Computer hints', value: 'On',    color: '#FCD34D' },
+                { label: 'Alerts',        value: `${adminInsights.length} Active`, color: '#FCA5A5' },
               ].map((chip, i) => (
                 <div key={i} style={{
                   padding: '3px 9px', borderRadius: 99,
@@ -172,7 +369,7 @@ export default function MainDashboard() {
                 </div>
               ))}
             </div>
-            <button type="button" onClick={() => navigate('/admin/farms')} style={{ marginTop: 6, border: '1px solid rgba(255,255,255,0.28)', background: 'rgba(255,255,255,0.12)', color: '#fff', borderRadius: 8, padding: '4px 8px', fontSize: 11, fontWeight: 700, cursor: 'pointer' }}>Open Admin Drill-down</button>
+            <button type="button" onClick={() => navigate('/admin/farms')} style={{ marginTop: 6, border: '1px solid rgba(255,255,255,0.28)', background: 'rgba(255,255,255,0.12)', color: '#fff', borderRadius: 8, padding: '4px 8px', fontSize: 11, fontWeight: 700, cursor: 'pointer' }} title="Opens a separate drill-down for farms and groups">Open farm drill-down</button>
           </div>
         </div>
 
@@ -207,11 +404,11 @@ export default function MainDashboard() {
       </div>
 
       {/* ── Livestock Doughnut ── */}
-      <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 18, padding: '1.1rem 1.25rem', marginBottom: 16, boxShadow: 'var(--shadow-xs)', animation: 'fadeUp 0.4s ease 0.06s both' }}>
+      <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 18, padding: '0.95rem 1.1rem', marginBottom: 12, boxShadow: 'var(--shadow-xs)', animation: 'fadeUp 0.4s ease 0.06s both' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
           <div>
             <p style={{ fontSize: 14, fontWeight: 700, color: 'var(--text-1)' }}>Livestock Distribution</p>
-            <p style={{ fontSize: 12, color: 'var(--text-4)' }}>Click a segment to filter KPIs, AI alerts, and service modules</p>
+            <p style={{ fontSize: 12, color: 'var(--text-4)' }}>Pick a category to narrow the summary tiles and service list.</p>
           </div>
           {activeLivestock && (
             <button
@@ -224,7 +421,7 @@ export default function MainDashboard() {
           )}
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: 'minmax(240px,320px) 1fr', gap: 16, alignItems: 'center' }}>
-          <div style={{ position: 'relative', height: 220 }}>
+          <div style={{ position: 'relative', height: 176 }}>
             <ResponsiveContainer>
               <PieChart>
                 <Pie
@@ -289,42 +486,60 @@ export default function MainDashboard() {
               onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = `0 6px 20px ${kpi.color}18`; e.currentTarget.style.borderColor = `${kpi.color}30`; }}
               onMouseLeave={e => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = 'var(--shadow-xs)'; e.currentTarget.style.borderColor = 'var(--border)'; }}
             >
-              <div style={{ width: 32, height: 32, borderRadius: 9, marginBottom: 10, background: kpi.bg, border: `1px solid ${kpi.color}20`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <Icon className="icon-sm" style={{ color: kpi.color }} />
+              <div style={{ width: 44, height: 44, borderRadius: 12, marginBottom: 10, background: kpi.bg, border: `1px solid ${kpi.color}20`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <Icon className="icon-lg" style={{ color: kpi.color }} />
               </div>
               <p style={{ fontSize: 10, color: 'var(--text-4)', marginBottom: 4, fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.04em' }}>{kpi.label}</p>
               <p style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--text-1)', letterSpacing: '-0.02em', marginBottom: 4 }}>{kpi.value}</p>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 3 }}>
-                {kpi.up
-                  ? <TrendingUp  className="icon-xs" style={{ color: 'var(--success)' }} />
-                  : <TrendingDown className="icon-xs" style={{ color: 'var(--danger)'  }} />
-                }
-                <span style={{ fontSize: 10, fontWeight: 600, color: kpi.up ? 'var(--success)' : 'var(--danger)' }}>{kpi.change}</span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                {kpi.change === 'Live' ? (
+                  <>
+                    <span className="dot dot-blue dot-pulse" style={{ width: 7, height: 7, flexShrink: 0 }} />
+                    <span style={{ fontSize: 10, fontWeight: 700, color: 'var(--blue)', letterSpacing: '0.04em' }}>LIVE AGGREGATE</span>
+                  </>
+                ) : (
+                  <>
+                    {kpi.up
+                      ? <TrendingUp  className="icon-xs" style={{ color: 'var(--success)' }} />
+                      : <TrendingDown className="icon-xs" style={{ color: 'var(--danger)'  }} />
+                    }
+                    <span style={{ fontSize: 10, fontWeight: 600, color: kpi.up ? 'var(--success)' : 'var(--danger)' }}>{kpi.change}</span>
+                  </>
+                )}
               </div>
             </div>
           );
         })}
       </div>
 
-      {/* ── AI Insight Cards ── */}
+      {/* ── Highlight cards (practice data) ── */}
       <div style={{ background: '#FFFFFF', border: '1px solid var(--border)', borderRadius: 18, padding: '1.1rem 1.25rem', marginBottom: 16, boxShadow: 'var(--shadow-xs)', animation: 'fadeUp 0.4s ease 0.2s both', position: 'relative', overflow: 'hidden' }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-            <div style={{ width: 26, height: 26, borderRadius: 8, background: '#8B5CF6', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 0 0 2px rgba(255,255,255,0.06)' }}>
+        <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 12, gap: 10, flexWrap: 'wrap' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, flex: '1 1 200px', minWidth: 0 }}>
+            <div style={{ width: 26, height: 26, borderRadius: 8, background: '#8B5CF6', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 0 0 2px rgba(255,255,255,0.06)', flexShrink: 0 }}>
               <Sparkles className="icon-xs" style={{ color: '#fff' }} />
             </div>
             <div>
-              <p style={{ fontSize: 14, fontWeight: 700, color: 'var(--text-1)' }}>AI-Simulated Insight Cards</p>
-              <p style={{ fontSize: 11, color: 'var(--text-4)' }}>Simulation feed for administrative review · confidence ranked</p>
+              <p style={{ fontSize: 14, fontWeight: 700, color: 'var(--text-1)' }}>Short highlight cards</p>
+              <p style={{ fontSize: 11, color: 'var(--text-4)' }}>Practice data only — tap a card to read more; full wording lives inside each service.</p>
             </div>
           </div>
-          <button
-            type="button"
-            onClick={() => navigate('/admin/farms')}
-            style={{ border: '1px solid var(--blue-muted)', background: 'var(--blue-subtle)', color: 'var(--blue-dark)', borderRadius: 9, padding: '6px 10px', fontSize: 12, fontWeight: 700, cursor: 'pointer' }}
-          >
-            Drill-down Reports
-          </button>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, justifyContent: 'flex-end' }}>
+            <button
+              type="button"
+              onClick={() => navigate('/admin/farms')}
+              style={{ border: '1px solid var(--blue-muted)', background: 'var(--blue-subtle)', color: 'var(--blue-dark)', borderRadius: 9, padding: '6px 10px', fontSize: 12, fontWeight: 700, cursor: 'pointer' }}
+            >
+              Drill-down Reports
+            </button>
+            <button
+              type="button"
+              onClick={() => executiveKpis && exportExecutiveSummaryCsv(executiveKpis)}
+              style={{ border: '1px solid var(--success-border)', background: 'var(--success-bg)', color: 'var(--success)', borderRadius: 9, padding: '6px 10px', fontSize: 12, fontWeight: 700, cursor: 'pointer' }}
+            >
+              Export Executive Summary
+            </button>
+          </div>
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(250px,1fr))', gap: 10 }}>
           {adminInsights.map((insight) => {
@@ -339,13 +554,13 @@ export default function MainDashboard() {
               >
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8 }}>
                   <span style={{ fontSize: 11, fontWeight: 700, color: sx.badge, background: '#fff', borderRadius: 999, padding: '2px 8px' }}>{sx.label}</span>
-                  <span style={{ fontSize: 11, color: 'var(--text-3)', fontWeight: 700 }}>AI {insight.confidence}%</span>
+                  <span style={{ fontSize: 11, color: 'var(--text-3)', fontWeight: 700 }}>Hint strength {insight.confidence}%</span>
                 </div>
                 <p style={{ marginTop: 8, fontSize: 13, fontWeight: 700, color: 'var(--text-1)' }}>{insight.title}</p>
                 <p style={{ marginTop: 5, fontSize: 12, color: 'var(--text-3)', lineHeight: 1.5 }}>{insight.description}</p>
                 <div style={{ marginTop: 8 }}>
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 4 }}>
-                    <span style={{ fontSize: 10, color: 'var(--text-4)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Confidence Signal</span>
+                    <span style={{ fontSize: 10, color: 'var(--text-4)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>How sure is this hint?</span>
                     <span style={{ fontSize: 10, color: sx.badge, fontWeight: 700 }}>{insight.confidence}%</span>
                   </div>
                   <div style={{ height: 6, borderRadius: 999, background: 'rgba(148,163,184,0.25)', overflow: 'hidden' }}>
@@ -371,7 +586,7 @@ export default function MainDashboard() {
           )}
         </div>
         <div style={{ marginTop: 10, borderTop: '1px dashed var(--border)', paddingTop: 8, display: 'flex', justifyContent: 'space-between' }}>
-          <span style={{ fontSize: 11, color: 'var(--text-4)' }}>Source: Pattern Intelligence Layer (AI-simulated)</span>
+          <span style={{ fontSize: 11, color: 'var(--text-4)' }}>Source: practice “insight” feed (not a live forecast)</span>
           <span style={{ fontSize: 11, color: 'var(--text-4)' }}>Updated: {lastUpdated}</span>
         </div>
       </div>
@@ -381,94 +596,9 @@ export default function MainDashboard() {
 
       {/* ── Resource Analytics Section ── */}
       <ResourceAnalytics />
+      </>
+      )}
 
-      {/* ── Services Grid ── */}
-      <div style={{ animation: 'fadeUp 0.4s ease 0.24s both' }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
-          <p className="section-label">Microservices — {accessible.length} accessible</p>
-          <div style={{
-            display: 'flex', alignItems: 'center', gap: 6,
-            padding: '4px 12px', borderRadius: 99,
-            background: 'var(--success-bg)', border: '1px solid var(--success-border)',
-            fontSize: 11, fontWeight: 600, color: 'var(--success)',
-          }}>
-            <div className="dot dot-success dot-pulse" style={{ width: 6, height: 6 }} />
-            {accessible.length} Online
-          </div>
-        </div>
-
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: 12 }}>
-          {accessible.map(svc => {
-            const Icon = svc.icon;
-            const isHov = hoveredSvc === svc.id;
-            return (
-              <button
-                key={svc.id}
-                onClick={() => navigate(svc.path)}
-                onMouseEnter={() => setHoveredSvc(svc.id)}
-                onMouseLeave={() => setHoveredSvc(null)}
-                style={{
-                  textAlign: 'left', padding: '1.125rem',
-                  background: isHov ? 'var(--base-2)' : 'var(--surface)',
-                  border: `1px solid ${isHov ? svc.color + '40' : 'var(--border)'}`,
-                  borderRadius: 18, cursor: 'pointer', outline: 'none',
-                  transform: isHov ? 'translateY(-3px)' : 'none',
-                  boxShadow: isHov ? `0 8px 24px ${svc.color}18` : 'var(--shadow-xs)',
-                  transition: 'all 0.2s cubic-bezier(0.4,0,0.2,1)',
-                }}
-              >
-                {/* Icon */}
-                <div style={{
-                  width: 42, height: 42, borderRadius: 11, marginBottom: 12, marginTop: 4,
-                  background: svc.color + '12', border: `1px solid ${svc.color}20`,
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  transform: isHov ? 'scale(1.08)' : 'scale(1)',
-                  transition: 'transform 0.2s ease',
-                }}>
-                  <Icon className="icon-md" style={{ color: svc.color }} />
-                </div>
-
-                <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--text-1)', marginBottom: 3, letterSpacing: '-0.01em' }}>{svc.title}</p>
-                <p style={{ fontSize: 11, color: 'var(--text-4)', lineHeight: 1.5, marginBottom: 12 }}>{svc.desc}</p>
-
-                <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12 }}>
-                  <span style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 10, color: 'var(--text-4)' }}>
-                    <Layers className="icon-xs" />{svc.modules || 4} modules
-                  </span>
-                  <span style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 10, color: 'var(--success)' }}>
-                    <CheckCircle className="icon-xs" />Online
-                  </span>
-                </div>
-
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingTop: 10, borderTop: '1px solid var(--border)' }}>
-                  <div>
-                    <p style={{ fontSize: '1.0625rem', fontWeight: 800, color: 'var(--text-1)', letterSpacing: '-0.02em' }}>{svc.stat.v}</p>
-                    <p style={{ fontSize: 10, color: 'var(--text-4)' }}>{svc.stat.l}</p>
-                  </div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 3 }}>
-                      {svc.stat.up
-                        ? <TrendingUp  className="icon-xs" style={{ color: 'var(--success)' }} />
-                        : <TrendingDown className="icon-xs" style={{ color: 'var(--danger)'  }} />
-                      }
-                      <span style={{ fontSize: 10, fontWeight: 600, color: svc.stat.up ? 'var(--success)' : 'var(--danger)' }}>{svc.stat.t}</span>
-                    </div>
-                    <div style={{
-                      width: 28, height: 28, borderRadius: 8,
-                      background: isHov ? 'var(--orange)' : 'var(--orange-subtle)',
-                      border: `1px solid ${isHov ? 'var(--orange)' : 'var(--orange-muted)'}`,
-                      display: 'flex', alignItems: 'center', justifyContent: 'center',
-                      transition: 'all 0.2s ease',
-                    }}>
-                      <ArrowRight className="icon-xs" style={{ color: isHov ? '#fff' : 'var(--orange-dark)', transform: isHov ? 'translateX(1px)' : 'none', transition: 'all 0.2s ease' }} />
-                    </div>
-                  </div>
-                </div>
-              </button>
-            );
-          })}
-        </div>
-      </div>
     </div>
   );
 }

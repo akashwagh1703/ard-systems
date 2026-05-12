@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { getDailyMetrics } from '../../services/dailyChartData';
+import { getResourceAnalyticsSnapshot } from '../../services/data/aggregateDashboard';
 import { Activity, CheckCircle, AlertTriangle, Zap, RefreshCw, Download, BarChart3 } from 'lucide-react';
 
 export default function DailyAnalytics() {
   const [metrics, setMetrics] = useState(null);
+  const [resourceSnapshot, setResourceSnapshot] = useState(null);
   const [lastUpdated, setLastUpdated] = useState(new Date());
   const [isRefreshing, setIsRefreshing] = useState(false);
 
@@ -12,8 +13,41 @@ export default function DailyAnalytics() {
     loadData();
   }, []);
 
-  const loadData = () => {
-    setMetrics(getDailyMetrics());
+  const loadData = async () => {
+    const snapshot = await getResourceAnalyticsSnapshot();
+    setResourceSnapshot(snapshot);
+    const m = snapshot.dailyMetrics;
+    setMetrics({
+      totalServices: {
+        value: m.totalServices,
+        label: 'Total Services Tracked',
+        changeLabel: '+Live',
+        isPositive: true,
+        icon: 'activity',
+      },
+      avgCompletionRate: {
+        value: m.avgCompletionRate,
+        label: 'Aggregate Completion Rate',
+        changeLabel: '+Live',
+        isPositive: true,
+        icon: 'checkCircle',
+      },
+      activeAlerts: {
+        value: m.activeAlerts,
+        label: 'Active Alerts',
+        changeLabel: `${m.activeAlerts}`,
+        isPositive: m.activeAlerts <= 5,
+        icon: 'alertTriangle',
+      },
+      systemHealth: {
+        value: m.systemHealth,
+        label: 'System Health',
+        changeLabel: '+Live',
+        isPositive: m.systemHealth >= 85,
+        icon: 'zap',
+        status: m.systemHealth >= 90 ? 'Excellent' : m.systemHealth >= 80 ? 'Good' : 'Fair',
+      },
+    });
     setLastUpdated(new Date());
   };
 
@@ -28,6 +62,7 @@ export default function DailyAnalytics() {
   const handleExport = () => {
     const exportData = {
       metrics,
+      resourceSnapshot,
       exportedAt: new Date().toISOString()
     };
     
@@ -73,7 +108,7 @@ export default function DailyAnalytics() {
       borderRadius: 20,
       padding: '1.5rem',
       boxShadow: 'var(--shadow-xs)',
-      marginBottom: 16,
+      marginBottom: 12,
       animation: 'fadeUp 0.4s ease 0.2s both'
     }}>
       {/* Header */}

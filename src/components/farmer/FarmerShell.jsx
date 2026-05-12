@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation, Navigate } from 'react-router-dom';
 import { useFarmerAuth } from '../../contexts/FarmerAuthContext';
-import { LayoutDashboard, Heart, Droplets, Stethoscope, Wrench, BarChart3, Bot, LogOut, Leaf } from 'lucide-react';
+import { LayoutDashboard, Heart, Droplets, Stethoscope, Wrench, BarChart3, Bot, LogOut, Leaf, Microscope, GraduationCap, LifeBuoy } from 'lucide-react';
 
 const NAV = [
   { path: '/farmer/dashboard',  label: 'Home',     icon: LayoutDashboard },
@@ -10,6 +10,9 @@ const NAV = [
   { path: '/farmer/milk',       label: 'Milk',     icon: Droplets        },
   { path: '/farmer/health',     label: 'Health',   icon: Stethoscope     },
   { path: '/farmer/services',   label: 'Services', icon: Wrench          },
+  { path: '/farmer/disease-track', label: 'Disease', icon: Microscope },
+  { path: '/farmer/training',   label: 'Training', icon: GraduationCap },
+  { path: '/farmer/grievance',  label: 'Grievance', icon: LifeBuoy },
   { path: '/farmer/reports',    label: 'Reports',  icon: BarChart3       },
 ];
 
@@ -59,9 +62,23 @@ export default function FarmerShell({ children }) {
     return (
       <div style={{ ...FARMER_THEME_VARS, minHeight: '100vh', display: 'flex', background: 'var(--base)' }}>
         {/* Sidebar */}
-        <aside style={{ width: 240, background: '#2F6FE4', display: 'flex', flexDirection: 'column', position: 'fixed', top: 0, left: 0, bottom: 0, zIndex: 40 }}>
-          {/* Brand */}
-          <div style={{ padding: '1.5rem 1.25rem 1rem', borderBottom: '1px solid rgba(255,255,255,0.12)' }}>
+        <aside
+          style={{
+            width: 240,
+            height: '100vh',
+            maxHeight: '100vh',
+            background: '#2F6FE4',
+            display: 'flex',
+            flexDirection: 'column',
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            zIndex: 40,
+            overflow: 'hidden',
+          }}
+        >
+          {/* Brand — fixed top block */}
+          <div style={{ flexShrink: 0, padding: '1.5rem 1.25rem 1rem', borderBottom: '1px solid rgba(255,255,255,0.12)' }}>
             <div style={{ marginBottom: 12 }}>
               <img 
                 src="/ard-systems/logo.jpeg" 
@@ -81,8 +98,20 @@ export default function FarmerShell({ children }) {
             </div>
           </div>
 
-          {/* Nav links */}
-          <nav style={{ flex: 1, padding: '1rem 0.75rem', display: 'flex', flexDirection: 'column', gap: 4 }}>
+          {/* Nav links — scroll when many items (minHeight:0 required for flex overflow) */}
+          <nav
+            style={{
+              flex: '1 1 auto',
+              minHeight: 0,
+              overflowY: 'auto',
+              overflowX: 'hidden',
+              WebkitOverflowScrolling: 'touch',
+              padding: '1rem 0.75rem',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 4,
+            }}
+          >
             {NAV.map(item => {
               const Icon = item.icon;
               const active = isPathActive(item.path);
@@ -110,8 +139,8 @@ export default function FarmerShell({ children }) {
             </button>
           </nav>
 
-          {/* Logout */}
-          <div style={{ padding: '1rem 0.75rem', borderTop: '1px solid rgba(255,255,255,0.12)' }}>
+          {/* Logout — fixed bottom block */}
+          <div style={{ flexShrink: 0, padding: '1rem 0.75rem', borderTop: '1px solid rgba(255,255,255,0.12)' }}>
             <button onClick={() => { farmerLogout(); navigate('/farmer/login'); }}
               style={{ display: 'flex', alignItems: 'center', gap: 10, width: '100%', padding: '10px 14px', borderRadius: 10, border: 'none', cursor: 'pointer', background: 'rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.80)', fontSize: 14, fontWeight: 500 }}
               onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.15)'}
@@ -160,12 +189,12 @@ export default function FarmerShell({ children }) {
         {children}
       </main>
 
-      <nav style={{ position: 'fixed', bottom: 0, left: 0, right: 0, background: 'var(--surface)', borderTop: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'space-around', padding: '6px 0 8px', zIndex: 40, boxShadow: '0 -4px 20px rgba(66,133,244,0.10)' }}>
+      <nav style={{ position: 'fixed', bottom: 0, left: 0, right: 0, background: 'var(--surface)', borderTop: '1px solid var(--border)', display: 'flex', alignItems: 'center', gap: 2, padding: '6px 8px 8px', zIndex: 40, boxShadow: '0 -4px 20px rgba(66,133,244,0.10)', overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}>
         {NAV.map(item => {
           const Icon = item.icon;
           const active = isPathActive(item.path);
           return (
-            <button key={item.path} onClick={() => navigate(item.path)} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 3, background: 'none', border: 'none', cursor: 'pointer', padding: '4px 10px', borderRadius: 10, minWidth: 52 }}>
+            <button key={item.path} onClick={() => navigate(item.path)} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 3, background: 'none', border: 'none', cursor: 'pointer', padding: '4px 8px', borderRadius: 10, minWidth: 48, flex: '0 0 auto' }}>
               <Icon size={20} color={active ? '#4285F4' : 'var(--text-4)'} strokeWidth={active ? 2.2 : 1.75} />
               <span style={{ fontSize: 10, fontWeight: active ? 700 : 500, color: active ? '#4285F4' : 'var(--text-4)' }}>{item.label}</span>
               {active && <div style={{ width: 4, height: 4, borderRadius: '50%', background: '#4285F4', marginTop: -2 }} />}
@@ -174,7 +203,7 @@ export default function FarmerShell({ children }) {
         })}
       </nav>
 
-      <button onClick={() => navigate('/farmer/ai')} style={{ position: 'fixed', bottom: 72, right: 20, width: 52, height: 52, borderRadius: '50%', background: 'var(--orange), var(--orange-dark))', border: 'none', boxShadow: '0 4px 20px rgba(249,115,22,0.40)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 50 }}
+      <button type="button" onClick={() => navigate('/farmer/ai')} style={{ position: 'fixed', bottom: 72, right: 20, width: 52, height: 52, borderRadius: '50%', background: 'linear-gradient(135deg, var(--orange), var(--orange-dark))', border: 'none', boxShadow: '0 4px 20px rgba(249,115,22,0.40)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 50 }}
         onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.10)'}
         onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}
         title="AI Assistant"

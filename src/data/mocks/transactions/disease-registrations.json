@@ -1,0 +1,17 @@
+[
+  {
+    "id": "dis_reg_1",
+    "registrationNumber": "DR-2026-0001",
+    "reporterName": "Gita Devi",
+    "mobile": "9876543210",
+    "aadhaarLast4": "4412",
+    "district": "Khordha",
+    "block": "Bhubaneswar",
+    "diseaseType": "FMD",
+    "sampleType": "blood",
+    "animalType": "cattle",
+    "collectedAt": "2026-02-07",
+    "status": "processing",
+    "createdAt": "2026-02-07T10:30:00.000Z"
+  }
+]

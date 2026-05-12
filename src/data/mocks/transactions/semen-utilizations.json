@@ -1,0 +1,22 @@
+[
+  {
+    "id": "sem_util_seed_1",
+    "farmerName": "Pradeep Sahoo",
+    "farmerPhone": "9876543210",
+    "farmerAadhaarLast4": "4412",
+    "farmerInternalId": "FI-KO-SEED-001",
+    "semenUniqueCode": "OD-FSB-045-SS-2024",
+    "animalBreed": "Crossbred",
+    "bullOrBuckId": "Bull-045",
+    "dateOfCollection": "2026-01-10",
+    "batchOfCollection": "BATCH-SS-045-01",
+    "dampSeal": "DS-7781",
+    "stationNumber": "MVU-KH-05",
+    "dateAdministered": "2026-01-11",
+    "distributionSource": "CDVO_STORE",
+    "locationId": "loc_khordha_cdvo",
+    "district": "Khordha",
+    "doses": 1,
+    "createdAt": "2026-01-11T09:00:00.000Z"
+  }
+]

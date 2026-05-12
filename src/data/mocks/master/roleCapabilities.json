@@ -1,0 +1,32 @@
+[
+  {
+    "moduleId": "grievance",
+    "action": "resolve",
+    "description": "Mark grievance resolved (SLA owner)",
+    "roles": ["super_admin", "directorate", "district_officer", "sdvo", "dd_dvh"]
+  },
+  {
+    "moduleId": "grievance",
+    "action": "progress",
+    "description": "Move grievance to in-progress",
+    "roles": ["super_admin", "directorate", "district_officer", "sdvo", "dd_dvh", "block_officer"]
+  },
+  {
+    "moduleId": "grievance",
+    "action": "delete",
+    "description": "Remove grievance record (audit-sensitive)",
+    "roles": ["super_admin", "directorate"]
+  },
+  {
+    "moduleId": "expenditure",
+    "action": "approve_fund_request",
+    "description": "Directorate approve / modify fund request",
+    "roles": ["super_admin", "directorate", "district_officer", "sdvo", "dd_dvh"]
+  },
+  {
+    "moduleId": "training",
+    "action": "allocate_voti_slots",
+    "description": "VOTI batch slot allocation",
+    "roles": ["super_admin", "directorate", "voti_admin"]
+  }
+]

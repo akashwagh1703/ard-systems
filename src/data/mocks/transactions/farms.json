@@ -1,0 +1,21 @@
+[
+  {
+    "id": "farm_1",
+    "farmName": "Khandagiri Dairy Cluster",
+    "district": "Khordha",
+    "ownerFarmerId": "F001",
+    "ownerName": "Gita Devi",
+    "ownerMobile": "9876543210",
+    "infrastructure": {
+      "shedCount": 3,
+      "coldStorage": true
+    },
+    "fodder": {
+      "availableDays": 18
+    },
+    "staff": {
+      "vets": 1,
+      "assistants": 4
+    }
+  }
+]

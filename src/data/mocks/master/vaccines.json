@@ -1,0 +1,7 @@
+[
+  { "id": "vac_fmd", "name": "FMD Vaccine (Trivalent)", "diseaseType": "Foot and Mouth Disease", "animalTypes": ["cattle", "buffalo", "goat", "sheep"] },
+  { "id": "vac_hs", "name": "HS Vaccine", "diseaseType": "Haemorrhagic Septicaemia", "animalTypes": ["cattle", "buffalo"] },
+  { "id": "vac_bq", "name": "BQ Vaccine", "diseaseType": "Black Quarter", "animalTypes": ["cattle", "buffalo"] },
+  { "id": "vac_ppr", "name": "PPR Vaccine", "diseaseType": "Peste des Petits Ruminants", "animalTypes": ["goat", "sheep"] },
+  { "id": "vac_bruc", "name": "Brucella S19 / RB51", "diseaseType": "Brucellosis", "animalTypes": ["cattle", "buffalo"] }
+]

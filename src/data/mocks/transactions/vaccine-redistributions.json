@@ -1,0 +1,14 @@
+[
+  {
+    "id": "vac_red_1",
+    "fromDistrict": "Khordha",
+    "toDistrict": "Nayagarh",
+    "vaccineId": "vac_fmd",
+    "batchNumber": "FMD-2026-OD-001",
+    "mode": "qty",
+    "quantity": 200,
+    "pickupSlots": ["2026-01-22T08:00:00.000Z"],
+    "status": "draft",
+    "createdAt": "2026-01-11T12:00:00.000Z"
+  }
+]

@@ -1,0 +1,86 @@
+[
+  {
+    "id": "sem_rst_seed_1",
+    "requesterName": "Suresh Patel",
+    "requesterRole": "block_officer",
+    "district": "Khordha",
+    "block": "Bhubaneswar",
+    "animalType": "cattle",
+    "semenType": "sex_sorted",
+    "quantity": 200,
+    "urgency": "high",
+    "status": "submitted",
+    "history": [
+      {
+        "at": "2026-01-12T08:00:00.000Z",
+        "status": "submitted",
+        "by": "Suresh Patel",
+        "note": "Peak AI season — block buffer low"
+      }
+    ],
+    "createdAt": "2026-01-12T08:00:00.000Z",
+    "updatedAt": "2026-01-12T08:00:00.000Z"
+  },
+  {
+    "id": "sem_rst_seed_2",
+    "requesterName": "Dr. Priya Sharma",
+    "requesterRole": "district_officer",
+    "district": "Cuttack",
+    "block": "All",
+    "animalType": "cattle",
+    "semenType": "normal",
+    "quantity": 500,
+    "urgency": "medium",
+    "status": "block_approved",
+    "history": [
+      {
+        "at": "2026-01-08T10:00:00.000Z",
+        "status": "submitted",
+        "by": "BVO Athagarh",
+        "note": "Initial request"
+      },
+      {
+        "at": "2026-01-09T12:00:00.000Z",
+        "status": "block_approved",
+        "by": "CDVO Office",
+        "note": "Verified block stock"
+      }
+    ],
+    "createdAt": "2026-01-08T10:00:00.000Z",
+    "updatedAt": "2026-01-09T12:00:00.000Z"
+  },
+  {
+    "id": "sem_rst_seed_3",
+    "requesterName": "Dr. Lipika Panda",
+    "requesterRole": "dd_dvh",
+    "district": "Cuttack",
+    "block": "All",
+    "animalType": "cattle",
+    "semenType": "normal",
+    "quantity": 300,
+    "urgency": "low",
+    "status": "district_pending",
+    "history": [
+      {
+        "at": "2026-01-05T09:00:00.000Z",
+        "status": "submitted",
+        "by": "BVO Tigiria",
+        "note": ""
+      },
+      {
+        "at": "2026-01-06T11:00:00.000Z",
+        "status": "block_approved",
+        "by": "BVO lead",
+        "note": "OK"
+      },
+      {
+        "at": "2026-01-07T15:00:00.000Z",
+        "status": "district_pending",
+        "by": "CDVO Cuttack",
+        "note": "Awaiting directorate quota"
+      }
+    ],
+    "createdAt": "2026-01-05T09:00:00.000Z",
+    "updatedAt": "2026-01-07T15:00:00.000Z"
+  }
+]

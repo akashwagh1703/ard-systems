@@ -1,0 +1,18 @@
+[
+  {
+    "id": "fhe_seed_1",
+    "farmId": "farm_1",
+    "farmerMobile": "9876543210",
+    "event": "Vaccination",
+    "date": "2026-04-20",
+    "notes": "HS vaccine — field camp at Balianta."
+  },
+  {
+    "id": "fhe_seed_2",
+    "farmId": "farm_1",
+    "farmerMobile": "9876543210",
+    "event": "Checkup",
+    "date": "2026-05-01",
+    "notes": "Routine VD visit; all animals stable."
+  }
+]

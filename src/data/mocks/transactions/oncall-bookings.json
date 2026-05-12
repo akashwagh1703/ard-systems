@@ -1,0 +1,24 @@
+[
+  {
+    "id": "oc_1",
+    "farmerId": "F001",
+    "farmerMobile": "9876543210",
+    "farmer": "Gita Devi",
+    "location": "Khordha",
+    "districtId": "Khordha",
+    "service": "Artificial Insemination",
+    "priority": "High",
+    "date": "2026-05-12",
+    "livestockId": "LS-KH-001",
+    "breed": "Crossbred",
+    "preferredWindow": "08:00-10:00",
+    "status": "assigned",
+    "assignedTo": "Ramesh Das",
+    "justification": "",
+    "semenLocationId": "loc_khordha_cdvo",
+    "closureOtp": "6482",
+    "closureOtpMasked": "**82",
+    "feedback": null,
+    "createdAt": "2026-05-12T08:30:00.000Z"
+  }
+]

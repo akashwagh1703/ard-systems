@@ -1,0 +1,42 @@
+[
+  {
+    "name": "Medicine",
+    "count": 32,
+    "percentage": 26,
+    "trend": "-2%",
+    "aiRecommendation": "Enhanced cold chain monitoring",
+    "avgResolution": 5.1
+  },
+  {
+    "name": "Semen",
+    "count": 28,
+    "percentage": 22,
+    "trend": "+1%",
+    "aiRecommendation": "Stabilize mobile sync in low-connectivity blocks",
+    "avgResolution": 4.8
+  },
+  {
+    "name": "Vaccine",
+    "count": 24,
+    "percentage": 19,
+    "trend": "+3%",
+    "aiRecommendation": "Booster camp communications",
+    "avgResolution": 6.0
+  },
+  {
+    "name": "MVU",
+    "count": 20,
+    "percentage": 16,
+    "trend": "-1%",
+    "aiRecommendation": "Tour plan compliance nudges",
+    "avgResolution": 5.4
+  },
+  {
+    "name": "Other",
+    "count": 21,
+    "percentage": 17,
+    "trend": "0%",
+    "aiRecommendation": "General FAQ deflection",
+    "avgResolution": 4.2
+  }
+]

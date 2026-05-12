@@ -1,0 +1,81 @@
+[
+  {
+    "id": "med_req_farmer_demo",
+    "medicineSkuId": "med_deworm_01",
+    "medicineName": "Albendazole",
+    "quantity": 24,
+    "urgency": "P2",
+    "status": "submitted",
+    "district": "Khordha",
+    "block": "Balianta",
+    "requestedBy": "Gita Devi",
+    "farmerId": "F001",
+    "farmerMobile": "9876543210",
+    "districtProcuredList": false,
+    "fulfillmentScanRefs": [],
+    "history": [
+      {
+        "at": "2026-05-09T08:00:00.000Z",
+        "status": "submitted",
+        "by": "Gita Devi",
+        "note": "Farmer portal — deworming camp follow-up"
+      }
+    ],
+    "createdAt": "2026-05-09T08:00:00.000Z",
+    "updatedAt": "2026-05-09T08:00:00.000Z"
+  },
+  {
+    "id": "med_req_1",
+    "medicineSkuId": "med_antibiotic_01",
+    "medicineName": "Oxytetracycline",
+    "quantity": 300,
+    "urgency": "P1",
+    "status": "submitted",
+    "district": "Khordha",
+    "block": "Bhubaneswar",
+    "requestedBy": "Suresh Patel",
+    "districtProcuredList": false,
+    "fulfillmentScanRefs": [],
+    "history": [
+      {
+        "at": "2026-02-08T09:00:00.000Z",
+        "status": "submitted",
+        "by": "Suresh Patel",
+        "note": "Urgent outbreak support"
+      }
+    ],
+    "createdAt": "2026-02-08T09:00:00.000Z",
+    "updatedAt": "2026-02-08T09:00:00.000Z"
+  },
+  {
+    "id": "med_req_2",
+    "medicineSkuId": "med_deworm_01",
+    "medicineName": "Albendazole",
+    "quantity": 500,
+    "urgency": "P2",
+    "status": "district_approved",
+    "district": "Cuttack",
+    "block": "Athagarh",
+    "requestedBy": "Dr. Priya Sharma",
+    "districtProcuredList": true,
+    "fulfillmentScanRefs": [
+      "SCAN-REF-4451"
+    ],
+    "history": [
+      {
+        "at": "2026-02-01T10:00:00.000Z",
+        "status": "submitted",
+        "by": "Block office",
+        "note": ""
+      },
+      {
+        "at": "2026-02-02T13:30:00.000Z",
+        "status": "district_approved",
+        "by": "CDVO Cuttack",
+        "note": "Approved with district procurement"
+      }
+    ],
+    "createdAt": "2026-02-01T10:00:00.000Z",
+    "updatedAt": "2026-02-02T13:30:00.000Z"
+  }
+]

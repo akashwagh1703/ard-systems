@@ -1,9 +1,10 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Zap } from 'lucide-react';
+import { Zap } from 'lucide-react';
+import { useAuth } from '../../contexts/AuthContext';
+import { HierarchyStrip } from './SowDesignKit';
 
 export default function ServiceShell({ title, subtitle, icon: Icon, color = 'var(--blue)', modules, activeModule, onModuleChange, children, badge }) {
-  const navigate = useNavigate();
+  const { user } = useAuth();
   const normalizedBadge = badge === 'AI Powered' ? 'AI-Simulated' : badge;
 
   return (
@@ -13,6 +14,7 @@ export default function ServiceShell({ title, subtitle, icon: Icon, color = 'var
       <div style={{
         background: 'rgba(0,111,142,0.10)',
         border: '1px solid rgba(0,111,142,0.28)',
+        borderLeft: `4px solid ${color}`,
         borderRadius: 'var(--r-2xl)',
         padding: '1rem 1rem',
         marginBottom: 20,
@@ -48,6 +50,12 @@ export default function ServiceShell({ title, subtitle, icon: Icon, color = 'var
               <Zap className="icon-xs" style={{ color: 'var(--orange)' }} />
               {subtitle}
             </p>
+            <div style={{ marginTop: 10, paddingTop: 10, borderTop: '1px dashed rgba(0,111,142,0.22)' }}>
+              <HierarchyStrip role={user?.role} district={user?.district} />
+              <p style={{ fontSize: 10, color: 'var(--text-4)', marginTop: 8, lineHeight: 1.45 }}>
+                External integrations (Krushak Odisha, Bharat Pashudhan, GO-SUGAM, vendors, fleet) are shown as mock stubs in the header until live APIs are configured.
+              </p>
+            </div>
           </div>
         </div>
       </div>

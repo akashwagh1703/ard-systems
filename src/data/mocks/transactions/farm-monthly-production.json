@@ -1,0 +1,9 @@
+[
+  {
+    "id": "farm_prod_1",
+    "farmId": "farm_1",
+    "month": "2026-05",
+    "milkLitres": 12800,
+    "calvesBorn": 4
+  }
+]

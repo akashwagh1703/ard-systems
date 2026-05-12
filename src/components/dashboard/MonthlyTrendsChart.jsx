@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-import { getTrendsByRange, getTrendStats, exportToCSV } from '../../services/resourceChartData';
+import { downloadCsv } from '../../utils/exportCsv';
+import { getMonthlyResourceTrends } from '../../services/data/aggregateDashboard';
 import { TrendingUp, TrendingDown, Download, Calendar } from 'lucide-react';
 
 export default function MonthlyTrendsChart() {
@@ -12,10 +13,10 @@ export default function MonthlyTrendsChart() {
     loadData(dateRange);
   }, [dateRange]);
 
-  const loadData = (range) => {
-    const trendsData = getTrendsByRange(range);
-    setData(trendsData);
-    setStats(getTrendStats(trendsData));
+  const loadData = async (range) => {
+    const result = await getMonthlyResourceTrends(range);
+    setData(result.rows);
+    setStats(result.stats);
   };
 
   const handleExport = () => {
@@ -26,7 +27,7 @@ export default function MonthlyTrendsChart() {
       Medicine: d.medicine,
       Total: d.total
     }));
-    exportToCSV(exportData, `monthly-trends-${dateRange}.csv`);
+    downloadCsv(exportData, `monthly-trends-${dateRange}.csv`);
   };
 
   // Custom tooltip

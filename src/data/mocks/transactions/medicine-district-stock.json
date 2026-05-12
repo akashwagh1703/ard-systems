@@ -1,0 +1,20 @@
+[
+  {
+    "id": "med_dst_1",
+    "district": "Khordha",
+    "skuId": "med_antibiotic_01",
+    "medicineName": "Oxytetracycline",
+    "qtyOnHand": 1200,
+    "flaggedExtraForState": false,
+    "updatedAt": "2026-02-10T06:00:00.000Z"
+  },
+  {
+    "id": "med_dst_2",
+    "district": "Cuttack",
+    "skuId": "med_deworm_01",
+    "medicineName": "Albendazole",
+    "qtyOnHand": 2400,
+    "flaggedExtraForState": true,
+    "updatedAt": "2026-02-10T06:00:00.000Z"
+  }
+]

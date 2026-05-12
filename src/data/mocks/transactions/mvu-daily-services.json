@@ -1,0 +1,22 @@
+[
+  {
+    "id": "mvu_daily_1",
+    "mvuId": "MVU-KH-01",
+    "district": "Khordha",
+    "serviceDate": "2026-05-05",
+    "village": "Jatni",
+    "gpsLat": 20.159,
+    "gpsLng": 85.707,
+    "speciesServed": {
+      "cattle": 18,
+      "goat": 7,
+      "buffalo": 3
+    },
+    "treatmentsGiven": 22,
+    "vaccinationsDone": 14,
+    "aiServicesDone": 6,
+    "fieldStaffCount": 3,
+    "submittedBy": "MVU Staff KH-01",
+    "createdAt": "2026-05-05T17:10:00.000Z"
+  }
+]

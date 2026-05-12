@@ -2,19 +2,27 @@ import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import AIAssistant from './AIAssistant';
-import { LogOut, ArrowLeft, Zap, Globe, BarChart3 } from 'lucide-react';
+import { LogOut, ArrowLeft, Zap, Globe, BarChart3, RotateCcw, LayoutGrid } from 'lucide-react';
+import { getDataProviderMode } from '../../services/data/provider';
+import { resetMockDataToSeed } from '../../services/data/repositories/grievanceRepository';
+import { IntegrationStubBar } from './SowDesignKit';
 
 const ROLE_LABEL = {
   super_admin:      'Super Admin',
+  directorate:      'Directorate',
   district_officer: 'District Officer',
+  sdvo:             'SDVO',
+  dd_dvh:           'Deputy Director (DVH)',
   block_officer:    'Block Officer',
   field_user:       'Field User',
+  voti_admin:       'VOTI',
   farmer:           'Farmer',
 };
 
 const NAV_LINKS = [
-  { path: '/integrations', label: 'Integrations', icon: Globe    },
-  { path: '/reports',      label: 'Reports',      icon: BarChart3 },
+  { path: '/dashboard', hash: '#ard-services', label: 'Service menu', icon: LayoutGrid },
+  { path: '/integrations', label: 'Integrations', icon: Globe },
+  { path: '/reports', label: 'Reports', icon: BarChart3 },
 ];
 
 export default function AppShell({ children }) {
@@ -69,11 +77,25 @@ export default function AppShell({ children }) {
 
           {/* Nav links */}
           <div className="hidden md:flex" style={{ display: 'flex', alignItems: 'center', gap: 4, marginLeft: 8 }}>
-            {NAV_LINKS.map(link => {
+            {NAV_LINKS.map((link) => {
               const Icon = link.icon;
-              const isActive = location.pathname === link.path;
+              const isActive = link.hash
+                ? location.pathname === '/dashboard' && location.hash === link.hash
+                : location.pathname === link.path;
+              const go = () => {
+                if (link.hash) {
+                  navigate(`/dashboard${link.hash}`);
+                  if (location.pathname === '/dashboard') {
+                    requestAnimationFrame(() => {
+                      document.getElementById('ard-services')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    });
+                  }
+                } else {
+                  navigate(link.path);
+                }
+              };
               return (
-                <button key={link.path} onClick={() => navigate(link.path)} style={{
+                <button key={link.path + (link.hash || '')} type="button" onClick={go} style={{
                   display: 'flex', alignItems: 'center', gap: 5,
                   padding: '5px 10px', borderRadius: 8, border: 'none',
                   background: isActive ? 'rgba(255,255,255,0.20)' : 'rgba(255,255,255,0.08)',
@@ -81,6 +103,7 @@ export default function AppShell({ children }) {
                   fontSize: 11, fontWeight: isActive ? 600 : 500,
                   cursor: 'pointer', transition: 'all 0.15s ease',
                 }}
+                  title={link.hash ? 'Jump to your service tiles on the home page' : undefined}
                   onMouseEnter={e => { if (!isActive) e.currentTarget.style.background = 'rgba(255,255,255,0.14)'; }}
                   onMouseLeave={e => { if (!isActive) e.currentTarget.style.background = 'rgba(255,255,255,0.08)'; }}
                 >
@@ -94,6 +117,32 @@ export default function AppShell({ children }) {
 
         {/* Right */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          {(user?.role === 'super_admin' || user?.role === 'directorate') && getDataProviderMode() === 'mock' && (
+            <button
+              type="button"
+              title="Reset grievance mock data to bundled JSON seed"
+              onClick={() => {
+                if (!window.confirm('Reset demo data to bundled JSON seeds? This clears mock transaction overlays in localStorage (grievance, semen, vaccine, medicine, disease, MVU, training, expenditure, farm, on-call) and reloads the page.')) return;
+                resetMockDataToSeed().then(() => window.location.reload());
+              }}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 5,
+                padding: '5px 10px',
+                borderRadius: 8,
+                border: '1px solid rgba(255,255,255,0.25)',
+                background: 'rgba(255,255,255,0.08)',
+                color: 'rgba(255,255,255,0.9)',
+                fontSize: 11,
+                fontWeight: 600,
+                cursor: 'pointer',
+              }}
+            >
+              <RotateCcw className="icon-xs" />
+              Reset demo data
+            </button>
+          )}
           <div style={{
             display: 'flex', alignItems: 'center', gap: 6,
             padding: '4px 10px', borderRadius: 99,
@@ -113,7 +162,7 @@ export default function AppShell({ children }) {
             fontSize: 11, fontWeight: 600, color: '#FED7AA',
           }} className="hidden sm:flex">
             <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#F97316', flexShrink: 0 }} />
-            {ROLE_LABEL[user?.role]}
+            {ROLE_LABEL[user?.role] ?? user?.role ?? '—'}
           </div>
 
           <div style={{
@@ -146,6 +195,8 @@ export default function AppShell({ children }) {
         </div>
       </header>
 
+      <IntegrationStubBar />
+
       {/* ── Page content ── */}
       <main style={{ flex: 1, padding: '1.5rem 2rem', maxWidth: 1280, width: '100%', margin: '0 auto', boxSizing: 'border-box' }}>
         {children}
@@ -159,7 +210,7 @@ export default function AppShell({ children }) {
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
           <Zap className="icon-xs" style={{ color: 'var(--orange)' }} />
-          <span style={{ fontSize: 10, color: 'var(--text-4)', fontWeight: 500 }}>ARD Digital Operations Platform · Government of Odisha · AI-Simulated Decision Support</span>
+          <span style={{ fontSize: 10, color: 'var(--text-4)', fontWeight: 500 }}>ARD Digital Operations Platform · Government of Odisha · Repository-backed modules; AI overlays where labelled</span>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
           <div style={{ width: 6, height: 6, borderRadius: '50%', background: 'var(--success)', animation: 'dotPulse 2s ease-in-out infinite' }} />

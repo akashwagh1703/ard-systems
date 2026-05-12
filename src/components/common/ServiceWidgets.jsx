@@ -17,11 +17,11 @@ export function StatCard({ label, value, sub, icon: Icon, color = 'var(--blue)',
     >
       <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 10 }}>
         <div style={{
-          width: 36, height: 36, borderRadius: 'var(--r-md)',
+          width: 48, height: 48, borderRadius: 'var(--r-md)',
           background: color + '12', border: `1px solid ${color}20`,
           display: 'flex', alignItems: 'center', justifyContent: 'center',
         }}>
-          {Icon && <Icon className="icon-sm" style={{ color }} />}
+          {Icon && <Icon className="icon-lg" style={{ color }} />}
         </div>
         <Brain className="icon-xs" style={{ color: 'var(--text-4)', marginTop: 2 }} />
       </div>
@@ -124,16 +124,16 @@ export function AIAlert({ title, message, color = 'var(--orange)', actions = [] 
         </div>
         <div style={{ position: 'absolute', bottom: -18, right: -18, width: 64, height: 64, borderRadius: '50%', background: `${color}20`, filter: 'blur(4px)', pointerEvents: 'none' }} />
         <div style={{
-          width: 40, height: 40, borderRadius: 'var(--r-md)', flexShrink: 0,
+          width: 52, height: 52, borderRadius: 'var(--r-md)', flexShrink: 0,
           background: `${color}15`,
           display: 'flex', alignItems: 'center', justifyContent: 'center',
         }}>
-          <Brain className="icon-md" style={{ color }} />
+          <Brain className="icon-xl" style={{ color }} />
         </div>
         <div style={{ flex: 1 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6 }}>
             <Zap className="icon-xs" style={{ color }} />
-            <span style={{ fontSize: 13, fontWeight: 700, color: 'var(--text-1)' }}>{title}</span>
+            <span style={{ fontSize: 12, fontWeight: 700, color: 'var(--text-1)', lineHeight: 1.35 }}>{title}</span>
             <span style={{
               fontSize: 9, fontWeight: 700, padding: '2px 6px', borderRadius: 'var(--r-full)',
               background: `${color}15`, color, border: `1px solid ${color}30`,
@@ -169,7 +169,7 @@ export function AIAlert({ title, message, color = 'var(--orange)', actions = [] 
         </div>
       </div>
       {activeAction && detailBlocks && (
-        <div style={{ position: 'fixed', inset: 0, background: 'rgba(15,23,42,0.45)', zIndex: 120, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 16 }}>
+        <div className="ard-modal-backdrop" style={{ zIndex: 120 }}>
           <div style={{ width: '100%', maxWidth: 760, background: 'var(--surface)', borderRadius: 18, border: `1px solid ${color}35`, boxShadow: `0 0 0 1px ${color}16 inset, var(--shadow-lg)`, overflow: 'hidden' }}>
             <div style={{ background: 'rgba(66,133,244,0.14), rgba(14,165,233,0.10))', borderBottom: '1px solid var(--border)', padding: '0.95rem 1.1rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', position: 'relative', overflow: 'hidden' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
@@ -266,9 +266,17 @@ export function AIAlert({ title, message, color = 'var(--orange)', actions = [] 
 export function SectionHeader({ title, icon: Icon, color = 'var(--blue)', right }) {
   return (
     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-        {Icon && <Icon className="icon-sm" style={{ color }} />}
-        <span style={{ fontSize: 13, fontWeight: 700, color: 'var(--text-1)' }}>{title}</span>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+        {Icon && (
+          <div style={{
+            width: 44, height: 44, borderRadius: 12, flexShrink: 0,
+            background: 'var(--base-2)', border: '1px solid var(--border)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+          }}>
+            <Icon className="icon-lg" style={{ color }} />
+          </div>
+        )}
+        <span style={{ fontSize: 12, fontWeight: 700, color: 'var(--text-1)', lineHeight: 1.35 }}>{title}</span>
       </div>
       {right}
     </div>
@@ -306,15 +314,15 @@ export function StatusRow({ label, sub, status, statusColor, statusLabel, right,
       <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
         {Icon && (
           <div style={{
-            width: 34, height: 34, borderRadius: 'var(--r-md)', flexShrink: 0,
+            width: 44, height: 44, borderRadius: 'var(--r-md)', flexShrink: 0,
             background: iconBg || 'var(--base-3)',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
           }}>
-            <Icon className="icon-sm" style={{ color: statusColor || 'var(--text-3)' }} />
+            <Icon className="icon-lg" style={{ color: statusColor || 'var(--text-3)' }} />
           </div>
         )}
         <div>
-          <p style={{ fontSize: 12, fontWeight: 600, color: 'var(--text-1)' }}>{label}</p>
+          <p style={{ fontSize: 12, fontWeight: 600, color: 'var(--text-1)', lineHeight: 1.35 }}>{label}</p>
           {sub && <p style={{ fontSize: 10, color: 'var(--text-4)', marginTop: 1 }}>{sub}</p>}
         </div>
       </div>
@@ -345,6 +353,63 @@ export function ProgressBar({ value, color = 'var(--blue)', label, showValue = t
       )}
       <div className="progress">
         <div className="progress-fill" style={{ width: `${Math.min(value, 100)}%`, background: color }} />
+      </div>
+    </div>
+  );
+}
+
+/* ── Submitted / saved records under forms (consistent table layout) ── */
+/**
+ * @param {object} props
+ * @param {string} [props.title]
+ * @param {string} [props.emptyText]
+ * @param {{ key: string, label: string, align?: 'right', render?: (value: unknown, row: object) => React.ReactNode }[]} props.columns
+ * @param {object[]} props.rows
+ * @param {(row: object) => string|number} [props.getRowKey]
+ */
+export function SubmittedRecordsTable({
+  title = 'Saved records',
+  emptyText = 'No records yet.',
+  columns,
+  rows,
+  getRowKey = (r) => r.id,
+}) {
+  if (!rows || rows.length === 0) {
+    return (
+      <div style={{ marginTop: 18 }}>
+        {title ? <p className="section-label">{title}</p> : null}
+        <p style={{ fontSize: 13, color: 'var(--text-3)', marginTop: title ? 6 : 0 }}>{emptyText}</p>
+      </div>
+    );
+  }
+  return (
+    <div style={{ marginTop: 18 }}>
+      {title ? <p className="section-label">{title}</p> : null}
+      <div style={{ overflowX: 'auto', marginTop: title ? 10 : 0, border: '1px solid var(--border)', borderRadius: 'var(--r-lg)', background: 'var(--surface)' }}>
+        <table className="table" style={{ fontSize: 13 }}>
+          <thead>
+            <tr>
+              {columns.map((c) => (
+                <th key={c.key} style={c.align === 'right' ? { textAlign: 'right' } : undefined}>{c.label}</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map((row) => (
+              <tr key={String(getRowKey(row))}>
+                {columns.map((c) => {
+                  const v = row[c.key];
+                  const cell = c.render ? c.render(v, row) : (v == null || v === '' ? '—' : String(v));
+                  return (
+                    <td key={c.key} style={c.align === 'right' ? { textAlign: 'right', fontVariantNumeric: 'tabular-nums' } : undefined}>
+                      {cell}
+                    </td>
+                  );
+                })}
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     </div>
   );

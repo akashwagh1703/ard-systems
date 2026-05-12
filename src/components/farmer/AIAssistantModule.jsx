@@ -62,11 +62,11 @@ export default function AIAssistantModule() {
 
       {/* Header */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
-        <div style={{ width: 42, height: 42, borderRadius: 12, background: 'var(--orange), var(--orange-dark))', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <Bot size={20} color="#fff" />
+        <div style={{ width: 52, height: 52, borderRadius: 12, background: 'linear-gradient(135deg, var(--orange), var(--orange-dark))', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <Bot size={28} color="#fff" strokeWidth={2} />
         </div>
         <div>
-          <h2 style={{ fontSize: 18, fontWeight: 800, color: 'var(--text-1)', letterSpacing: '-0.02em' }}>Livestock Decision Support Assistant</h2>
+          <h2 style={{ fontSize: 15, fontWeight: 800, color: 'var(--text-1)', letterSpacing: '-0.02em', lineHeight: 1.35 }}>Livestock Decision Support Assistant</h2>
           <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
             <div style={{ width: 7, height: 7, borderRadius: '50%', background: 'var(--success)', animation: 'dotPulse 2s ease-in-out infinite' }} />
             <span style={{ fontSize: 12, color: 'var(--success)', fontWeight: 500 }}>Online · AI-Simulated Advisory Support</span>

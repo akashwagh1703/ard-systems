@@ -1,0 +1,14 @@
+[
+  {
+    "id": "sem_red_seed_1",
+    "fromDistrict": "Khordha",
+    "toDistrict": "Puri",
+    "mode": "qty",
+    "quantity": 50,
+    "percent": null,
+    "pickupSlots": ["2026-01-20T09:00:00.000Z", "2026-01-21T09:00:00.000Z"],
+    "status": "scheduled",
+    "createdAt": "2026-01-10T10:00:00.000Z",
+    "createdBy": "State Directorate"
+  }
+]

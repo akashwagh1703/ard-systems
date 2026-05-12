@@ -1,0 +1,7 @@
+[
+  { "id": "med_ab01", "sku": "ABX-OTC-01", "name": "Oxytetracycline LA", "category": "antibiotic" },
+  { "id": "med_dw01", "sku": "DWM-FEN-01", "name": "Fenbendazole Bolus", "category": "dewormer" },
+  { "id": "med_ns01", "sku": "NSA-MEL-01", "name": "Meloxicam Injection", "category": "anti_inflammatory" },
+  { "id": "med_vt01", "sku": "VIT-B-01", "name": "Vitamin B Complex", "category": "supplement" },
+  { "id": "med_tp01", "sku": "TOP-WD-01", "name": "Wound Spray (Topical)", "category": "topical" }
+]

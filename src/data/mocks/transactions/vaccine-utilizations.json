@@ -1,0 +1,16 @@
+[
+  {
+    "id": "vac_util_1",
+    "batchNumber": "FMD-2026-OD-001",
+    "vaccineId": "vac_fmd",
+    "farmerName": "Smt. Geeta Das",
+    "farmerPhone": "9123456789",
+    "species": "cattle",
+    "doses": 1,
+    "villageName": "Jatni",
+    "district": "Khordha",
+    "dateAdministered": "2026-01-13",
+    "locationId": "loc_khordha_cdvo",
+    "createdAt": "2026-01-13T16:00:00.000Z"
+  }
+]

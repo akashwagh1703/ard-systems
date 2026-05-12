@@ -1,32 +1,44 @@
 import React, { useState, useEffect } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
-import { getDistrictWiseDistribution, getTopDistricts, getResourceTotals, exportToCSV } from '../../services/resourceChartData';
+import { getDistrictResourceDistribution } from '../../services/data/aggregateDashboard';
+import { downloadCsv } from '../../utils/exportCsv';
 import { TrendingUp, Download, Maximize2, Minimize2 } from 'lucide-react';
 
 export default function DistrictDistributionCharts() {
   const [allData, setAllData] = useState([]);
-  const [showAll, setShowAll] = useState(false);
   const [totals, setTotals] = useState(null);
+  const [showAll, setShowAll] = useState(false);
 
   useEffect(() => {
-    loadData();
+    let cancelled = false;
+    (async () => {
+      const result = await getDistrictResourceDistribution();
+      if (cancelled) return;
+      setAllData(result.rows);
+      setTotals(result.totals);
+    })();
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
-  const loadData = () => {
-    const data = getDistrictWiseDistribution();
-    setAllData(data);
-    setTotals(getResourceTotals(data));
-  };
-
-  const displayData = showAll ? allData : getTopDistricts(allData, 10);
-  const displayTotals = getResourceTotals(displayData);
+  const displayData = showAll ? allData : allData.slice(0, 10);
+  const displayTotals = displayData.reduce(
+    (acc, d) => ({
+      semen: acc.semen + d.semen,
+      vaccine: acc.vaccine + d.vaccine,
+      medicine: acc.medicine + d.medicine,
+      total: acc.total + d.total,
+    }),
+    { semen: 0, vaccine: 0, medicine: 0, total: 0 }
+  );
 
   const handleExport = (resource) => {
     const exportData = displayData.map(d => ({
       District: d.district,
       [resource.charAt(0).toUpperCase() + resource.slice(1)]: d[resource]
     }));
-    exportToCSV(exportData, `${resource}-distribution.csv`);
+    downloadCsv(exportData, `${resource}-distribution.csv`);
   };
 
   // Custom tooltip
@@ -182,14 +194,14 @@ export default function DistrictDistributionCharts() {
           fontSize: 11,
           color: 'var(--text-4)'
         }}>
-          <span>Top: {data[0].district} ({data[0][dataKey].toLocaleString()})</span>
-          <span>Avg: {Math.floor(total / data.length).toLocaleString()}</span>
+          <span>Top: {data[0] ? `${data[0].district} (${data[0][dataKey].toLocaleString()})` : '—'}</span>
+          <span>Avg: {data.length ? Math.floor(total / data.length).toLocaleString() : '—'}</span>
         </div>
       </div>
     );
   };
 
-  if (!allData.length || !totals) {
+  if (totals === null) {
     return (
       <div style={{
         background: 'var(--surface)',
@@ -199,7 +211,22 @@ export default function DistrictDistributionCharts() {
         textAlign: 'center',
         color: 'var(--text-3)'
       }}>
-        Loading district distribution...
+        Loading district distribution…
+      </div>
+    );
+  }
+
+  if (!allData.length) {
+    return (
+      <div style={{
+        background: 'var(--surface)',
+        border: '1px solid var(--border)',
+        borderRadius: 20,
+        padding: '2rem',
+        textAlign: 'center',
+        color: 'var(--text-3)'
+      }}>
+        No district-level inventory rows found. Add semen, vaccine, and medicine district stock in mock data to populate this chart.
       </div>
     );
   }

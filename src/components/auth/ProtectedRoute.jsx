@@ -12,7 +12,7 @@ const ProtectedRoute = ({ children, requiredRoles = [] }) => {
     return (
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '60vh' }}>
         <div style={{
-          background: 'var(--surface)', border: '1px solid var(--surface-border)',
+          background: 'var(--surface)', border: '1px solid var(--border)',
           borderRadius: 20, padding: '2rem', maxWidth: 360, width: '100%', textAlign: 'center',
         }}>
           <p style={{ fontSize: 16, fontWeight: 600, color: 'var(--text-1)', marginBottom: 8 }}>Access Denied</p>

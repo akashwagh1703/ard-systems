@@ -1,12 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { AreaChart, Area, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
-import { 
-  getFarmerOnboardingTrend, 
-  getFarmerOnboardingStats, 
-  getFarmersByDistrict, 
-  addPercentages,
-  exportToCSV 
-} from '../../services/resourceChartData';
+import { downloadCsv } from '../../utils/exportCsv';
+import { getFarmerOnboardingAnalytics } from '../../services/data/aggregateDashboard';
 import { TrendingUp, Users, Download, Award } from 'lucide-react';
 
 export default function FarmerOnboardingCharts() {
@@ -19,14 +14,11 @@ export default function FarmerOnboardingCharts() {
     loadData();
   }, []);
 
-  const loadData = () => {
-    const trend = getFarmerOnboardingTrend(12);
-    const districts = addPercentages(getFarmersByDistrict());
-    const statistics = getFarmerOnboardingStats(trend);
-    
-    setTrendData(trend);
-    setDistrictData(districts);
-    setStats(statistics);
+  const loadData = async () => {
+    const result = await getFarmerOnboardingAnalytics();
+    setTrendData(result.trendData);
+    setDistrictData(result.districtData);
+    setStats(result.stats);
   };
 
   const displayDistricts = showAllDistricts ? districtData : districtData.slice(0, 10);
@@ -37,7 +29,7 @@ export default function FarmerOnboardingCharts() {
       'New Farmers': d.farmers,
       'Cumulative Total': d.cumulative
     }));
-    exportToCSV(exportData, 'farmer-onboarding-trend.csv');
+    downloadCsv(exportData, 'farmer-onboarding-trend.csv');
   };
 
   const handleExportDistricts = () => {
@@ -47,7 +39,7 @@ export default function FarmerOnboardingCharts() {
       'Growth %': d.growth,
       'Percentage': d.percentage
     }));
-    exportToCSV(exportData, 'farmers-by-district.csv');
+    downloadCsv(exportData, 'farmers-by-district.csv');
   };
 
   // Custom tooltip for area chart
@@ -492,7 +484,7 @@ export default function FarmerOnboardingCharts() {
             fontSize: 11,
             color: 'var(--text-4)'
           }}>
-            <span>Top: {displayDistricts[0].district} ({displayDistricts[0].farmers.toLocaleString()})</span>
+            <span>Top: {displayDistricts[0] ? `${displayDistricts[0].district} (${displayDistricts[0].farmers.toLocaleString()})` : '—'}</span>
             <span>{displayDistricts.length} districts shown</span>
           </div>
         </div>

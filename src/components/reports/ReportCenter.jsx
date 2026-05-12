@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { ContentCard, SectionHeader } from '../common/ServiceWidgets';
 import {
   REPORT_TEMPLATES, generateReportData, exportToCSV,
-  exportToJSON, SCHEDULED_REPORTS, getChartData
+  exportToJSON, SCHEDULED_REPORTS, getChartDataAsync
 } from '../../services/reportingEngine';
 import {
   ArrowLeft, Download, FileText, Calendar, Clock,
@@ -22,6 +22,42 @@ const CATEGORY_COLORS = {
   ai:           { bg: '#EEF2FF', text: '#6366F1', border: '#C7D2FE' },
   custom:       { bg: '#F9FAFB', text: '#6B7280', border: '#E5E7EB' },
 };
+
+function previewChartType(templateId) {
+  if (templateId === 'ai_service_report' || templateId === 'executive_summary' || templateId === 'ai_insights_report') return 'ai_coverage_trend';
+  if (templateId === 'disease_surveillance_report') return 'disease_cases';
+  if (templateId === 'expenditure_report') return 'budget_utilization';
+  if (templateId === 'grievance_analytics') return 'grievance_trend';
+  if (templateId === 'mvu_performance') return 'mvu_coverage';
+  if (templateId === 'vaccination_coverage') return 'vaccination_coverage';
+  return 'vaccination_coverage';
+}
+
+function previewChartBars(templateId) {
+  if (templateId === 'disease_surveillance_report') {
+    return [
+      { key: 'fmd', label: 'FMD', color: 'var(--danger)' },
+      { key: 'hs', label: 'HS', color: 'var(--orange)' },
+      { key: 'bq', label: 'Other', color: 'var(--warning)' },
+    ];
+  }
+  if (templateId === 'grievance_analytics') {
+    return [
+      { key: 'received', label: 'Received', color: 'var(--danger)' },
+      { key: 'resolved', label: 'Resolved', color: 'var(--success)' },
+    ];
+  }
+  if (templateId === 'expenditure_report') {
+    return [
+      { key: 'utilized', label: 'Booked % (max month)', color: 'var(--success)' },
+      { key: 'allocated', label: 'Cap', color: 'var(--border-2)' },
+    ];
+  }
+  return [
+    { key: 'coverage', label: 'Series', color: 'var(--blue)' },
+    { key: 'target', label: 'Target', color: 'var(--border-2)' },
+  ];
+}
 
 // Pure CSS bar chart
 const BarChart = ({ data, xKey, bars }) => {
@@ -92,23 +128,33 @@ const ReportPreview = ({ template }) => {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState(null);
   const [dateRange, setDateRange] = useState('30d');
+  const [chartRows, setChartRows] = useState([]);
+  const [chartLoading, setChartLoading] = useState(true);
 
   const generate = async () => {
     setLoading(true);
     await new Promise(r => setTimeout(r, 600));
-    setData(generateReportData(template.id, { dateRange }));
+    setData(await generateReportData(template.id, { dateRange }));
     setLoading(false);
   };
 
   useEffect(() => { generate(); }, [template.id, dateRange]);
 
-  const chartData = getChartData(
-    template.id === 'ai_service_report' ? 'ai_coverage_trend' :
-    template.id === 'disease_surveillance_report' ? 'disease_cases' :
-    template.id === 'expenditure_report' ? 'budget_utilization' :
-    template.id === 'grievance_analytics' ? 'grievance_trend' :
-    template.id === 'mvu_performance' ? 'mvu_coverage' : 'vaccination_coverage'
-  );
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      setChartLoading(true);
+      const typ = previewChartType(template.id);
+      const rows = await getChartDataAsync(typ);
+      if (!cancelled) {
+        setChartRows(Array.isArray(rows) ? rows : []);
+        setChartLoading(false);
+      }
+    })();
+    return () => { cancelled = true; };
+  }, [template.id, dateRange]);
+
+  const chartBars = previewChartBars(template.id);
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
@@ -126,7 +172,7 @@ const ReportPreview = ({ template }) => {
           <RefreshCw className={`icon-xs ${loading ? 'animate-spin' : ''}`} style={{ animation: loading ? 'spin 1s linear infinite' : 'none' }} />
           {loading ? 'Generating...' : 'Regenerate'}
         </button>
-        <button onClick={() => data && exportToCSV(data.kpis || data.districtBreakdown || data.categories || [], `${template.id}_${dateRange}`)}
+        <button onClick={() => data && exportToCSV(data.kpis || data.districtBreakdown || data.categories || data.coldChain || data.serviceLogs || data.batches || [], `${template.id}_${dateRange}`)}
           style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '8px 12px', background: 'var(--success)', color: '#fff', border: 'none', borderRadius: 'var(--r-xl)', fontSize: 13, fontWeight: 600, cursor: 'pointer', transition: 'all 0.15s ease' }}>
           <Download className="icon-xs" /> CSV
         </button>
@@ -154,18 +200,16 @@ const ReportPreview = ({ template }) => {
 
           {/* Trend chart */}
           <ContentCard>
-            <SectionHeader title="6-Month Trend" icon={TrendingUp} color="var(--blue)" />
-            <BarChart
-              data={chartData}
-              xKey="month"
-              bars={
-                template.id === 'disease_surveillance_report'
-                  ? [{ key: 'fmd', label: 'FMD', color: 'var(--danger)' }, { key: 'hs', label: 'HS', color: 'var(--orange)' }, { key: 'bq', label: 'BQ', color: 'var(--warning)' }]
-                  : template.id === 'grievance_analytics'
-                  ? [{ key: 'received', label: 'Received', color: 'var(--danger)' }, { key: 'resolved', label: 'Resolved', color: 'var(--success)' }]
-                  : [{ key: 'coverage', label: 'Actual', color: 'var(--blue)' }, { key: 'target', label: 'Target', color: 'var(--border-2)' }]
-              }
-            />
+            <SectionHeader title="6-Month trend (mock JSON–derived)" icon={TrendingUp} color="var(--blue)" />
+            {chartLoading || !chartRows.length ? (
+              <p style={{ fontSize: 13, color: 'var(--text-3)', padding: '1rem 0' }}>{chartLoading ? 'Loading chart…' : 'No chart rows.'}</p>
+            ) : (
+              <BarChart
+                data={chartRows}
+                xKey="month"
+                bars={chartBars}
+              />
+            )}
           </ContentCard>
 
           {/* KPIs */}
@@ -175,7 +219,7 @@ const ReportPreview = ({ template }) => {
                 <div key={i} style={{ padding: '1rem', borderRadius: 'var(--r-xl)', background: 'var(--base-2)', border: '1px solid var(--border)' }}>
                   <p style={{ fontSize: 11, color: 'var(--text-4)', marginBottom: 4 }}>{kpi.metric}</p>
                   <p style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--text-1)', marginBottom: 4 }}>{kpi.value}</p>
-                  <span style={{ fontSize: 11, fontWeight: 600, color: kpi.change?.startsWith('+') ? 'var(--success)' : 'var(--danger)' }}>{kpi.change}</span>
+                  <span style={{ fontSize: 11, fontWeight: 600, color: kpi.change === 'Live' ? 'var(--text-3)' : kpi.change?.startsWith('+') ? 'var(--success)' : 'var(--danger)' }}>{kpi.change}</span>
                 </div>
               ))}
             </div>
@@ -217,6 +261,13 @@ const ReportPreview = ({ template }) => {
             </div>
           )}
 
+          {data.serviceLogs && (
+            <div>
+              <p style={{ fontSize: 13, fontWeight: 600, color: 'var(--text-1)', marginBottom: 8 }}>Service logs (sample)</p>
+              <DataTable data={data.serviceLogs} />
+            </div>
+          )}
+
           {/* Service health */}
           {data.serviceHealth && (
             <div>
@@ -254,6 +305,60 @@ const ScheduledRow = ({ report }) => (
     </span>
   </div>
 );
+
+const ANALYTICS_CHARTS = [
+  { title: 'AI coverage (resource trend)', type: 'ai_coverage_trend', bars: [{ key: 'coverage', label: 'Coverage %', color: 'var(--blue)' }, { key: 'target', label: 'Target', color: 'var(--border-2)' }] },
+  { title: 'Disease registrations by month', type: 'disease_cases', bars: [{ key: 'fmd', label: 'FMD', color: 'var(--danger)' }, { key: 'hs', label: 'HS', color: 'var(--orange)' }, { key: 'bq', label: 'Other', color: 'var(--warning)' }] },
+  { title: 'Budget booked (by month)', type: 'budget_utilization', bars: [{ key: 'utilized', label: 'Booked %', color: 'var(--success)' }, { key: 'allocated', label: 'Cap', color: 'var(--border-2)' }] },
+  { title: 'Grievance trend', type: 'grievance_trend', bars: [{ key: 'received', label: 'Received', color: 'var(--danger)' }, { key: 'resolved', label: 'Resolved', color: 'var(--success)' }] },
+  { title: 'MVU compliance (model)', type: 'mvu_coverage', bars: [{ key: 'coverage', label: 'Coverage %', color: '#6366F1' }, { key: 'target', label: 'Target', color: 'var(--border-2)' }] },
+  { title: 'Vaccination share (resource trend)', type: 'vaccination_coverage', bars: [{ key: 'coverage', label: 'Share %', color: '#7C3AED' }, { key: 'target', label: 'Target', color: 'var(--border-2)' }] },
+];
+
+function AnalyticsOverviewGrid() {
+  const [byType, setByType] = useState({});
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      const entries = await Promise.all(ANALYTICS_CHARTS.map(async (ch) => [ch.type, await getChartDataAsync(ch.type)]));
+      if (!cancelled) {
+        setByType(Object.fromEntries(entries));
+        setLoading(false);
+      }
+    })();
+    return () => { cancelled = true; };
+  }, []);
+
+  return (
+    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
+      {ANALYTICS_CHARTS.map((chart) => {
+        const rows = byType[chart.type] || [];
+        return (
+          <ContentCard key={chart.type}>
+            <SectionHeader title={chart.title} icon={BarChart3} color="var(--blue)"
+              right={
+                <button
+                  type="button"
+                  onClick={() => rows.length > 0 && exportToCSV(rows, chart.type)}
+                  style={{ width: 28, height: 28, borderRadius: 'var(--r-md)', border: '1px solid var(--border)', background: 'var(--surface)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--text-3)' }}
+                >
+                  <Download className="icon-xs" />
+                </button>
+              }
+            />
+            {loading && rows.length === 0 ? (
+              <p style={{ fontSize: 13, color: 'var(--text-3)', padding: '1rem 0' }}>Loading…</p>
+            ) : (
+              <BarChart data={rows} xKey="month" bars={chart.bars} />
+            )}
+          </ContentCard>
+        );
+      })}
+    </div>
+  );
+}
 
 // ── Main Report Center ────────────────────────
 const ReportCenter = () => {
@@ -307,12 +412,12 @@ const ReportCenter = () => {
             <div key={i} style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 'var(--r-xl)', padding: '1rem', position: 'relative', overflow: 'hidden', boxShadow: 'var(--shadow-xs)' }}>
               <div style={{ position: 'absolute', inset: 0, background: kpi.gradient, opacity: 0.1 }} />
               <div style={{ position: 'relative', display: 'flex', alignItems: 'center', gap: 10 }}>
-                <div style={{ width: 40, height: 40, borderRadius: 'var(--r-xl)', background: kpi.gradient, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <Icon className="icon-sm" style={{ color: '#fff' }} />
+                <div style={{ width: 48, height: 48, borderRadius: 'var(--r-xl)', background: kpi.gradient, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <Icon className="icon-lg" style={{ color: '#fff' }} />
                 </div>
                 <div>
                   <p style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--text-1)', letterSpacing: '-0.02em' }}>{kpi.value}</p>
-                  <p style={{ fontSize: 11, color: 'var(--text-4)' }}>{kpi.label}</p>
+                  <p style={{ fontSize: 10, color: 'var(--text-4)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.04em' }}>{kpi.label}</p>
                 </div>
               </div>
             </div>
@@ -371,11 +476,11 @@ const ReportCenter = () => {
                     style={{ padding: '12px 14px', borderRadius: 'var(--r-xl)', border: `1px solid ${isSelected ? 'var(--blue)' : 'var(--border)'}`, background: isSelected ? 'var(--blue-subtle)' : 'var(--surface)', cursor: 'pointer', transition: 'all 0.15s ease', boxShadow: isSelected ? '0 0 0 2px var(--blue-muted)' : 'none' }}
                     onMouseEnter={e => { if (!isSelected) e.currentTarget.style.background = 'var(--base-2)'; }}
                     onMouseLeave={e => { if (!isSelected) e.currentTarget.style.background = 'var(--surface)'; }}>
-                    <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10 }}>
-                      <span style={{ fontSize: 22, flexShrink: 0 }}>{template.icon}</span>
+                    <div style={{ display: 'flex', alignItems: 'flex-start', gap: 12 }}>
+                      <span style={{ fontSize: 32, lineHeight: 1, flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', width: 52, height: 52, borderRadius: 14, background: 'var(--base-2)', border: '1px solid var(--border)' }}>{template.icon}</span>
                       <div style={{ flex: 1, minWidth: 0 }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 3, flexWrap: 'wrap' }}>
-                          <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--text-1)' }}>{template.name}</p>
+                          <p style={{ fontSize: 12, fontWeight: 700, color: 'var(--text-1)', lineHeight: 1.35 }}>{template.name}</p>
                           <span style={{ fontSize: 10, padding: '1px 6px', borderRadius: 'var(--r-full)', fontWeight: 600, textTransform: 'capitalize', background: catColor.bg, color: catColor.text, border: `1px solid ${catColor.border}` }}>
                             {template.category}
                           </span>
@@ -439,31 +544,7 @@ const ReportCenter = () => {
         </ContentCard>
       )}
 
-      {/* ── ANALYTICS OVERVIEW TAB ── */}
-      {activeTab === 'analytics' && (
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
-          {[
-            { title: 'AI Coverage Trend',   type: 'ai_coverage_trend',    bars: [{ key: 'coverage', label: 'Coverage %', color: 'var(--blue)' }, { key: 'target', label: 'Target', color: 'var(--border-2)' }] },
-            { title: 'Disease Cases Trend', type: 'disease_cases',        bars: [{ key: 'fmd', label: 'FMD', color: 'var(--danger)' }, { key: 'hs', label: 'HS', color: 'var(--orange)' }, { key: 'bq', label: 'BQ', color: 'var(--warning)' }] },
-            { title: 'Budget Utilization',  type: 'budget_utilization',   bars: [{ key: 'utilized', label: 'Utilized %', color: 'var(--success)' }] },
-            { title: 'Grievance Trend',     type: 'grievance_trend',      bars: [{ key: 'received', label: 'Received', color: 'var(--danger)' }, { key: 'resolved', label: 'Resolved', color: 'var(--success)' }] },
-            { title: 'MVU Coverage',        type: 'mvu_coverage',         bars: [{ key: 'coverage', label: 'Coverage %', color: '#6366F1' }, { key: 'target', label: 'Target', color: 'var(--border-2)' }] },
-            { title: 'Vaccination Coverage',type: 'vaccination_coverage', bars: [{ key: 'coverage', label: 'Coverage %', color: '#7C3AED' }, { key: 'target', label: 'Target', color: 'var(--border-2)' }] },
-          ].map((chart, i) => (
-            <ContentCard key={i}>
-              <SectionHeader title={chart.title} icon={BarChart3} color="var(--blue)"
-                right={
-                  <button onClick={() => exportToCSV(getChartData(chart.type), chart.type)}
-                    style={{ width: 28, height: 28, borderRadius: 'var(--r-md)', border: '1px solid var(--border)', background: 'var(--surface)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--text-3)' }}>
-                    <Download className="icon-xs" />
-                  </button>
-                }
-              />
-              <BarChart data={getChartData(chart.type)} xKey="month" bars={chart.bars} />
-            </ContentCard>
-          ))}
-        </div>
-      )}
+      {activeTab === 'analytics' && <AnalyticsOverviewGrid />}
     </div>
   );
 };

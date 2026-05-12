@@ -87,12 +87,12 @@ const IntegrationCard = ({ integration, isDark }) => {
   return (
     <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 'var(--r-xl)', overflow: 'hidden', boxShadow: 'var(--shadow-xs)' }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '14px 16px' }}>
-        <div style={{ width: 44, height: 44, borderRadius: 'var(--r-lg)', background: 'var(--base-2)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20, flexShrink: 0 }}>
+        <div style={{ width: 56, height: 56, borderRadius: 'var(--r-lg)', background: 'var(--base-2)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 28, lineHeight: 1, flexShrink: 0 }}>
           {integration.icon}
         </div>
         <div style={{ flex: 1, minWidth: 0 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 3, flexWrap: 'wrap' }}>
-            <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--text-1)' }}>{integration.name}</p>
+            <p style={{ fontSize: 12, fontWeight: 700, color: 'var(--text-1)', lineHeight: 1.3 }}>{integration.name}</p>
             <span style={{ fontSize: 9, fontWeight: 600, padding: '2px 7px', borderRadius: 'var(--r-full)', background: 'var(--blue-subtle)', color: 'var(--blue)', border: '1px solid var(--blue-muted)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>{catMeta.label}</span>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>

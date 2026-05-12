@@ -4,7 +4,7 @@ import { useFarmerAuth } from '../../contexts/FarmerAuthContext';
 import { phoneValidator, otpValidator } from '../../utils/farmerValidations';
 import { Phone, ShieldCheck, ArrowRight, Leaf, RefreshCw, Beef, Syringe, BarChart3 } from 'lucide-react';
 
-const DEMO_FARMER = { id: 'F001', name: 'Gita Devi', mobile: '9876543210', district: 'Khordha', village: 'Balianta', animals: 5 };
+const DEMO_FARMER = { id: 'F001', name: 'Gita Devi', mobile: '9876543210', district: 'Khordha', village: 'Balianta', animals: 2 };
 
 const FEATURES = [
   { icon: Beef,       label: 'Animal Records',      desc: 'Track all your livestock in one place' },
@@ -192,11 +192,11 @@ export default function FarmerLogin() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
             {FEATURES.map(({ icon: Icon, label, desc }) => (
               <div key={label} style={{ display: 'flex', alignItems: 'flex-start', gap: 14 }}>
-                <div style={{ width: 40, height: 40, borderRadius: 11, background: 'rgba(255,255,255,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                  <Icon size={18} color="#fff" />
+                <div style={{ width: 52, height: 52, borderRadius: 11, background: 'rgba(255,255,255,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                  <Icon size={28} color="#fff" strokeWidth={2} />
                 </div>
                 <div>
-                  <p style={{ fontSize: 15, fontWeight: 700, color: '#fff', marginBottom: 2 }}>{label}</p>
+                  <p style={{ fontSize: 13, fontWeight: 700, color: '#fff', marginBottom: 2 }}>{label}</p>
                   <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.65)' }}>{desc}</p>
                 </div>
               </div>

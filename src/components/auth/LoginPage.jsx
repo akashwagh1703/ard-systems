@@ -1,15 +1,19 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
-import { SAMPLE_USERS } from '../../data/mockData';
-import { User, Shield, Building, Users, Wheat, ArrowRight, CheckCircle } from 'lucide-react';
+import demoUsers from '../../data/mocks/master/users-roles.json';
+import { User, Shield, Building, Users, Wheat, ArrowRight, CheckCircle, Landmark, BookOpen } from 'lucide-react';
 
 const ROLE_META = {
   super_admin:      { icon: Shield,   label: 'Super Admin',      color: '#006F8E', bg: '#EEF6F9', desc: 'Full system · All services · State-level'  },
-  district_officer: { icon: Building, label: 'District Officer', color: '#0891B2', bg: '#ECFEFF', desc: 'District access · CDVO operations'          },
-  block_officer:    { icon: Users,    label: 'Block Officer',    color: '#059669', bg: '#ECFDF5', desc: 'Block operations · BVO functions'           },
-  field_user:       { icon: User,     label: 'Field User',       color: '#D97706', bg: '#FFFBEB', desc: 'Field operations · Service delivery'       },
-  farmer:           { icon: Wheat,    label: 'Farmer',           color: '#7C3AED', bg: '#F5F3FF', desc: 'Service booking · Limited access'          },
+  directorate:      { icon: Shield,   label: 'Directorate',      color: '#005A73', bg: '#E0F2FE', desc: 'DAH&VS joint / directorate functions'       },
+  district_officer: { icon: Building, label: 'District Officer', color: '#0891B2', bg: '#ECFEFF', desc: 'CDVO operations'                          },
+  sdvo:             { icon: Building, label: 'SDVO',             color: '#0E7490', bg: '#ECFEFF', desc: 'Sub-division veterinary officer'          },
+  dd_dvh:           { icon: Landmark, label: 'Deputy Director',  color: '#0369A1', bg: '#E0F2FE', desc: 'Deputy Director, District Vet. Hospitals' },
+  block_officer:    { icon: Users,    label: 'Block Officer',    color: '#059669', bg: '#ECFDF5', desc: 'BVO functions'                              },
+  field_user:       { icon: User,     label: 'Field User',       color: '#D97706', bg: '#FFFBEB', desc: 'AIT / field service delivery'             },
+  voti_admin:       { icon: BookOpen, label: 'VOTI',             color: '#7C3AED', bg: '#F5F3FF', desc: 'Training institute · slot allocation'     },
+  farmer:           { icon: Wheat,    label: 'Farmer',           color: '#7C3AED', bg: '#F5F3FF', desc: 'Use Farmer Portal link below'             },
 };
 
 
@@ -21,7 +25,7 @@ export default function LoginPage() {
   const handleLogin = (e) => {
     e.preventDefault();
     if (!selected) return;
-    const user = SAMPLE_USERS.find(u => u.id === parseInt(selected));
+    const user = demoUsers.find((u) => u.id === parseInt(selected, 10));
     login(user);
     navigate('/dashboard');
   };
@@ -130,8 +134,8 @@ export default function LoginPage() {
 
           <form onSubmit={handleLogin}>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 20 }}>
-              {SAMPLE_USERS.map(u => {
-                const meta = ROLE_META[u.role];
+              {demoUsers.map(u => {
+                const meta = ROLE_META[u.role] || ROLE_META.field_user;
                 const Icon = meta.icon;
                 const isSel = selected === u.id.toString();
 
@@ -153,17 +157,17 @@ export default function LoginPage() {
                   >
                     <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
                       <div style={{
-                        width: 42, height: 42, borderRadius: 11, flexShrink: 0,
+                        width: 54, height: 54, borderRadius: 14, flexShrink: 0,
                         background: isSel ? meta.color : 'var(--base-2)',
                         display: 'flex', alignItems: 'center', justifyContent: 'center',
                         transition: 'all 0.15s ease',
                         boxShadow: isSel ? `0 2px 10px ${meta.color}50` : 'none',
                       }}>
-                        <Icon className="icon-md" style={{ color: isSel ? '#fff' : meta.color }} />
+                        <Icon className="icon-xl" style={{ color: isSel ? '#fff' : meta.color }} />
                       </div>
                       <div style={{ flex: 1, minWidth: 0 }}>
                         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8, marginBottom: 3 }}>
-                          <span style={{ fontSize: 13, fontWeight: 600, color: isSel ? meta.color : 'var(--text-1)' }}>
+                          <span style={{ fontSize: 12, fontWeight: 600, color: isSel ? meta.color : 'var(--text-1)' }}>
                             {u.name}
                           </span>
                           <span style={{

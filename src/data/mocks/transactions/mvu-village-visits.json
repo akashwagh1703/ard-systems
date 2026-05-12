@@ -1,0 +1,19 @@
+[
+  {
+    "id": "mvu_visit_1",
+    "mvuId": "MVU-KH-01",
+    "district": "Khordha",
+    "village": "Jatni",
+    "plannedDate": "2026-05-05",
+    "actualDate": "2026-05-05",
+    "beforePhoto": {
+      "url": "/mock/mvu/jatni-before.jpg",
+      "capturedAt": "2026-05-05T09:12:00.000Z"
+    },
+    "afterPhoto": {
+      "url": "/mock/mvu/jatni-after.jpg",
+      "capturedAt": "2026-05-05T12:18:00.000Z"
+    },
+    "planMismatch": false
+  }
+]

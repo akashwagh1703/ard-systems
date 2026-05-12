@@ -1,0 +1,20 @@
+[
+  {
+    "id": "mvu_med_1",
+    "mvuId": "MVU-KH-01",
+    "medicineName": "Albendazole",
+    "suppliedBy": "Khordha CDVO",
+    "qty": 120,
+    "shortageFlag": false,
+    "color": "green"
+  },
+  {
+    "id": "mvu_med_2",
+    "mvuId": "MVU-KH-01",
+    "medicineName": "Oxytetracycline",
+    "suppliedBy": "Khordha CDVO",
+    "qty": 30,
+    "shortageFlag": true,
+    "color": "amber"
+  }
+]

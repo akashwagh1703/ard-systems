@@ -1,0 +1,26 @@
+[
+  {
+    "id": "farm_an_1",
+    "farmId": "farm_1",
+    "species": "cattle",
+    "tattooId": "TAT-KH-0001",
+    "displayName": "Lakshmi",
+    "breed": "HF Cross",
+    "gender": "female",
+    "ageMonths": 36,
+    "healthStatus": "Lactating",
+    "dob": "2020-03-15"
+  },
+  {
+    "id": "farm_an_2",
+    "farmId": "farm_1",
+    "species": "cattle",
+    "tattooId": "TAT-KH-0002",
+    "displayName": "Ganga",
+    "breed": "Jersey",
+    "gender": "female",
+    "ageMonths": 42,
+    "healthStatus": "Healthy",
+    "dob": "2019-07-22"
+  }
+]

@@ -27,6 +27,11 @@ This is a **Proof of Concept (POC)** for the Government of Odisha's Animal Resou
 - Service-wise state management
 - Clear API boundaries simulation
 
+**Phase 0 data layer (grievances):**
+- Seed files under `src/data/mocks/` (`transactions/grievances.json`, `master/districts.json`, `analytics/grievance-categories.json`).
+- Runtime persistence: `localStorage` key `ard_mock_overlay_v1` (merge over seed). **Super Admin** header: **Reset demo data** (mock mode only).
+- Code: `src/services/data/` (`mockJsonProvider.js`, `provider.js`, `repositories/grievanceRepository.js`). Switch future API via `.env.example`: `VITE_DATA_PROVIDER=api` (stubs throw until HTTP is implemented).
+
 ### 🎨 Design System
 
 **Government-Grade UI:**

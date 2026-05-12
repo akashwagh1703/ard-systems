@@ -2,29 +2,38 @@ import React, { useState } from 'react';
 import MonthlyTrendsChart from './MonthlyTrendsChart';
 import FarmerOnboardingCharts from './FarmerOnboardingCharts';
 import MedicalProcurementChart from './MedicalProcurementChart';
-import { refreshResourceData } from '../../services/resourceChartData';
+import { getResourceAnalyticsSnapshot } from '../../services/data/aggregateDashboard';
 import { RefreshCw, Download, BarChart3, ChevronDown, ChevronUp } from 'lucide-react';
 
 export default function ResourceAnalytics() {
   const [refreshKey, setRefreshKey] = useState(0);
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [snapshot, setSnapshot] = useState(null);
   const [collapsedSections, setCollapsedSections] = useState({
-    trends: false,
-    farmers: false,
-    medical: false
+    trends: true,
+    farmers: true,
+    medical: true,
   });
+
+  React.useEffect(() => {
+    getResourceAnalyticsSnapshot().then(setSnapshot);
+  }, []);
 
   const handleRefresh = () => {
     setIsRefreshing(true);
     setTimeout(() => {
       // Only refresh when button is clicked
       setRefreshKey(prev => prev + 1);
+      getResourceAnalyticsSnapshot().then(setSnapshot);
       setIsRefreshing(false);
     }, 800);
   };
 
   const handleExportAll = () => {
-    const allData = refreshResourceData();
+    const allData = {
+      repositorySnapshot: snapshot,
+      exportedAt: new Date().toISOString(),
+    };
     const blob = new Blob([JSON.stringify(allData, null, 2)], { type: 'application/json' });
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -46,9 +55,9 @@ export default function ResourceAnalytics() {
       background: 'var(--surface)',
       border: '1px solid var(--border)',
       borderRadius: 20,
-      padding: '1.5rem',
+      padding: '1.1rem',
       boxShadow: 'var(--shadow-xs)',
-      marginBottom: 16,
+      marginBottom: 12,
       animation: 'fadeUp 0.4s ease 0.24s both'
     }}>
       {/* Main Header */}
@@ -87,7 +96,7 @@ export default function ResourceAnalytics() {
               fontSize: 12,
               color: 'var(--text-3)'
             }}>
-              Comprehensive insights on Monthly Trends, Farmer Onboarding & Medical Procurement
+              Comprehensive insights on Monthly Trends, Farmer Onboarding & Medical Procurement · live rows {snapshot?.metadata?.collections?.semenRows ?? 0}/{snapshot?.metadata?.collections?.vaccineRows ?? 0}/{snapshot?.metadata?.collections?.medicineRows ?? 0}
             </p>
           </div>
         </div>
@@ -385,7 +394,7 @@ export default function ResourceAnalytics() {
           </span>
         </div>
         <span style={{ fontSize: 12, color: 'var(--text-4)' }}>
-          5 interactive charts • 30 districts • 12 months data
+          5 interactive charts • open alerts {snapshot?.dailyMetrics?.activeAlerts ?? 0} • snapshot {snapshot ? 'synced' : 'loading'}
         </span>
       </div>
 

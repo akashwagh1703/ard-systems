@@ -1,0 +1,26 @@
+[
+  {
+    "id": "ins_1",
+    "severity": "critical",
+    "sourceModule": "disease-surveillance",
+    "title": "Potential disease cluster in Khordha belt",
+    "body": "Recent registration and lab trend suggests an early cluster pattern; prioritize rapid field verification.",
+    "generatedAt": "2026-05-12T08:00:00.000Z"
+  },
+  {
+    "id": "ins_2",
+    "severity": "warning",
+    "sourceModule": "vaccine-management",
+    "title": "Low vaccine stock in one district node",
+    "body": "At least one vaccine inventory row is below threshold; trigger district restock follow-up.",
+    "generatedAt": "2026-05-12T08:10:00.000Z"
+  },
+  {
+    "id": "ins_3",
+    "severity": "info",
+    "sourceModule": "mvu-management",
+    "title": "MVU service throughput improving",
+    "body": "Daily service submissions show healthy treatment and vaccination throughput against recent baseline.",
+    "generatedAt": "2026-05-12T08:20:00.000Z"
+  }
+]

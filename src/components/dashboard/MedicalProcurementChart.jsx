@@ -1,7 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend, PieChart, Pie, Cell, BarChart, Bar } from 'recharts';
-import { getMonthlyProcurement, getProcurementStats, exportToCSV, formatCurrency } from '../../services/medicalProcurementData';
+import { getMedicalProcurementTrends } from '../../services/data/aggregateDashboard';
+import { downloadCsv } from '../../utils/exportCsv';
 import { Package, DollarSign, MapPin, TrendingUp, Download } from 'lucide-react';
+
+function formatCurrency(amount) {
+  if (amount >= 10000000) return `₹${(amount / 10000000).toFixed(2)} Cr`;
+  if (amount >= 100000) return `₹${(amount / 100000).toFixed(2)} L`;
+  return `₹${amount.toLocaleString('en-IN')}`;
+}
 
 export default function MedicalProcurementChart() {
   const [data, setData] = useState([]);
@@ -12,11 +19,10 @@ export default function MedicalProcurementChart() {
     loadData();
   }, [dateRange]);
 
-  const loadData = () => {
-    const procurementData = getMonthlyProcurement(dateRange);
-    const statistics = getProcurementStats(procurementData);
-    setData(procurementData);
-    setStats(statistics);
+  const loadData = async () => {
+    const result = await getMedicalProcurementTrends(dateRange);
+    setData(result.rows);
+    setStats(result.stats);
   };
 
   const handleExport = () => {
@@ -26,7 +32,7 @@ export default function MedicalProcurementChart() {
       'Procurement Cost (₹)': d.cost,
       'Districts Covered': d.districts
     }));
-    exportToCSV(exportData, 'medical-procurement-trend.csv');
+    downloadCsv(exportData, 'medical-procurement-trend.csv');
   };
 
   // Custom tooltip
@@ -89,20 +95,19 @@ export default function MedicalProcurementChart() {
     { name: 'Supplements', value: Math.round(latestMonth.medicines * 0.22), color: '#F97316' },
     { name: 'Others', value: Math.round(latestMonth.medicines * 0.18), color: '#64748B' },
   ];
-  const categoryMixTotal = categoryMixData.reduce((sum, item) => sum + item.value, 0);
+  const categoryMixTotal = categoryMixData.reduce((sum, item) => sum + item.value, 0) || 1;
 
+  const budgetUtil = Math.min(99, Math.max(0, Number(stats.budgetUtilizationPct) || 0));
+  const budgetRem = Math.min(99, Math.max(0, stats.budgetRemainingPct != null ? stats.budgetRemainingPct : 100 - budgetUtil));
   const budgetSplitData = [
-    { name: 'Utilized', value: 74, color: '#059669' },
-    { name: 'Remaining', value: 26, color: '#E5E7EB' },
+    { name: 'Utilized', value: budgetUtil, color: '#059669' },
+    { name: 'Remaining', value: budgetRem, color: '#E5E7EB' },
   ];
 
-  const stockAvailabilityData = [
-    { name: 'Antibiotics', availability: 91 },
-    { name: 'Vaccines', availability: 87 },
-    { name: 'Supplements', availability: 84 },
-    { name: 'Emergency Drugs', availability: 78 },
-    { name: 'Consumables', availability: 93 },
-  ];
+  const stockAvailabilityData =
+    Array.isArray(stats.stockAvailabilityData) && stats.stockAvailabilityData.length > 0
+      ? stats.stockAvailabilityData
+      : [{ name: 'No district stock', availability: 0 }];
 
   const renderPieLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent, name }) => {
     const RADIAN = Math.PI / 180;
@@ -373,7 +378,7 @@ export default function MedicalProcurementChart() {
             </ResponsiveContainer>
             <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', pointerEvents: 'none' }}>
               <div style={{ textAlign: 'center' }}>
-                <p style={{ fontSize: 23, fontWeight: 800, color: '#059669', lineHeight: 1 }}>74%</p>
+                <p style={{ fontSize: 23, fontWeight: 800, color: '#059669', lineHeight: 1 }}>{budgetUtil}%</p>
                 <p style={{ fontSize: 11, color: 'var(--text-4)' }}>Utilized</p>
               </div>
             </div>

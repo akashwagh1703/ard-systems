@@ -1,9 +1,41 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useId } from 'react';
 import { X, CheckCircle, AlertTriangle, Info } from 'lucide-react';
+
+/* ── ModalFooter (declared before Modal so last-child detection can use reference) ── */
+export function ModalFooter({ onCancel, onSubmit, submitLabel = 'Save', submitColor = 'var(--blue)', loading = false }) {
+  return (
+    <div className="ard-modal-footer">
+      <button type="button" onClick={onCancel} style={{
+        padding: '9px 20px', borderRadius: 'var(--r-md)', fontSize: 14, fontWeight: 600,
+        background: 'var(--surface)', border: '1px solid var(--border)', color: 'var(--text-2)',
+        cursor: 'pointer', transition: 'all 0.15s ease',
+      }}
+        onMouseEnter={e => { e.currentTarget.style.background = 'var(--base-2)'; }}
+        onMouseLeave={e => { e.currentTarget.style.background = 'var(--surface)'; }}
+      >Cancel</button>
+      <button type="button" onClick={onSubmit} disabled={loading} style={{
+        padding: '9px 20px', borderRadius: 'var(--r-md)', fontSize: 14, fontWeight: 600,
+        background: submitColor, border: 'none', color: '#fff',
+        cursor: loading ? 'not-allowed' : 'pointer', opacity: loading ? 0.7 : 1,
+        transition: 'all 0.15s ease',
+      }}
+        onMouseEnter={e => { if (!loading) e.currentTarget.style.opacity = '0.88'; }}
+        onMouseLeave={e => { e.currentTarget.style.opacity = loading ? '0.7' : '1'; }}
+      >{loading ? 'Saving...' : submitLabel}</button>
+    </div>
+  );
+}
 
 /* ── Modal ── */
 export function Modal({ open, onClose, title, children, width = 480 }) {
   const ref = useRef();
+  const titleId = useId();
+  const childArr = React.Children.toArray(children);
+  const last = childArr[childArr.length - 1];
+  const pinnedFooter = React.isValidElement(last) && last.type === ModalFooter;
+  const bodyChildren = pinnedFooter ? childArr.slice(0, -1) : childArr;
+  const footerEl = pinnedFooter ? last : null;
+
   useEffect(() => {
     if (!open) return;
     const handler = (e) => { if (ref.current && !ref.current.contains(e.target)) onClose(); };
@@ -19,38 +51,23 @@ export function Modal({ open, onClose, title, children, width = 480 }) {
 
   if (!open) return null;
   return (
-    <div style={{
-      position: 'fixed', inset: 0, zIndex: 100,
-      background: 'rgba(15,42,38,0.45)', backdropFilter: 'blur(4px)',
-      display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem',
-      animation: 'fadeUp 0.2s ease forwards',
-    }}>
-      <div ref={ref} style={{
-        background: 'var(--surface)', borderRadius: 'var(--r-2xl)',
-        width: '100%', maxWidth: width, boxShadow: 'var(--shadow-lg)',
-        border: '1px solid var(--border)', overflow: 'hidden',
-        animation: 'fadeUp 0.25s ease forwards',
-      }}>
-        {/* Header */}
-        <div style={{
-          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-          padding: '1rem 1.5rem', borderBottom: '1px solid var(--border)',
-          background: 'var(--base-2)',
-        }}>
-          <span style={{ fontSize: 15, fontWeight: 700, color: 'var(--text-1)' }}>{title}</span>
-          <button onClick={onClose} style={{
-            width: 30, height: 30, borderRadius: 'var(--r-md)', border: '1px solid var(--border)',
-            background: 'var(--surface)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
-            color: 'var(--text-3)', transition: 'all 0.15s ease',
-          }}
-            onMouseEnter={e => { e.currentTarget.style.background = 'var(--danger-bg)'; e.currentTarget.style.color = 'var(--danger)'; }}
-            onMouseLeave={e => { e.currentTarget.style.background = 'var(--surface)'; e.currentTarget.style.color = 'var(--text-3)'; }}
-          >
+    <div className="ard-modal-backdrop" role="presentation">
+      <div
+        ref={ref}
+        className="ard-modal-panel"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby={titleId}
+        style={{ maxWidth: `min(100vw - 24px, ${typeof width === 'number' ? `${width}px` : width})` }}
+      >
+        <div className="ard-modal-header">
+          <span id={titleId} className="ard-modal-title">{title}</span>
+          <button type="button" className="ard-modal-close" onClick={onClose} aria-label="Close dialog">
             <X className="icon-xs" />
           </button>
         </div>
-        {/* Body */}
-        <div style={{ padding: '1.5rem' }}>{children}</div>
+        <div className="ard-modal-body">{bodyChildren}</div>
+        {footerEl}
       </div>
     </div>
   );
@@ -175,46 +192,17 @@ export function Textarea({ value, onChange, placeholder, rows = 3 }) {
   );
 }
 
-/* ── ModalFooter ── */
-export function ModalFooter({ onCancel, onSubmit, submitLabel = 'Save', submitColor = 'var(--blue)', loading = false }) {
-  return (
-    <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 8, marginTop: 20, paddingTop: 16, borderTop: '1px solid var(--border)' }}>
-      <button onClick={onCancel} style={{
-        padding: '9px 20px', borderRadius: 'var(--r-md)', fontSize: 14, fontWeight: 600,
-        background: 'var(--surface)', border: '1px solid var(--border)', color: 'var(--text-2)',
-        cursor: 'pointer', transition: 'all 0.15s ease',
-      }}
-        onMouseEnter={e => { e.currentTarget.style.background = 'var(--base-2)'; }}
-        onMouseLeave={e => { e.currentTarget.style.background = 'var(--surface)'; }}
-      >Cancel</button>
-      <button onClick={onSubmit} disabled={loading} style={{
-        padding: '9px 20px', borderRadius: 'var(--r-md)', fontSize: 14, fontWeight: 600,
-        background: submitColor, border: 'none', color: '#fff',
-        cursor: loading ? 'not-allowed' : 'pointer', opacity: loading ? 0.7 : 1,
-        transition: 'all 0.15s ease',
-      }}
-        onMouseEnter={e => { if (!loading) e.currentTarget.style.opacity = '0.88'; }}
-        onMouseLeave={e => { e.currentTarget.style.opacity = loading ? '0.7' : '1'; }}
-      >{loading ? 'Saving...' : submitLabel}</button>
-    </div>
-  );
-}
-
 /* ── ConfirmDialog ── */
 export function ConfirmDialog({ open, onClose, onConfirm, title, message, confirmLabel = 'Delete', confirmColor = 'var(--danger)' }) {
   return (
     <Modal open={open} onClose={onClose} title={title} width={400}>
-      <p style={{ fontSize: 14, color: 'var(--text-2)', lineHeight: 1.65, marginBottom: 20 }}>{message}</p>
-      <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 8 }}>
-        <button onClick={onClose} style={{
-          padding: '9px 20px', borderRadius: 'var(--r-md)', fontSize: 14, fontWeight: 600,
-          background: 'var(--surface)', border: '1px solid var(--border)', color: 'var(--text-2)', cursor: 'pointer',
-        }}>Cancel</button>
-        <button onClick={() => { onConfirm(); onClose(); }} style={{
-          padding: '9px 20px', borderRadius: 'var(--r-md)', fontSize: 14, fontWeight: 600,
-          background: confirmColor, border: 'none', color: '#fff', cursor: 'pointer',
-        }}>{confirmLabel}</button>
-      </div>
+      <p style={{ fontSize: 14, color: 'var(--text-2)', lineHeight: 1.65, margin: 0 }}>{message}</p>
+      <ModalFooter
+        onCancel={onClose}
+        onSubmit={() => { onConfirm(); onClose(); }}
+        submitLabel={confirmLabel}
+        submitColor={confirmColor}
+      />
     </Modal>
   );
 }

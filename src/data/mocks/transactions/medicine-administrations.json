@@ -1,0 +1,36 @@
+[
+  {
+    "id": "med_admin_1",
+    "mode": "farmer",
+    "beneficiaryName": "Smt. Geeta Das",
+    "farmerPhone": "9123456789",
+    "animalType": "cattle",
+    "medicineSkuId": "med_antibiotic_01",
+    "medicineName": "Oxytetracycline",
+    "quantity": 2,
+    "unit": "vial",
+    "district": "Khordha",
+    "block": "Bhubaneswar",
+    "siteId": "loc_khordha_cdvo",
+    "administeredAt": "2026-02-10",
+    "notes": "Post-partum infection protocol",
+    "createdAt": "2026-02-10T11:00:00.000Z"
+  },
+  {
+    "id": "med_admin_2",
+    "mode": "stray",
+    "beneficiaryName": "Ward 12 Stray Unit",
+    "farmerPhone": "",
+    "animalType": "dog",
+    "medicineSkuId": "med_rabies_01",
+    "medicineName": "Rabies Vaccine",
+    "quantity": 1,
+    "unit": "dose",
+    "district": "Cuttack",
+    "block": "CMC",
+    "siteId": "loc_cuttack_cdvo",
+    "administeredAt": "2026-02-09",
+    "notes": "Municipal camp",
+    "createdAt": "2026-02-09T08:30:00.000Z"
+  }
+]
