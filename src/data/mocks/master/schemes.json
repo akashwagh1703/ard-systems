@@ -1,0 +1,7 @@
+[
+  { "id": "sch_mvu", "code": "MVU-SP", "name": "Mobile Veterinary Units (State Plan)", "financialYear": "2025-26" },
+  { "id": "sch_adri", "code": "ADRI-DS", "name": "Disease Surveillance — ADRI", "financialYear": "2025-26" },
+  { "id": "sch_vaccine", "code": "OBPI-VP", "name": "Vaccine Production & Disease Control", "financialYear": "2025-26" },
+  { "id": "sch_bmwm", "code": "LHCS-BW", "name": "Bio-Medical Waste Management (LHCS)", "financialYear": "2025-26" },
+  { "id": "sch_equip", "code": "SLSI-EQ", "name": "Repair / AMC of Equipment (SLSI & MO)", "financialYear": "2025-26" }
+]

@@ -1,27 +1,30 @@
 import React from 'react';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 
 const ProtectedRoute = ({ children, requiredRoles = [] }) => {
   const { user, hasAccess } = useAuth();
+  const navigate = useNavigate();
 
-  if (!user) {
-    return <Navigate to="/login" replace />;
-  }
+  if (!user) return <Navigate to="/login" replace />;
 
   if (!hasAccess(requiredRoles)) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-secondary-50">
-        <div className="card max-w-md text-center">
-          <h2 className="text-xl font-semibold text-secondary-900 mb-2">Access Denied</h2>
-          <p className="text-secondary-600 mb-4">
-            You don't have permission to access this service.
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '60vh' }}>
+        <div style={{
+          background: 'var(--surface)', border: '1px solid var(--border)',
+          borderRadius: 20, padding: '2rem', maxWidth: 360, width: '100%', textAlign: 'center',
+        }}>
+          <p style={{ fontSize: 16, fontWeight: 600, color: 'var(--text-1)', marginBottom: 8 }}>Access Denied</p>
+          <p style={{ fontSize: 13, color: 'var(--text-2)', marginBottom: 20 }}>
+            Your role does not have permission to access this service.
           </p>
-          <button 
-            onClick={() => window.history.back()}
-            className="btn-secondary"
+          <button
+            onClick={() => navigate('/dashboard')}
+            className="btn btn-accent"
+            style={{ width: '100%' }}
           >
-            Go Back
+            Return to Dashboard
           </button>
         </div>
       </div>

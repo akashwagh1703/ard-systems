@@ -1,0 +1,66 @@
+[
+  {
+    "id": 1,
+    "name": "Dr. Rajesh Kumar",
+    "role": "super_admin",
+    "designation": "Director, ARD",
+    "district": "All",
+    "block": "All"
+  },
+  {
+    "id": 2,
+    "name": "Dr. Priya Sharma",
+    "role": "district_officer",
+    "designation": "Chief District Veterinary Officer (CDVO)",
+    "district": "Khordha",
+    "block": "All"
+  },
+  {
+    "id": 3,
+    "name": "Suresh Patel",
+    "role": "block_officer",
+    "designation": "Block Veterinary Officer (BVO)",
+    "district": "Khordha",
+    "block": "Bhubaneswar"
+  },
+  {
+    "id": 4,
+    "name": "Ramesh Das",
+    "role": "field_user",
+    "designation": "Artificial Insemination Technician (AIT)",
+    "district": "Khordha",
+    "block": "Bhubaneswar"
+  },
+  {
+    "id": 5,
+    "name": "Smt. Ananya Mishra",
+    "role": "directorate",
+    "designation": "Joint Secretary — DAH&VS (Directorate)",
+    "district": "All",
+    "block": "All"
+  },
+  {
+    "id": 6,
+    "name": "Dr. Bikash Rout",
+    "role": "sdvo",
+    "designation": "Sub-Divisional Veterinary Officer (SDVO)",
+    "district": "Khordha",
+    "block": "Bhubaneswar SD"
+  },
+  {
+    "id": 7,
+    "name": "Dr. Lipika Panda",
+    "role": "dd_dvh",
+    "designation": "Deputy Director, District Veterinary Hospitals",
+    "district": "Cuttack",
+    "block": "All"
+  },
+  {
+    "id": 8,
+    "name": "Shri Debasish Sahoo",
+    "role": "voti_admin",
+    "designation": "VOTI — Training Coordinator",
+    "district": "Khordha",
+    "block": "All"
+  }
+]

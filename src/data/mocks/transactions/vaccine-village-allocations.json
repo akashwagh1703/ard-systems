@@ -1,0 +1,26 @@
+[
+  {
+    "id": "vva_1",
+    "batchNumber": "FMD-2026-OD-001",
+    "villageId": "vil_jatni",
+    "villageName": "Jatni",
+    "district": "Khordha",
+    "quantity": 400
+  },
+  {
+    "id": "vva_2",
+    "batchNumber": "FMD-2026-OD-001",
+    "villageId": "vil_balianta",
+    "villageName": "Balianta",
+    "district": "Khordha",
+    "quantity": 250
+  },
+  {
+    "id": "vva_4",
+    "batchNumber": "FMD-2026-OD-001",
+    "villageId": "vil_niali",
+    "villageName": "Niali",
+    "district": "Cuttack",
+    "quantity": 320
+  }
+]

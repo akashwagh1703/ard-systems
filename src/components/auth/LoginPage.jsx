@@ -1,153 +1,237 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
-import { SAMPLE_USERS } from '../../data/mockData';
-import { User, Shield, Building, Users, Wheat } from 'lucide-react';
+import demoUsers from '../../data/mocks/master/users-roles.json';
+import { User, Shield, Building, Users, Wheat, ArrowRight, CheckCircle, Landmark, BookOpen } from 'lucide-react';
 
-const LoginPage = () => {
-  const [selectedUser, setSelectedUser] = useState('');
+const ROLE_META = {
+  super_admin:      { icon: Shield,   label: 'Super Admin',      color: '#006F8E', bg: '#EEF6F9', desc: 'Full system · All services · State-level'  },
+  directorate:      { icon: Shield,   label: 'Directorate',      color: '#005A73', bg: '#E0F2FE', desc: 'DAH&VS joint / directorate functions'       },
+  district_officer: { icon: Building, label: 'District Officer', color: '#0891B2', bg: '#ECFEFF', desc: 'CDVO operations'                          },
+  sdvo:             { icon: Building, label: 'SDVO',             color: '#0E7490', bg: '#ECFEFF', desc: 'Sub-division veterinary officer'          },
+  dd_dvh:           { icon: Landmark, label: 'Deputy Director',  color: '#0369A1', bg: '#E0F2FE', desc: 'Deputy Director, District Vet. Hospitals' },
+  block_officer:    { icon: Users,    label: 'Block Officer',    color: '#059669', bg: '#ECFDF5', desc: 'BVO functions'                              },
+  field_user:       { icon: User,     label: 'Field User',       color: '#D97706', bg: '#FFFBEB', desc: 'AIT / field service delivery'             },
+  voti_admin:       { icon: BookOpen, label: 'VOTI',             color: '#7C3AED', bg: '#F5F3FF', desc: 'Training institute · slot allocation'     },
+  farmer:           { icon: Wheat,    label: 'Farmer',           color: '#7C3AED', bg: '#F5F3FF', desc: 'Use Farmer Portal link below'             },
+};
+
+
+export default function LoginPage() {
+  const [selected, setSelected] = useState('');
   const { login } = useAuth();
   const navigate = useNavigate();
 
   const handleLogin = (e) => {
     e.preventDefault();
-    if (selectedUser) {
-      const user = SAMPLE_USERS.find(u => u.id === parseInt(selectedUser));
-      login(user);
-      navigate('/dashboard');
-    }
-  };
-
-  const getRoleIcon = (role) => {
-    switch (role) {
-      case 'super_admin': return Shield;
-      case 'district_officer': return Building;
-      case 'block_officer': return Users;
-      case 'field_user': return User;
-      case 'farmer': return Wheat;
-      default: return User;
-    }
-  };
-
-  const getRoleColor = (role) => {
-    switch (role) {
-      case 'super_admin': return 'bg-red-50 border-red-200 text-red-800';
-      case 'district_officer': return 'bg-blue-50 border-blue-200 text-blue-800';
-      case 'block_officer': return 'bg-green-50 border-green-200 text-green-800';
-      case 'field_user': return 'bg-orange-50 border-orange-200 text-orange-800';
-      case 'farmer': return 'bg-yellow-50 border-yellow-200 text-yellow-800';
-      default: return 'bg-gray-50 border-gray-200 text-gray-800';
-    }
-  };
-
-  const getRoleDescription = (role) => {
-    switch (role) {
-      case 'super_admin': return 'Full system access • All microservices • State-level overview';
-      case 'district_officer': return 'District-level access • Most microservices • CDVO operations';
-      case 'block_officer': return 'Block-level operations • Operational services • BVO functions';
-      case 'field_user': return 'Field operations • Service delivery • Technician access';
-      case 'farmer': return 'Farmer interface • Service booking • Limited access';
-      default: return '';
-    }
+    if (!selected) return;
+    const user = demoUsers.find((u) => u.id === parseInt(selected, 10));
+    login(user);
+    navigate('/dashboard');
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
-      <div className="max-w-2xl w-full space-y-8 p-8">
-        {/* Header */}
-        <div className="text-center">
-          <div className="mx-auto h-20 w-20 bg-gradient-to-r from-blue-600 to-indigo-700 rounded-2xl flex items-center justify-center mb-6 shadow-lg">
-            <span className="text-white text-3xl font-bold">ARD</span>
+    <div style={{ minHeight: '100vh', display: 'flex', background: 'var(--base)' }}>
+
+      {/* ── Left panel — 30% Royal Blue ── */}
+      <div style={{
+        width: '42%', minHeight: '100vh', flexShrink: 0,
+        background: '#005A73',
+        display: 'flex', flexDirection: 'column', justifyContent: 'space-between',
+        padding: '3rem', position: 'relative', overflow: 'hidden',
+      }}
+        className="hidden lg:flex"
+      >
+        {/* Decorative shapes */}
+        <div style={{ position: 'absolute', top: -80, right: -80, width: 300, height: 300, borderRadius: '50%', background: 'rgba(255,255,255,0.05)', pointerEvents: 'none' }} />
+        <div style={{ position: 'absolute', bottom: -60, left: -40, width: 220, height: 220, borderRadius: '50%', background: 'rgba(249,115,22,0.10)', pointerEvents: 'none' }} />
+        <div style={{ position: 'absolute', top: '45%', right: -30, width: 140, height: 140, borderRadius: '50%', background: 'rgba(255,255,255,0.04)', pointerEvents: 'none' }} />
+
+        <div style={{ position: 'relative', zIndex: 1 }}>
+          {/* Logo */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: '2rem' }}>
+            <img 
+              src="/ard-systems/logo.jpeg" 
+              alt="ARD Logo" 
+              style={{
+                height: 72,
+                width: 'auto',
+                objectFit: 'contain',
+                boxShadow: '0 4px 20px rgba(249,115,22,0.50)',
+              }}
+            />
           </div>
-          <h2 className="text-4xl font-bold text-gray-900 mb-2">
-            Animal Resources Development
-          </h2>
-          <p className="text-lg text-gray-600 mb-2">Government of Odisha</p>
-          <p className="text-sm text-gray-500">Microservices-Based Platform</p>
-        </div>
-        
-        <form className="space-y-6" onSubmit={handleLogin}>
-          <div className="bg-white rounded-2xl shadow-xl border border-gray-100 p-8">
-            <div className="mb-6">
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">Select Your Role</h3>
-              <p className="text-sm text-gray-600">Choose your user role to access the appropriate dashboard</p>
+
+          {/* History Section */}
+          <div style={{ marginBottom: '2rem' }}>
+            <h2 style={{ color: '#FCD34D', fontSize: '1.125rem', fontWeight: 700, marginBottom: '0.75rem', letterSpacing: '-0.01em' }}>
+              History
+            </h2>
+            <p style={{ color: 'rgba(255,255,255,0.75)', fontSize: 12, lineHeight: 1.7 }}>
+              The Department of Fisheries & Animal Resources Development was created in 1991 after being bifurcated from the erstwhile Forestry, Fisheries & Animal Husbandry Department vide GA Department Resolution No.28038/Gen., dt. 10.10.1990. The Department acts as the nodal bureau for formulating plans, policies, and programs for Fisheries and the Animal Resources sector and ensuring its successful implementation.
+            </p>
+          </div>
+
+          {/* Function Section */}
+          <div>
+            <h2 style={{ color: '#FCD34D', fontSize: '1.125rem', fontWeight: 700, marginBottom: '0.75rem', letterSpacing: '-0.01em' }}>
+              Functions
+            </h2>
+            <p style={{ color: 'rgba(255,255,255,0.65)', fontSize: 11, marginBottom: '0.75rem', fontWeight: 600 }}>
+              Functions of the Directorate of Animal Husbandry and Veterinary Services
+            </p>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+              {[
+                'To improve the genetic potential of the livestock through organized breeding.',
+                'To provide quality livestock health care services in the state.',
+                'To educate the livestock owners in modern animal husbandry practices.',
+                'To promote animal welfare measures to reduce the suffering of animals and birds.',
+                'To provide livelihood to the farmers of the state through economic livestock and poultry rearing.',
+              ].map((func, i) => (
+                <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: 10 }}>
+                  <div style={{
+                    width: 20, height: 20, borderRadius: 6, flexShrink: 0, marginTop: 1,
+                    background: 'rgba(249,115,22,0.20)',
+                    border: '1px solid rgba(249,115,22,0.35)',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  }}>
+                    <CheckCircle className="icon-xs" style={{ color: '#FCD34D', width: 12, height: 12 }} />
+                  </div>
+                  <p style={{ color: 'rgba(255,255,255,0.75)', fontSize: 11.5, lineHeight: 1.6, flex: 1 }}>{func}</p>
+                </div>
+              ))}
             </div>
-            
-            <div className="space-y-4">
-              {SAMPLE_USERS.map(user => {
-                const IconComponent = getRoleIcon(user.role);
-                const isSelected = selectedUser === user.id.toString();
-                
+          </div>
+        </div>
+      </div>
+
+      {/* ── Right panel ── */}
+      <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2rem', background: 'var(--base)' }}>
+        <div style={{ width: '100%', maxWidth: 460 }}>
+
+          {/* Mobile logo */}
+          <div className="flex lg:hidden items-center gap-3 mb-8">
+            <img 
+              src="/ard-systems/logo.jpeg" 
+              alt="ARD Logo" 
+              style={{
+                height: 40,
+                width: 'auto',
+                objectFit: 'contain',
+              }}
+            />
+          </div>
+
+          {/* Heading */}
+          <div style={{ marginBottom: '1.75rem' }}>
+            <h2 style={{ fontSize: '1.625rem', fontWeight: 800, color: 'var(--text-1)', letterSpacing: '-0.02em', marginBottom: 6 }}>
+              Select Your Role
+            </h2>
+            <p style={{ fontSize: 13, color: 'var(--text-3)', lineHeight: 1.6 }}>
+              Choose your profile to access the appropriate dashboard and services.
+            </p>
+          </div>
+
+          <form onSubmit={handleLogin}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 20 }}>
+              {demoUsers.map(u => {
+                const meta = ROLE_META[u.role] || ROLE_META.field_user;
+                const Icon = meta.icon;
+                const isSel = selected === u.id.toString();
+
                 return (
-                  <div
-                    key={user.id}
-                    onClick={() => setSelectedUser(user.id.toString())}
-                    className={`relative p-4 rounded-xl border-2 cursor-pointer transition-all duration-200 hover:shadow-md ${
-                      isSelected 
-                        ? 'border-blue-500 bg-blue-50 shadow-md' 
-                        : 'border-gray-200 bg-gray-50 hover:border-gray-300'
-                    }`}
+                  <button
+                    key={u.id}
+                    type="button"
+                    onClick={() => setSelected(u.id.toString())}
+                    style={{
+                      width: '100%', textAlign: 'left',
+                      padding: '13px 16px', borderRadius: 14,
+                      background: isSel ? meta.bg : 'var(--surface)',
+                      border: `1.5px solid ${isSel ? meta.color : 'var(--border)'}`,
+                      cursor: 'pointer', transition: 'all 0.15s ease', outline: 'none',
+                      boxShadow: isSel ? `0 0 0 3px ${meta.color}25` : 'var(--shadow-xs)',
+                    }}
+                    onMouseEnter={e => { if (!isSel) { e.currentTarget.style.borderColor = 'var(--border-2)'; e.currentTarget.style.background = 'var(--base-2)'; }}}
+                    onMouseLeave={e => { if (!isSel) { e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.background = 'var(--surface)'; }}}
                   >
-                    <div className="flex items-center space-x-4">
-                      <div className={`h-12 w-12 rounded-xl flex items-center justify-center ${
-                        isSelected ? 'bg-blue-100' : 'bg-white'
-                      }`}>
-                        <IconComponent className={`h-6 w-6 ${
-                          isSelected ? 'text-blue-600' : 'text-gray-600'
-                        }`} />
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+                      <div style={{
+                        width: 54, height: 54, borderRadius: 14, flexShrink: 0,
+                        background: isSel ? meta.color : 'var(--base-2)',
+                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        transition: 'all 0.15s ease',
+                        boxShadow: isSel ? `0 2px 10px ${meta.color}50` : 'none',
+                      }}>
+                        <Icon className="icon-xl" style={{ color: isSel ? '#fff' : meta.color }} />
                       </div>
-                      
-                      <div className="flex-1">
-                        <div className="flex items-center justify-between mb-1">
-                          <h4 className="font-semibold text-gray-900">{user.name}</h4>
-                          <span className={`px-3 py-1 rounded-full text-xs font-medium border ${getRoleColor(user.role)}`}>
-                            {user.designation}
+                      <div style={{ flex: 1, minWidth: 0 }}>
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8, marginBottom: 3 }}>
+                          <span style={{ fontSize: 12, fontWeight: 600, color: isSel ? meta.color : 'var(--text-1)' }}>
+                            {u.name}
+                          </span>
+                          <span style={{
+                            fontSize: 10, fontWeight: 700, padding: '2px 8px', borderRadius: 99,
+                            background: isSel ? meta.color : 'var(--base-2)',
+                            color: isSel ? '#fff' : 'var(--text-3)',
+                            textTransform: 'uppercase', letterSpacing: '0.04em', flexShrink: 0,
+                          }}>
+                            {meta.label}
                           </span>
                         </div>
-                        <p className="text-sm text-gray-600 mb-1">
-                          {user.district} District • {user.block} Block
-                        </p>
-                        <p className="text-xs text-gray-500">
-                          {getRoleDescription(user.role)}
+                        <p style={{ fontSize: 11, color: 'var(--text-4)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                          {u.district} · {meta.desc}
                         </p>
                       </div>
-                      
-                      {isSelected && (
-                        <div className="absolute top-2 right-2">
-                          <div className="h-3 w-3 bg-blue-600 rounded-full"></div>
-                        </div>
-                      )}
+                      <ArrowRight className="icon-sm" style={{
+                        color: isSel ? meta.color : 'var(--border-2)',
+                        transform: isSel ? 'translateX(2px)' : 'none',
+                        transition: 'all 0.15s ease', flexShrink: 0,
+                      }} />
                     </div>
-                  </div>
+                  </button>
                 );
               })}
             </div>
-            
+
+            {/* CTA */}
             <button
               type="submit"
-              disabled={!selectedUser}
-              className="w-full mt-6 bg-gradient-to-r from-blue-600 to-indigo-700 hover:from-blue-700 hover:to-indigo-800 disabled:from-gray-400 disabled:to-gray-500 text-white font-semibold py-4 px-6 rounded-xl transition-all duration-200 disabled:cursor-not-allowed shadow-lg hover:shadow-xl"
+              disabled={!selected}
+              style={{
+                width: '100%', padding: '14px',
+                borderRadius: 12, border: 'none',
+                fontSize: 14, fontWeight: 700, color: '#fff',
+                background: selected ? '#F97316' : 'var(--base-3)',
+                cursor: selected ? 'pointer' : 'not-allowed',
+                boxShadow: selected ? '0 4px 20px rgba(249,115,22,0.35)' : 'none',
+                transition: 'all 0.2s ease',
+                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+                letterSpacing: '0.01em',
+              }}
+              onMouseEnter={e => { if (selected) { e.currentTarget.style.transform = 'translateY(-1px)'; e.currentTarget.style.boxShadow = '0 6px 24px rgba(249,115,22,0.45)'; }}}
+              onMouseLeave={e => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = selected ? '0 4px 20px rgba(249,115,22,0.35)' : 'none'; }}
             >
-              {selectedUser ? 'Access Dashboard' : 'Select a Role to Continue'}
+              {selected ? 'Access Dashboard' : 'Select a Role to Continue'}
+              {selected && <ArrowRight className="icon-sm" />}
             </button>
-          </div>
-        </form>
-        
-        <div className="text-center">
-          <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-4">
-            <p className="text-sm text-gray-600 mb-2">
-              <span className="font-semibold">Demo System</span> - Select any role to explore the microservices platform
-            </p>
-            <div className="flex items-center justify-center space-x-4 text-xs text-gray-500">
-              <span>• Role-based Access Control</span>
-              <span>• 10 Microservices</span>
-              <span>• AI-Enabled Features</span>
-            </div>
+          </form>
+
+          <p style={{ textAlign: 'center', fontSize: 11, color: 'var(--text-4)', marginTop: 20 }}>
+            Government operations portal · Role-based access · 10 microservices · AI-assisted insights
+          </p>
+
+          {/* Farmer Portal Link */}
+          <div style={{ marginTop: 20, paddingTop: 16, borderTop: '1px solid var(--border)', textAlign: 'center' }}>
+            <p style={{ fontSize: 13, color: 'var(--text-3)', marginBottom: 10 }}>Are you a farmer?</p>
+            <button onClick={() => navigate('/farmer/login')} style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '10px 24px', borderRadius: 'var(--r-md)', background: 'var(--blue-subtle)', border: '1.5px solid var(--blue-muted)', color: 'var(--blue-dark)', fontSize: 14, fontWeight: 600, cursor: 'pointer', transition: 'all 0.15s ease' }}
+              onMouseEnter={e => { e.currentTarget.style.background = 'var(--blue-pale)'; }}
+              onMouseLeave={e => { e.currentTarget.style.background = 'var(--blue-subtle)'; }}>
+              Go to Farmer Portal
+            </button>
           </div>
         </div>
       </div>
     </div>
   );
-};
-
-export default LoginPage;
+}

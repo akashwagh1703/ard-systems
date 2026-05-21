@@ -1,0 +1,7 @@
+[
+  { "id": "lac_001", "name": "LAC Bhubaneswar Urban", "blockId": "blk_bbsr", "type": "LAC" },
+  { "id": "lac_002", "name": "LAC Jatni", "blockId": "blk_jatni", "type": "LAC" },
+  { "id": "vd_001", "name": "VD Cuttack Sadar", "blockId": "blk_ctc_urban", "type": "VD" },
+  { "id": "mvu_001", "name": "MVU Khordha-1", "blockId": "blk_balianta", "type": "MVU" },
+  { "id": "mvu_002", "name": "MVU Ganjam-2", "blockId": "blk_chatrapur", "type": "MVU" }
+]

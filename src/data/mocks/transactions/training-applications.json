@@ -1,0 +1,32 @@
+[
+  {
+    "id": "tr_app_farmer_demo",
+    "programmeId": "tr_prog_1",
+    "applicantName": "Gita Devi",
+    "applicantMobile": "9876543210",
+    "designation": "Farmer",
+    "institutionKey": "FARMER-F001",
+    "status": "submitted",
+    "batchId": null,
+    "appliedAt": "2026-05-08T10:00:00.000Z"
+  },
+  {
+    "id": "tr_app_1",
+    "programmeId": "tr_prog_1",
+    "applicantName": "Ramesh Das",
+    "designation": "AIT",
+    "institutionKey": "VOTI-BBSR",
+    "status": "approved",
+    "batchId": "tr_batch_1",
+    "appliedAt": "2026-05-03T11:00:00.000Z"
+  },
+  {
+    "id": "tr_app_2",
+    "programmeId": "tr_prog_1",
+    "applicantName": "Smita Patnaik",
+    "designation": "BVO",
+    "institutionKey": "VOTI-BBSR",
+    "status": "submitted",
+    "appliedAt": "2026-05-10T09:30:00.000Z"
+  }
+]

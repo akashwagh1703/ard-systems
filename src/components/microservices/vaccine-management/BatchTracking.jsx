@@ -1,41 +1,52 @@
-import React, { useState } from 'react';
-import { Package, Search, AlertTriangle, CheckCircle, Clock, MapPin, Brain, TrendingUp } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Package, Search, Clock, MapPin, X } from 'lucide-react';
 import AIBatchAnalytics from './AIBatchAnalytics';
+import * as vacRepo from '../../../services/data/repositories/vaccineRepository';
 
 const BatchTracking = () => {
   const [searchBatch, setSearchBatch] = useState('');
   const [selectedBatch, setSelectedBatch] = useState(null);
+  const [batches, setBatches] = useState([]);
 
-  const batches = [
-    {
-      id: 'VAC001234',
-      vaccine: 'FMD Vaccine',
-      manufacturer: 'Indian Immunologicals Ltd',
-      quantity: 5000,
-      received: 4800,
-      distributed: 3200,
-      remaining: 1600,
-      expiryDate: '2024-12-15',
-      status: 'Active',
-      locations: ['Cuttack', 'Bhubaneswar', 'Puri'],
-      temperature: '2-8°C',
-      lastUpdated: '2024-01-15 14:30'
-    },
-    {
-      id: 'VAC001235',
-      vaccine: 'Rabies Vaccine',
-      manufacturer: 'Hester Biosciences',
-      quantity: 2000,
-      received: 2000,
-      distributed: 1800,
-      remaining: 200,
-      expiryDate: '2024-11-30',
-      status: 'Low Stock',
-      locations: ['Khordha', 'Nayagarh'],
-      temperature: '2-8°C',
-      lastUpdated: '2024-01-15 12:15'
-    }
-  ];
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      const [inv, villages] = await Promise.all([vacRepo.listInventory({}), vacRepo.listVillageAllocations({})]);
+      if (cancelled) return;
+      const mapped = inv.map((r) => {
+        const vAlloc = villages.filter((v) => v.batchNumber === r.batchNumber);
+        const vills = vAlloc.map((v) => v.villageName);
+        const qoh = r.quantityOnHand || 0;
+        const del = r.deliveredQty || 0;
+        const alloc = r.allocatedQty || 0;
+        return {
+          id: r.batchNumber,
+          vaccine: r.vaccineName,
+          manufacturer: `${r.district} · ${r.level || 'store'}`,
+          quantity: qoh + del + alloc,
+          received: qoh + del,
+          distributed: del,
+          remaining: qoh,
+          expiryDate: r.expiryDate || '—',
+          status: qoh < 1500 ? 'Low Stock' : 'Active',
+          locations: vills.length ? vills : [r.district || '—'],
+          allocationBreakdown: vAlloc,
+          temperature: '2–8 °C',
+          lastUpdated: r.expiryDate ? `Expiry ${r.expiryDate}` : '—',
+        };
+      });
+      setBatches(mapped);
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  useEffect(() => {
+    if (selectedBatch) document.body.style.overflow = 'hidden';
+    else document.body.style.overflow = '';
+    return () => { document.body.style.overflow = ''; };
+  }, [selectedBatch]);
 
   const filteredBatches = batches.filter(batch =>
     batch.id.toLowerCase().includes(searchBatch.toLowerCase()) ||
@@ -127,81 +138,88 @@ const BatchTracking = () => {
         ))}
       </div>
 
-      {/* Batch Details Modal */}
       {selectedBatch && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-xl font-bold">Batch Details: {selectedBatch.id}</h3>
-              <button
-                onClick={() => setSelectedBatch(null)}
-                className="text-gray-500 hover:text-gray-700"
-              >
-                ✕
+        <div className="ard-modal-backdrop" role="presentation" onMouseDown={(e) => e.target === e.currentTarget && setSelectedBatch(null)}>
+          <div
+            className="ard-modal-panel ard-modal-panel--wide"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="batch-detail-title"
+            onMouseDown={(e) => e.stopPropagation()}
+            style={{ maxWidth: 'min(100vw - 24px, 640px)' }}
+          >
+            <div className="ard-modal-header">
+              <span id="batch-detail-title" className="ard-modal-title">Batch details · {selectedBatch.id}</span>
+              <button type="button" className="ard-modal-close" onClick={() => setSelectedBatch(null)} aria-label="Close">
+                <X className="icon-xs" />
               </button>
             </div>
-            
-            <div className="space-y-4">
-              {/* Basic Info */}
-              <div className="grid grid-cols-2 gap-4">
+            <div className="ard-modal-body">
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 16 }}>
                 <div>
-                  <label className="text-sm font-medium text-gray-500">Vaccine Type</label>
-                  <p className="font-medium">{selectedBatch.vaccine}</p>
+                  <p style={{ fontSize: 11, fontWeight: 600, color: 'var(--text-4)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Vaccine</p>
+                  <p style={{ fontSize: 14, fontWeight: 600, color: 'var(--text-1)' }}>{selectedBatch.vaccine}</p>
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-gray-500">Manufacturer</label>
-                  <p className="font-medium">{selectedBatch.manufacturer}</p>
+                  <p style={{ fontSize: 11, fontWeight: 600, color: 'var(--text-4)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Store / district</p>
+                  <p style={{ fontSize: 14, fontWeight: 600, color: 'var(--text-1)' }}>{selectedBatch.manufacturer}</p>
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-gray-500">Storage Temperature</label>
-                  <p className="font-medium">{selectedBatch.temperature}</p>
+                  <p style={{ fontSize: 11, fontWeight: 600, color: 'var(--text-4)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Cold chain</p>
+                  <p style={{ fontSize: 14, fontWeight: 600, color: 'var(--text-1)' }}>{selectedBatch.temperature}</p>
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-gray-500">Expiry Date</label>
-                  <p className="font-medium">{selectedBatch.expiryDate}</p>
+                  <p style={{ fontSize: 11, fontWeight: 600, color: 'var(--text-4)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Expiry</p>
+                  <p style={{ fontSize: 14, fontWeight: 600, color: 'var(--text-1)' }}>{selectedBatch.expiryDate}</p>
                 </div>
               </div>
 
-              {/* Quantity Tracking */}
-              <div className="bg-gray-50 p-4 rounded-lg">
-                <h4 className="font-medium mb-3">📊 Quantity Tracking</h4>
-                <div className="grid grid-cols-3 gap-4">
-                  <div className="text-center">
-                    <p className="text-2xl font-bold text-blue-600">{selectedBatch.quantity.toLocaleString()}</p>
-                    <p className="text-sm text-gray-500">Total Received</p>
+              <div style={{ padding: '14px 16px', borderRadius: 'var(--r-lg)', background: 'var(--base-2)', border: '1px solid var(--border)', marginBottom: 16 }}>
+                <p style={{ fontSize: 12, fontWeight: 700, color: 'var(--text-1)', marginBottom: 12 }}>Quantity summary (doses)</p>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12, textAlign: 'center' }}>
+                  <div>
+                    <p style={{ fontSize: 22, fontWeight: 800, color: 'var(--blue)' }}>{selectedBatch.quantity.toLocaleString('en-IN')}</p>
+                    <p style={{ fontSize: 11, color: 'var(--text-3)' }}>Recorded total</p>
                   </div>
-                  <div className="text-center">
-                    <p className="text-2xl font-bold text-green-600">{selectedBatch.distributed.toLocaleString()}</p>
-                    <p className="text-sm text-gray-500">Distributed</p>
+                  <div>
+                    <p style={{ fontSize: 22, fontWeight: 800, color: 'var(--success)' }}>{selectedBatch.distributed.toLocaleString('en-IN')}</p>
+                    <p style={{ fontSize: 11, color: 'var(--text-3)' }}>Distributed</p>
                   </div>
-                  <div className="text-center">
-                    <p className="text-2xl font-bold text-orange-600">{selectedBatch.remaining.toLocaleString()}</p>
-                    <p className="text-sm text-gray-500">Remaining</p>
+                  <div>
+                    <p style={{ fontSize: 22, fontWeight: 800, color: 'var(--orange)' }}>{selectedBatch.remaining.toLocaleString('en-IN')}</p>
+                    <p style={{ fontSize: 11, color: 'var(--text-3)' }}>On hand</p>
                   </div>
                 </div>
               </div>
 
-              {/* Distribution Locations */}
-              <div>
-                <h4 className="font-medium mb-2">📍 Distribution Locations</h4>
-                <div className="flex flex-wrap gap-2">
-                  {selectedBatch.locations.map((location, index) => (
-                    <span key={index} className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm">
-                      {location}
-                    </span>
-                  ))}
+              <p style={{ fontSize: 12, fontWeight: 700, color: 'var(--text-1)', marginBottom: 8 }}>Village allocations</p>
+              {selectedBatch.allocationBreakdown?.length ? (
+                <div style={{ overflowX: 'auto', border: '1px solid var(--border)', borderRadius: 'var(--r-lg)' }}>
+                  <table className="table" style={{ fontSize: 13 }}>
+                    <thead>
+                      <tr>
+                        <th>District</th>
+                        <th>Village</th>
+                        <th style={{ textAlign: 'right' }}>Doses</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {selectedBatch.allocationBreakdown.map((row) => (
+                        <tr key={row.id}>
+                          <td>{row.district}</td>
+                          <td>{row.villageName}</td>
+                          <td style={{ textAlign: 'right' }}>{Number(row.quantity).toLocaleString('en-IN')}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
                 </div>
-              </div>
-
-              {/* Actions */}
-              <div className="flex gap-3 pt-4">
-                <button className="flex-1 bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700">
-                  📋 View Distribution History
-                </button>
-                <button className="flex-1 bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700">
-                  📊 Generate Report
-                </button>
-              </div>
+              ) : (
+                <p style={{ fontSize: 13, color: 'var(--text-3)' }}>No village-level allocation rows are linked to this batch yet.</p>
+              )}
+            </div>
+            <div className="ard-modal-footer">
+              <button type="button" className="btn-blue" style={{ fontSize: 13 }} onClick={() => setSelectedBatch(null)}>Close</button>
             </div>
           </div>
         </div>

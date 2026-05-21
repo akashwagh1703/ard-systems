@@ -1,0 +1,12 @@
+[
+  {
+    "id": "tr_batch_1",
+    "programmeId": "tr_prog_1",
+    "batchLabel": "Batch-A",
+    "assignedBy": "voti_admin",
+    "slotCapacity": 30,
+    "participantIds": [
+      "tr_app_1"
+    ]
+  }
+]

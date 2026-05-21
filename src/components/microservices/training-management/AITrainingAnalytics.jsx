@@ -32,10 +32,10 @@ const AITrainingAnalytics = () => {
   return (
     <div className="space-y-6">
       {/* AI Header */}
-      <div className="bg-gradient-to-r from-purple-500 to-indigo-600 rounded-xl p-6 text-white">
+      <div className="bg-slate-700 rounded-xl p-6 text-white">
         <div className="flex items-center space-x-3 mb-4">
           <Brain className="h-8 w-8" />
-          <h3 className="text-2xl font-bold">🤖 AI Training Intelligence</h3>
+          <h3 className="text-2xl font-bold"> AI Training Intelligence</h3>
         </div>
         <p className="text-purple-100">Smart capacity optimization and performance analytics</p>
       </div>
@@ -44,7 +44,7 @@ const AITrainingAnalytics = () => {
       <div className="bg-white rounded-xl p-6 border border-gray-200">
         <h4 className="font-bold text-gray-900 mb-4 flex items-center">
           <Target className="h-5 w-5 mr-2 text-purple-500" />
-          🎯 AI Capacity Optimization
+           AI Capacity Optimization
         </h4>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
@@ -109,7 +109,7 @@ const AITrainingAnalytics = () => {
       </div>
 
       {/* AI Insights */}
-      <div className="bg-gradient-to-r from-green-50 to-blue-50 rounded-xl p-6 border border-green-200">
+      <div className="bg-slate-700 rounded-xl p-6 border border-green-200">
         <h4 className="font-bold text-green-900 mb-4 flex items-center">
           <Brain className="h-5 w-5 mr-2 text-green-500" />
           💡 AI Training Insights

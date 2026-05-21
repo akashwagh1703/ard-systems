@@ -1,0 +1,50 @@
+[
+  {
+    "id": "vac_inv_fmd_001",
+    "batchNumber": "FMD-2026-OD-001",
+    "vaccineId": "vac_fmd",
+    "vaccineName": "FMD Vaccine (Trivalent)",
+    "diseaseType": "Foot and Mouth Disease",
+    "animalType": "cattle",
+    "quantityOnHand": 12000,
+    "allocatedQty": 2400,
+    "deliveredQty": 1800,
+    "expiryDate": "2026-12-15",
+    "locationId": "loc_state_vac_cold",
+    "district": "State",
+    "level": "state",
+    "statusColor": "green"
+  },
+  {
+    "id": "vac_inv_fmd_kh",
+    "batchNumber": "FMD-2026-OD-001",
+    "vaccineId": "vac_fmd",
+    "vaccineName": "FMD Vaccine (Trivalent)",
+    "diseaseType": "Foot and Mouth Disease",
+    "animalType": "cattle",
+    "quantityOnHand": 3200,
+    "allocatedQty": 600,
+    "deliveredQty": 400,
+    "expiryDate": "2026-12-15",
+    "locationId": "loc_khordha_cdvo",
+    "district": "Khordha",
+    "level": "district",
+    "statusColor": "green"
+  },
+  {
+    "id": "vac_inv_hs_ct",
+    "batchNumber": "HS-2026-OD-014",
+    "vaccineId": "vac_hs",
+    "vaccineName": "HS Vaccine",
+    "diseaseType": "Haemorrhagic Septicaemia",
+    "animalType": "cattle",
+    "quantityOnHand": 2100,
+    "allocatedQty": 300,
+    "deliveredQty": 150,
+    "expiryDate": "2026-11-01",
+    "locationId": "loc_cuttack_cdvo",
+    "district": "Cuttack",
+    "level": "district",
+    "statusColor": "amber"
+  }
+]

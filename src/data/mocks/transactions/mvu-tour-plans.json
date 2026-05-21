@@ -1,0 +1,22 @@
+[
+  {
+    "id": "mvu_plan_1",
+    "mvuId": "MVU-KH-01",
+    "district": "Khordha",
+    "month": "2026-06",
+    "submittedByBvo": "Suresh Patel",
+    "cdvoStatus": "accepted",
+    "cdvoComment": "Approved for monsoon outreach",
+    "versions": [
+      {
+        "version": 1,
+        "submittedAt": "2026-05-01T10:00:00.000Z",
+        "villages": [
+          "Jatni",
+          "Balianta",
+          "Tangi"
+        ]
+      }
+    ]
+  }
+]

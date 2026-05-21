@@ -1,0 +1,56 @@
+[
+  {
+    "id": "GRV-001",
+    "reporterName": "Dr. Priya Sharma",
+    "userType": "District",
+    "issueType": "Non-Technical",
+    "serviceType": "Medicine",
+    "description": "Delay in restocking essential antibiotics at block cold chain.",
+    "district": "Khordha",
+    "geoTaggedPhoto": null,
+    "status": "open",
+    "createdAt": "2024-01-15T10:00:00.000Z",
+    "updatedAt": "2024-01-15T10:00:00.000Z",
+    "slaDueAt": "2024-01-17T10:00:00.000Z",
+    "assignedQueue": "technical_team",
+    "resolvedAt": null
+  },
+  {
+    "id": "GRV-002",
+    "reporterName": "Ramesh Das",
+    "userType": "AITs",
+    "issueType": "Technical",
+    "serviceType": "Semen",
+    "description": "Mobile app could not sync semen utilization record; manual entry required.",
+    "district": "Cuttack",
+    "geoTaggedPhoto": null,
+    "status": "resolved",
+    "createdAt": "2024-01-10T09:30:00.000Z",
+    "updatedAt": "2024-01-11T14:00:00.000Z",
+    "slaDueAt": "2024-01-12T09:30:00.000Z",
+    "assignedQueue": "technical_team",
+    "resolvedAt": "2024-01-11T14:00:00.000Z"
+  },
+  {
+    "id": "GRV-003",
+    "reporterName": "Gita Devi",
+    "reporterMobile": "9876543210",
+    "userType": "Farmers",
+    "issueType": "Non-Technical",
+    "serviceType": "Vaccine",
+    "description": "Information on booster dose schedule for FMD vaccination camp.",
+    "district": "Ganjam",
+    "geoTaggedPhoto": {
+      "url": "https://placehold.co/120x90/png?text=Geo",
+      "lat": 19.3144,
+      "lng": 84.7941,
+      "capturedAt": "2024-01-18T08:15:00.000Z"
+    },
+    "status": "open",
+    "createdAt": "2024-01-18T08:20:00.000Z",
+    "updatedAt": "2024-01-18T08:20:00.000Z",
+    "slaDueAt": "2024-01-20T08:20:00.000Z",
+    "assignedQueue": "technical_team",
+    "resolvedAt": null
+  }
+]

@@ -1,0 +1,10 @@
+[
+  {
+    "id": "farm_brd_1",
+    "farmId": "farm_1",
+    "animalId": "farm_an_1",
+    "eventType": "insemination",
+    "eventDate": "2026-05-02",
+    "remarks": "AI cycle 1"
+  }
+]

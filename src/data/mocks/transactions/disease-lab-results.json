@@ -1,0 +1,11 @@
+[
+  {
+    "id": "dis_lab_1",
+    "registrationNumber": "DR-2026-0001",
+    "status": "completed",
+    "resultSummary": "FMD suspected positive",
+    "reportPdfUrl": "/mock-reports/DR-2026-0001.pdf",
+    "advisoryText": "Isolate affected cattle and start protocol vaccination in 5km radius.",
+    "updatedAt": "2026-02-08T14:20:00.000Z"
+  }
+]

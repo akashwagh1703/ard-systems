@@ -1,0 +1,6 @@
+[
+  { "id": "ven_nddb", "name": "NDDB Dairy Services", "lines": ["semen", "vaccine"] },
+  { "id": "ven_obpi", "name": "OBPI Odisha", "lines": ["vaccine"] },
+  { "id": "ven_gem", "name": "GeM Empanelled Supplier A", "lines": ["medicine", "equipment"] },
+  { "id": "ven_ivf", "name": "Private Semen Partner (IVF)", "lines": ["semen"] }
+]
