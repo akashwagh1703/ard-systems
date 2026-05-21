@@ -17,7 +17,6 @@ function normalizeUser(raw) {
   };
 }
 
-/** Route guard: `actual` role satisfies `required` role (Phase 1 aliases). */
 export function roleFulfillsRequired(actual, required) {
   if (!actual || !required) return false;
   if (actual === required) return true;
